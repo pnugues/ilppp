@@ -1,8 +1,8 @@
 # Differences between single and double quotes
-$pattern = 'toto\ttiti';
+$pattern = 'aaa\tbbb';
 print $pattern, "\n";
 
-$pattern2 = "aaa" . $pattern;
+$pattern2 = "ccc\t" . $pattern;
 
 print $pattern2 . "\n";
 
@@ -15,7 +15,7 @@ print $pattern4;
 $pattern5 = "my string";
 $width = 10;
 $line = <>;
-if ($line =~ m/(.{0,$width}})$pattern5.{0,$width})/) {
+if ($line =~ m/(.{0,$width}$pattern5.{0,$width})/) {
     print $1, "\n";
 }
 
