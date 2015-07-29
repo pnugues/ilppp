@@ -9,9 +9,9 @@ import java.util.TreeMap;
  */
 public class BigramCounter {
     Map<String, Integer> count(String[] words) {
-        TreeMap<String, Integer> counts = new TreeMap<>();
+        Map<String, Integer> counts = new TreeMap<>();
         for (int i = 0; i < words.length - 1; i++) {
-            String bigram = words[i] + " " + words[i + 1];
+            String bigram = words[i] + "\t" + words[i + 1];
             if (counts.get(bigram) == null) {
                 counts.put(bigram, 1);
             } else {
@@ -29,7 +29,7 @@ public class BigramCounter {
         BigramCounter bigramCounter = new BigramCounter();
         Map<String, Integer> bigramCounts = bigramCounter.count(words);
         for (String bigramCount: bigramCounts.keySet()) {
-            System.out.println(bigramCount + "\t" + bigramCounts.get(bigramCount));
+            System.out.println(bigramCounts.get(bigramCount) + "\t" + bigramCount);
         }
     }
 }
