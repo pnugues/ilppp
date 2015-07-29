@@ -8,6 +8,18 @@ import java.util.TreeMap;
  * Created by Pierre Nugues on 25/07/15.
  */
 public class BigramCounter {
+    public static void main(String[] args) throws IOException {
+        FileReader reader = new FileReader();
+        String text = reader.readFile(args[0]);
+        Tokenizer tokenizer = new Tokenizer();
+        String[] words = tokenizer.tokenize(text);
+        BigramCounter bigramCounter = new BigramCounter();
+        Map<String, Integer> bigramCounts = bigramCounter.count(words);
+        for (String bigramCount : bigramCounts.keySet()) {
+            System.out.println(bigramCounts.get(bigramCount) + "\t" + bigramCount);
+        }
+    }
+
     Map<String, Integer> count(String[] words) {
         Map<String, Integer> counts = new TreeMap<>();
         for (int i = 0; i < words.length - 1; i++) {
@@ -19,17 +31,5 @@ public class BigramCounter {
             }
         }
         return counts;
-    }
-
-    public static void main(String[] args) throws IOException {
-        FileReader reader = new FileReader();
-        String text = reader.readFile(args[0]);
-        Tokenizer tokenizer = new Tokenizer();
-        String[] words = tokenizer.tokenize(text);
-        BigramCounter bigramCounter = new BigramCounter();
-        Map<String, Integer> bigramCounts = bigramCounter.count(words);
-        for (String bigramCount: bigramCounts.keySet()) {
-            System.out.println(bigramCounts.get(bigramCount) + "\t" + bigramCount);
-        }
     }
 }

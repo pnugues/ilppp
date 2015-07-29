@@ -8,18 +8,6 @@ import java.util.TreeMap;
  * Created by Pierre Nugues on 25/07/15.
  */
 public class WordCounter {
-    Map<String, Integer> count(String[] words) {
-        Map<String, Integer> counts = new TreeMap<>();
-        for (String word : words) {
-            if (counts.get(word) == null) {
-                counts.put(word, 1);
-            } else {
-                counts.put(word, counts.get(word) + 1);
-            }
-        }
-        return counts;
-    }
-
     public static void main(String[] args) throws IOException {
         FileReader reader = new FileReader();
         String text = reader.readFile(args[0]);
@@ -30,5 +18,17 @@ public class WordCounter {
         for (String wordCount : wordCounts.keySet()) {
             System.out.println(wordCounts.get(wordCount) + "\t" + wordCount);
         }
+    }
+
+    Map<String, Integer> count(String[] words) {
+        Map<String, Integer> counts = new TreeMap<>();
+        for (String word : words) {
+            if (counts.get(word) == null) {
+                counts.put(word, 1);
+            } else {
+                counts.put(word, counts.get(word) + 1);
+            }
+        }
+        return counts;
     }
 }
