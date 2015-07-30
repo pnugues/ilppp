@@ -1,0 +1,11 @@
+jlksjdlkskldasjlkdjskldjsalkjdaskl
+köladköldsfkölkdsölfsdla sdlk sdklsd kg
+kdlsklsakdlsak $ 12.45 jlsjkdsjkldfs $ 45.00 sjksjdka $ 34 jkjflkdjflkds
+lsfkölsdkf jflsdaf sjadlfjl sdjlkgdfs $12
+The next line contains Greek and extended Greek
+ρςστἂἄἅ
+The next line contains Greek and Coptic characters
+αααββγϢϣϦ
+The next line contains Coptic characters
+ϢϣϦ
+αaö
