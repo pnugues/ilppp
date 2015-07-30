@@ -2,9 +2,10 @@
 % finds Pattern in List and displays the Line
 % where it appears within Span characters
 % surrounding it
+:- use_module(library(lists)).
 
-concord :- 
-    read_file('../../corpus/Selma.txt', L), 
+concord :-
+    read_file('../../corpus/Selma.txt', L),
     normalize(L, L2),
     concordance('Helen', L2, 30, C),
     write(C), nl, 
@@ -62,16 +63,16 @@ prepend(Pattern, Span, List, FList) :-
 % replaces contiguous white spaces with one blank
 
 normalize([C1, C2 | L1], [' ' | L2]) :-
-    memberchk(C1, [' ', '\t', '\n', '\r', '\f']),
-    memberchk(C2, [' ', '\t', '\n', '\r', '\f']),
+    char_type(C1, space),
+    char_type(C2, space),
     !,
     normalize([C2 | L1], [' ' | L2]).
 normalize([C1 | L1], [' ' | L2]) :-
-    memberchk(C1, [' ', '\t', '\n', '\r', '\f']),
+    char_type(C1, space),
     !,
     normalize(L1, L2).
 normalize([C1 | L1], [C1 | L2]) :-
-    \+ memberchk(C1, [' ', '\t', '\n', '\r', '\f']),
+    \+ char_type(C1, space),
     !,
     normalize(L1, L2).
 normalize([], []).
