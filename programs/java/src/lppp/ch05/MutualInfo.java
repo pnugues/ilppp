@@ -15,8 +15,7 @@ public class MutualInfo {
         String[] words = tokenizer.tokenize(text);
         WordCounter wc = new WordCounter();
         Map<String, Integer> unigramCounts = wc.count(words);
-        BigramCounter bc = new BigramCounter();
-        Map<String, Integer> bigramCounts = bc.count(words);
+        Map<String, Integer> bigramCounts = wc.countBigrams(words);
 
         MutualInfo mi = new MutualInfo();
         Map<String, Double> miScores = mi.compute(words.length, unigramCounts, bigramCounts);

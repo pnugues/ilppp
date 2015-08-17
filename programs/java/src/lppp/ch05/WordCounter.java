@@ -1,6 +1,7 @@
 package lppp.ch05;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -18,6 +19,14 @@ public class WordCounter {
         for (String wordCount : wordCounts.keySet()) {
             System.out.println(wordCounts.get(wordCount) + "\t" + wordCount);
         }
+        Map<String, Integer> bigramCounts = wordCounter.countBigrams(words);
+        for (String bigramCount : bigramCounts.keySet()) {
+            System.out.println(bigramCounts.get(bigramCount) + "\t" + bigramCount);
+        }
+        Map<String, Integer> nCounts = wordCounter.countNgrams(words, 7);
+        for (String nCount : nCounts.keySet()) {
+            System.out.println(nCounts.get(nCount) + "\t" + nCount);
+        }
     }
 
     Map<String, Integer> count(String[] words) {
@@ -27,6 +36,32 @@ public class WordCounter {
                 counts.put(word, 1);
             } else {
                 counts.put(word, counts.get(word) + 1);
+            }
+        }
+        return counts;
+    }
+
+    Map<String, Integer> countBigrams(String[] words) {
+        Map<String, Integer> counts = new TreeMap<>();
+        for (int i = 0; i < words.length - 1; i++) {
+            String bigram = words[i] + "\t" + words[i + 1];
+            if (counts.get(bigram) == null) {
+                counts.put(bigram, 1);
+            } else {
+                counts.put(bigram, counts.get(bigram) + 1);
+            }
+        }
+        return counts;
+    }
+
+    Map<String, Integer> countNgrams(String[] words, int n) {
+        Map<String, Integer> counts = new TreeMap<>();
+        for (int i = 0; i < words.length - n + 1; i++) {
+            String ngram = String.join("\t", Arrays.asList(Arrays.copyOfRange(words, i, i + n)));
+            if (counts.get(ngram) == null) {
+                counts.put(ngram, 1);
+            } else {
+                counts.put(ngram, counts.get(ngram) + 1);
             }
         }
         return counts;
