@@ -15,7 +15,7 @@ public class concord {
         String pattern = args[1];
         int width = new Integer(args[2]);
         String text = new Scanner(new File(file)).useDelimiter("\\Z").next();
-        text.replaceAll("\\s+", " ");
+        text = text.replaceAll("\\s+", " ");
         String concRegex = String.format("(.{0,%s}%s.{0,%s})", width, pattern, width);
         //System.out.println(concRE);
         Pattern concPattern = Pattern.compile(concRegex);
