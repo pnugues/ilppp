@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Assignment #2: Extracting noun groups using manually written rules</title>
+    </head>
+    <body>
+        <!--<h1>Assignment #2: Extracting noun groups using manually written rules</h1>-->
+        <h2>Objectives</h2>
+        <p>The objectives of this assignment are to:</p>
+        <ul>
+            <li>Write phrase-structure rules to describe partial syntactic structures</li>
+            <li>Understand the principles of the DCG parsing mechanisms</li>
+            <li>Know what syntactic chunking is</li>
+            <li>Optionally, read a short text on an industrial system</li>
+        </ul>
+        <h2>Organization and location</h2>
+        <p>The second lab session will take place on</p>
+        <ul>
+            <li>Group 1: Wednesday, September 16 from 10:15 to 12:00 in the Alpha room</li>
+            <li>Group 2: Wednesday, September 16 from 10:15 to 12:00 in the Beta room</li>
+            <li>Group 3: Wednesday, September 16 from 13:15 to 15:00 in the Beta room</li>
+        </ul>
+        <p>You can work alone or collaborate with another student.</p>
+        <p>Each group will have to:</p>
+        <ul>
+            <li>Write a set of grammar rules in Prolog to detect noun groups.</li>
+            <li>Evaluate the results and comment them briefly</li>
+        </ul>
+        <h2>Preparation</h2>
+        <ol>
+            <li>Make sure that you understand what shallow syntax is, and what is
+                the point of it. See page 291-292 in the book, 2nd edition, or take a look at the
+                <i>Chunk stylebook</i>
+                from Steven Abney [<a href="http://www.vinartus.com/spa/96i.pdf">pdf</a>].
+            </li>
+            <li>The lab will use the data from the
+                <a href="http://www.cnts.ua.ac.be/conll2000/chunking">CoNLL-2000
+                    shared task
+                </a>
+                on chunking. Have a look at the web page and make sure
+                that you understand how the groups are represented in the tabular
+                format (see<b>Software and Data</b>).
+            </li>
+        </ol>
+        <h2>Programming</h2>
+        <h3>Choosing a training and a test sets</h3>
+        <ol>
+            <li>As annotated data and annotation scheme, you will use the data available from <a
+                    href="http://www.cnts.ua.ac.be/conll2000/chunking/">CONLL 2000</a>.
+            </li>
+            <li>Download both the
+                <a
+                        href="http://www.cnts.ua.ac.be/conll2000/chunking/train.txt.gz">training
+                </a>
+                and
+                <a href="http://www.cnts.ua.ac.be/conll2000/chunking/test.txt.gz">test</a>
+                texts. Decompress them using <code>gunzip</code>.
+                <br/>
+                (Local copies available here: [<a
+                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/train.txt">train.txt</a>]
+                [<a href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/test.txt">test.txt</a>].)
+            </li>
+            <li>Be sure that you have a running Prolog system. In the computer room, you will use <a
+                    href="http://www.swi-prolog.org/">SWI Prolog</a>.
+            </li>
+        </ol>
+        <h3>Annotating the groups</h3>
+        <ol>
+            <li>The two main syntactic groups are the noun groups and the verb groups, also called noun chunks and verb
+                chunks. In the program you will write, you will first consider the noun groups.
+            </li>
+            <li>Find a couple of sentences in English, from a newspaper for instance, and tag manually some noun groups
+                using the tags
+                <tt>&lt;ng&gt;</tt>
+                and
+                <tt>&lt;/ng&gt;</tt>
+                to delimit the groups.
+            </li>
+            <!--<li>Write an XML DTD that describes the tagged text structure.</li>
+            <li>Validate the XML document and its DTD using the <a href="http://validator.w3.org/#validate_by_input">W3C validation service</a>
+            </li>-->
+            <li>Read the annotation scheme used by CoNLL and transform your tags using the IOB2 annotation scheme.
+                (Notice the difference between the IOB and IOB2 tagging schemes.)
+            </li>
+            <li>Read the
+                <tt>convert_brackets_to_iob2/1</tt>
+                predicate in the
+                <tt>brackets_to_iob2.pl</tt>
+                file and experiment it with the
+                <tt>test_conversion_iob2/0</tt>
+                predicate. [<a href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking">Program
+                    folder</a>].
+                <br/>
+                You will start the Prolog interpreter with the command:<tt>swipl</tt>. Prolog prints a prompt:
+                <tt>?-</tt>
+                and reads your commands. You will type:
+                <pre>?- [brackets_to_iob2].</pre>
+                to load the file and
+                <pre>?- convert_brackets_to_iob2.</pre>
+                to run the predicate.
+            </li>
+        </ol>
+        <h3>Writing rules to detect the noun groups</h3>
+        <ol>
+            <li>Read the rules describing noun groups from the
+                <tt>ng.pl</tt>
+                program demonstrated in the lecture on partial parsing and try to understand them. [<a
+                        href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking">Program folder</a>]
+            </li>
+            <li>Run the
+                <tt>tag_complete_file(InputFile, OutputFile)</tt>
+                predicate from the
+                <tt>group_detector.pl</tt>
+                file. <tt>InputFile</tt> is either
+                <tt>'train.txt'</tt>
+                or
+                <tt>'test.txt'</tt>
+                and
+                <tt>OutputFile</tt>
+                is the result from you tagging program.
+                <br/>
+                <tt>tag_complete_file</tt>
+                calls the
+                <tt>group_detector(TokenizedList, Result)</tt>
+                predicate seen during the lecture on partial parsing. You will also need input/output predicates that
+                you will find in the
+                <tt>conll_io.pl</tt>
+                file. You will need to have all these files in your working directory. [<a
+                        href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking">Program folder</a>]
+            </li>
+            <li>Measure the performance of the system. Use the
+                <a href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/eval.sh">
+                    <tt>eval.sh</tt>
+                </a>
+                script and the
+                <a href="http://www.cnts.ua.ac.be/conll2000/chunking/conlleval.txt">
+                    <tt>conlleval.txt</tt>
+                </a>
+                evaluation program used by the CONLL shared task. Run the command:
+                <br/>
+                <tt>sh eval.sh reference_file your_file</tt>
+            </li>
+            <li>Examine the rules to detect noun groups and propose
+                improvements. We will clarify this during the laboratory
+                session. You may need to consult a<a href="http://www.comp.leeds.ac.uk/amalgam/tagsets/upenn.html">
+                    description of the part-of-speech tags
+                </a>.
+            </li>
+            <li>Write more rules, and improve the existing rules,
+                iteratively. Evaluate the results on the
+                <b>training set</b>
+                to measure your progress. Improve the rules so that you
+                obtain a harmonic mean (FB1)
+                greater than 75 for the noun groups.
+                The applications
+                <code>tkdiff</code>
+                or
+                <code>kdiff3</code>
+                may be useful when you are inspecting the differences between your output and the
+                correct file.
+            </li>
+            <li>Finally, evaluate the result on the test set.</li>
+        </ol>
+        <h3>Writing rules to detect the verb groups</h3>
+        <p>You will now write a program to identify verb groups. There is no accuracy to reach in this laboratory;
+            however you can easily obtain scores better than 50.
+        </p>
+        <ol>
+            <li>Use the tags
+                <tt>&lt;vg&gt;</tt>
+                and
+                <tt>&lt;/vg&gt;</tt>
+                to delimit the groups on some sentences you will collect from newspapers.
+            </li>
+            <li>Use your program and write rules detecting the verb groups.</li>
+            <li>Do you think a perfect detection is possible? Propose improvements.</li>
+        </ol>
+        <!--
+        <h3>Detecting multiwords (Optional)</h3>
+        <p>Depending on the content of your text, you may have to write rules describing names of persons, organizations, and countries, or dates, or number expressions - monetary expressions or percentages.
+        </p>
+        <ol>
+            <li>Write a simple rule describing a multiword in your text together with its vocabulary. Read the examples from the <a href="http://fileadmin.cs.lth.se/cs/Education/EDA171/Programs/ch09/ch90.pl"><tt>ch90.pl</tt></a> program demonstrated in the lecture on partial parsing. Use the tags <tt>&lt;ENAMEX&gt;</tt> and <tt>&lt;/ENAMEX&gt;</tt>, <tt>&lt;NUMEX&gt;</tt> and <tt>&lt;/NUMEX&gt;</tt>, <tt>&lt;TIMEX&gt;</tt> and <tt>&lt;/TIMEX&gt;</tt> to delimit the multiwords. You may find additional specifications <a href="http://www.cs.nyu.edu/cs/faculty/grishman/NEtask20.book_1.html">here</a>.
+            </li>
+            <li>Run the <tt>multiword_detector(+TokenizedList, -Result)</tt> <a href="http://fileadmin.cs.lth.se/cs/Education/EDA171/Programs/ch09/ch90.pl">program</a> from the lecture on partial parsing and observe the result.
+            </li>
+            <li>Write rules for the remaining multiwords. You may write hard-wired rules but as far as possible try to be generic in the description of the expressions.
+            </li>
+        </ol>-->
+        <h2>Complement</h2>
+        <p>Read the text
+            <i>How Fastus Works</i>
+            about the
+            <a href="http://www.ai.sri.com/natural-language/projects/fastus.html">FASTUS</a>
+            system [<a href="http://www.ai.sri.com/~israel/fastus-schabes-Discern.pdf">pdf</a>]. You can additionally
+            read the
+            <a href="http://www.ai.sri.com/~appelt/ie-tutorial/">tutorial</a>
+            on information extraction by Douglas Appelt or some of Steven Abney's<a
+                    href="http://www.vinartus.com/spa/publications.html">publications</a>.
+        </p>
+    </body>
+</html>
