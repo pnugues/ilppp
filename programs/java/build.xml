@@ -1,0 +1,9 @@
+<project default="compile">
+    <target name="compile">
+        <mkdir dir="bin"/>
+        <javac includeantruntime="false" srcdir="src" destdir="bin"/>
+    </target>
+    <target name="clean">
+    	<delete dir="bin/"/>
+    </target>
+</project>
