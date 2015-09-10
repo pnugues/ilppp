@@ -1,3 +1,5 @@
+__author__ = "Pierre Nugues"
+
 import re
 import sys
 

@@ -1,3 +1,9 @@
+"""
+Counting n-grams of any size: N
+Usage: python count_ngrams.py N < corpus.txt
+"""
+__author__ = "Pierre Nugues"
+
 import sys
 
 import regex

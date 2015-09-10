@@ -1,4 +1,8 @@
-__author__ = 'pierre'
+"""
+Bigram counting
+Usage: python count_bigrams.py < corpus.txt
+"""
+__author__ = "Pierre Nugues"
 
 import sys
 

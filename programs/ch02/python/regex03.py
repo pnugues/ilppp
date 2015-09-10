@@ -1,6 +1,7 @@
 """
 The tr/// translate operator
 """
+__author__ = "Pierre Nugues"
 
 import sys
 

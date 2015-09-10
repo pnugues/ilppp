@@ -1,4 +1,8 @@
-__author__ = 'pierre'
+"""
+Trigram counting
+Usage: python count_trigrams.py < corpus.txt
+"""
+__author__ = "Pierre Nugues"
 
 import sys
 

@@ -1,3 +1,9 @@
+"""
+Tokenizers
+Usage: python tokenizer.py < corpus.txt
+"""
+__author__ = "Pierre Nugues"
+
 import sys
 import re
 

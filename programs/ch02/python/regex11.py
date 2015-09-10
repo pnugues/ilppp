@@ -1,7 +1,9 @@
 """
 Detecting nonASCII
 https://pypi.python.org/pypi/regex
+We need to use the regex module
 """
+__author__ = "Pierre Nugues"
 
 import sys
 import regex

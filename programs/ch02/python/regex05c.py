@@ -1,6 +1,7 @@
 """
 Match variables inside s//
 """
+__author__ = "Pierre Nugues"
 
 import sys
 import re

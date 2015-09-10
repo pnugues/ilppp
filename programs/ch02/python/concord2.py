@@ -5,6 +5,7 @@ if the distance between two concordances is less than the context size,
 for instance less than 20 characters apart
 python3 concord2.py helenus.txt 'Helenus' 20
 """
+__author__ = "Pierre Nugues"
 
 import re
 import sys

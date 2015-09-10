@@ -1,3 +1,8 @@
+"""
+Program to extract the left and right context of a match
+"""
+__author__ = "Pierre Nugues"
+
 import re
 import sys
 

@@ -1,4 +1,8 @@
-__author__ = 'pierre'
+"""
+Likelihood ratios of bigrams in a corpus
+Usage: python likelihood_ratio.py < corpus.txt
+"""
+__author__ = "Pierre Nugues"
 
 import sys
 from math import log

@@ -1,3 +1,9 @@
+"""
+A word counting program
+Usage: python count.py < corpus.txt
+"""
+__author__ = "Pierre Nugues"
+
 import sys
 
 import regex

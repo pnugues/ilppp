@@ -1,4 +1,8 @@
-__author__ = 'pierre'
+"""
+t-scores of bigrams in a corpus
+Usage: python t_scores.py < corpus.txt
+"""
+__author__ = "Pierre Nugues"
 
 import sys
 import math

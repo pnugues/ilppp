@@ -2,6 +2,7 @@
 The tr/// operator with modifiers
 tr///cs
 """
+__author__ = "Pierre Nugues"
 
 import re
 import sys

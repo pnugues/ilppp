@@ -1,3 +1,5 @@
+__author__ = "Pierre Nugues"
+
 import sys
 
 [source, target] = sys.argv[1:]

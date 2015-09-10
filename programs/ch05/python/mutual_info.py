@@ -1,4 +1,8 @@
-__author__ = 'pierre'
+"""
+Mutual information of bigrams in a corpus
+Usage: python mutual_info.py < corpus.txt
+"""
+__author__ = "Pierre Nugues"
 
 import sys
 import math
@@ -49,5 +53,6 @@ if __name__ == '__main__':
     mi = mutual_info(words, frequency, frequency_bigrams)
 
     for bigram in mi:
+        # if frequency_bigrams[bigram] < 10: continue
         print(mi[bigram], "\t", bigram, "\t", frequency[bigram[0]], "\t", frequency[bigram[1]], "\t",
               frequency_bigrams[bigram])

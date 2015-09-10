@@ -1,6 +1,7 @@
 """
 The m// match operator and s/// substitution operator
 """
+__author__ = "Pierre Nugues"
 
 import re
 import sys

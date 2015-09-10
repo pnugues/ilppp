@@ -1,3 +1,10 @@
+"""
+Concordance program to find all the concordances
+of a pattern surrounded by width characters.
+Usage: python concord.py file pattern width
+"""
+__author__ = "Pierre Nugues"
+
 import re
 import sys
 

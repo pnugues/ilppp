@@ -1,6 +1,7 @@
 """
 Unicode names
 """
+__author__ = "Pierre Nugues"
 
 print("\N{LATIN CAPITAL LIGATURE OE}", "\N{LATIN CAPITAL LETTER O WITH DIAERESIS}",
       "\N{LATIN SMALL LETTER O WITH DIAERESIS}", "\u0152", "\u00D6", " \77", "\x40")

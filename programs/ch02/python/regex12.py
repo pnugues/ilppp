@@ -1,8 +1,9 @@
 """
+Detecting nonASCII, Greek, Greek blocks
 This must be run with the command:
 python3 regex12.py <../test.txt
-Detecting nonASCII, Greek, Greek blocks
 """
+__author__ = "Pierre Nugues"
 
 import sys
 import regex
