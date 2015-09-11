@@ -29,22 +29,24 @@ abbr = {"Co.": 1, "Corp.": 1, "vs.": 1, "e.g.": 1,
         "Mr.": 1, "Jr.": 1, "Ms.": 1, "Mme.": 1, "Mrs.": 1,
         "Dr.": 1}
 
-for line in sys.stdin:
+
+def tokenize(text):
     # This line changes tabs into spaces
-    line = re.sub(r"\t", " ", line)
+    text = re.sub(r"\t", " ", text)
     # put blanks around characters that are unambiguous separators
-    line = re.sub(always_sep, r" \g<0> ", line)
+    text = re.sub(always_sep, r" \g<0> ", text)
     # if a word is a separator in the beginning of a token separate it here
-    line = re.sub("^" + begin_sep, r"\g<0> ", line)
-    line = re.sub(" " + begin_sep, r"\g<0> ", line)
-    line = re.sub("(" + not_letter + ")(" + begin_sep + ")", r"\1 \2", line)
+    text = re.sub("^" + begin_sep, r"\g<0> ", text)
+    text = re.sub(" " + begin_sep, r"\g<0> ", text)
+    text = re.sub("(" + not_letter + ")(" + begin_sep + ")", r"\1 \2", text)
     # idem for final separators
-    line = re.sub(end_sep + r"\s", r" \g<0>", line)
-    line = re.sub(end_sep + "(" + not_letter + ")", r"\1 \2",
-                  line)  # the end separator is already between parentheses and is stored in $1
+    text = re.sub(end_sep + r"\s", r" \g<0>", text)
+    text = re.sub(end_sep + "(" + not_letter + ")", r"\1 \2",
+                  text)  # the end separator is already between parentheses and is stored in $1
 
     # This line divides the input line and assigns it to elements of an array
-    all_words = line.split()
+    all_words = text.split()
+    words = []
     # We examine all the elements
     for word in all_words:
         # if it contains a letter followed by a period,
@@ -58,5 +60,13 @@ for line in sys.stdin:
                     word = re.sub(r"\.$", r" .", word)
         # Change all spaces to new lines
         word = re.sub(r"[ \t]+", r"\n", word)
-        # Print the current word
-        print(word)
+        # Append the current word
+        words.append(word)
+    return words
+
+
+if __name__ == '__main__':
+    for line in sys.stdin:
+        words = tokenize(line)
+        for word in words:
+            print(word)

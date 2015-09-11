@@ -33,10 +33,12 @@ def tokenize2(text):
 def tokenize3(text):
     """uses the punctuation and nonletters to break the text into words
     returns a list of words"""
-    text = re.sub("[^a-zåàâäæçéèêëîïôöœßùûüÿA-ZÅÀÂÄÆÇÉÈÊËÎÏÔÖŒÙÛÜŸ’'()\-,.?!:;]+", "\n", text)
-    text = re.sub("([,.?!:;)('-])", r"\n\1\n", text)
-    text = re.sub(r"\n+", "\n", text)
-    return text
+    #text = re.sub("[^a-zåàâäæçéèêëîïôöœßùûüÿA-ZÅÀÂÄÆÇÉÈÊËÎÏÔÖŒÙÛÜŸ’'()\-,.?!:;]+", "\n", text)
+    #text = re.sub("([,.?!:;)('-])", r"\n\1\n", text)
+    text = regex.sub(r"[^\p{L}\p{P}]+", "\n", text)
+    text = regex.sub(r"(\p{P})", r"\n\1\n", text)
+    text = regex.sub(r"\n+", "\n", text)
+    return text.split()
 
 
 if __name__ == '__main__':
@@ -44,5 +46,7 @@ if __name__ == '__main__':
     words = tokenize(text)
     for word in words:
         print(word)
-    text = tokenize2(text)
-    print(text)
+    words = tokenize2(text)
+    print(words)
+    words = tokenize3(text)
+    print(words)
