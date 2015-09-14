@@ -1,4 +1,4 @@
-:- [tokenize_dcg].
+:- ['../../ch09/prolog/tokenize_dcg'].
 % % A simplified version of the ELIZA program
 % %
 
