@@ -1,6 +1,6 @@
 # Programme montrant Brill avec le mot den
 # Le corpus est talbanken.txt
-# Un expression régulière utile pour trouver les cas correspondant à une règle
+# Une expression régulière utile pour trouver les cas correspondant à une règle
 # .+\tden\tdt.+\n.+\tpp\t
 
 $line_prev = <>;
