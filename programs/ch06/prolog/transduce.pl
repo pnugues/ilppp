@@ -40,10 +40,11 @@ final_state(15).
 letter(L) :-
 	nonvar(L),
 	char_type(L, alpha).
-*/
+
 % transduce(+Start, ?Final, ?UnderlyingString, ?SurfaceString)
 %  describes the transducer. The first and second rules include
 %  mute transitions and enable to remove 0s
+
 transduce(Start, Final, [U | UnderlyingString], SurfaceString) :-
 	arc(Start, Next, U, 0),
 	transduce(Next, Final, UnderlyingString, SurfaceString).
