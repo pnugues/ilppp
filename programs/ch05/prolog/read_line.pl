@@ -1,3 +1,4 @@
+% Author: Pierre Nugues
 % read_line(-Line)
 %  Reads characters from the keyboard until
 %  it reaches an eof or a new line.

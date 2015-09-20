@@ -33,7 +33,7 @@ tokenize([CharCode | RestCodes], Tokens) :- % a blank
 	char_type(CharCode, space),
 	!,
 	tokenize(RestCodes, Tokens).
-tokenize([CharCode | CharCodes], [Word | Tokens]) :- % an alphanumical
+tokenize([CharCode | CharCodes], [Word | Tokens]) :- % an alphanumerical
 	char_type(CharCode, alnum),
 	!,
 	make_word([CharCode | CharCodes], alnum, WordCodes, RestCodes),

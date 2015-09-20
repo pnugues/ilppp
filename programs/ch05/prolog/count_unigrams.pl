@@ -1,3 +1,6 @@
+% Author: Pierre Nugues
+% Program to count the frequencies of word in a file
+
 :- ['read_file.pl'].
 :- ['tokenize.pl'].
 :- ['count_duplicates.pl'].

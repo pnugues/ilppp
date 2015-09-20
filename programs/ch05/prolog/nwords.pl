@@ -1,4 +1,4 @@
-% Author Pierre Nugues
+% Author: Pierre Nugues
 % Reads, tokenizes, and counts the words of a file
 
 % nwords(+File, -WordFrequencies)
@@ -9,7 +9,7 @@ nwords(File, WordCounts) :-
     maplist(downcase_atom, Words, LCWords),
     count_occurrences(LCWords, WordCounts).
 
-% Returns a list of words from a list of characters
+% Tokenizer: Returns a list of words from a list of characters
 words(Words) --> blank, !, words(Words).
 words([Word | Words]) --> word(Word), !, words(Words).
 words([]) --> [].

@@ -1,3 +1,4 @@
+% Author: Pierre Nugues
 % read_file(+File, -CharList)
 read_file(File, CharList) :-
 	open(File, read, Stream),

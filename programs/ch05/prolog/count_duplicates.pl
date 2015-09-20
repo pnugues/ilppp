@@ -1,3 +1,4 @@
+% Author: Pierre Nugues
 % count_duplicates(+OrderedList, -CountedList) counts items of
 % an ordered list. The result is a list of [N, Item] elements
 count_duplicates(OrderedList, CountedList) :- 
