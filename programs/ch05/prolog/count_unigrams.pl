@@ -1,7 +1,7 @@
 % Author: Pierre Nugues
-% Program to count the frequencies of word in a file
+% Program to count the frequencies of words in a file
 
-:- ['read_file.pl'].
+:- ['../../appA/prolog/read_file.pl'].
 :- ['tokenize.pl'].
 :- ['count_duplicates.pl'].
 

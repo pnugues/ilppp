@@ -1,4 +1,6 @@
-% Getting the syntactic struture
+% Author: Pierre Nugues
+
+% Getting the syntactic struture from a parse
 % The query
 % ?- s(S, L, []). will result in:
 % S = s(np(det(the), noun(waiter)), 

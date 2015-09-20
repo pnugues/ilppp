@@ -1,3 +1,7 @@
+% Author: Pierre Nugues
+% Compositional rules to build a semantic representation of
+% I would like to hear some Mozart
+
 s(Sem) --> np(Sub), vp(Sub^Sem).
 
 npx(SemNP) --> pro(SemNP).

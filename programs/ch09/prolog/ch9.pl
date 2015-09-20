@@ -1,4 +1,5 @@
-:- encoding(utf8).
+% Author: Pierre Nugues
+
 % The rules to parse:
 % 	The waiter brought the meal
 % 	The waiter brought the meal to the table

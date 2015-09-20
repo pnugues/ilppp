@@ -6,8 +6,8 @@
 % tokenize_file/2 read characters from a file given in argument
 
 % Same as tokenize_opt. Should be better but in fact slower
-:- ['read_file.pl'].
-:- ['read_line.pl'].
+:- ['../../appA/prolog/read_file.pl'].
+:- ['../../appA/prolog/read_line.pl'].
 
 % tokenize_line(-TokenList)
 %  Tokenizes the current input: reads a line of text

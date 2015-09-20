@@ -1,4 +1,6 @@
-% Getting the semantic structure
+% Author: Pierre Nugues
+
+% Getting the semantic structure from a parse
 % The query ?- s(Semantics, [the, patron, ordered, a, meal], []).
 % will result in 
 % 	Semantics = ordered(patron, meal)
