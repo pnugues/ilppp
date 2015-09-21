@@ -1,6 +1,8 @@
-:- ['../../ch09/prolog/tokenize_dcg'].
+% Author: Pierre Nugues
 % % A simplified version of the ELIZA program
-% %
+
+
+:- ['../../ch09/prolog/tokenize_dcg'].
 
 % The main loop reads the input and calls process/1
 % It stops when the input is the word bye.

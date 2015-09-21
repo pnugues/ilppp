@@ -1,6 +1,12 @@
+% Author: Pierre Nugues
+
 % Multiword and group detector
 
 % Test with:
+test_multiword(Out) :-
+	multiword_detector(['M.', 'Dupont', was, given, 500,
+			    euros, in, front, of, the, casino], Out).
+
 la_times(L) :-
 	group_detector([critics, question, the, ability, of, a, relatively, small, group, of, big, integrated, prime, contractors, to, maintain, the, intellectual, diversity, that, formerly, provided, the, pentagon, with, innovative, weapons, with, fewer, design, staffs, working, on, military, problems, the, solutions, are, likely, to, be, less, varied], L).
 
@@ -9,6 +15,7 @@ la_times_2(S) :-
 	modifier_detector(L, S).
 
 
+% Multiwords
 multiword(give_up) -->
 	[give, up].
 multiword(['<ENAMEX>', 'Helmut', 'Kohl', '</ENAMEX>']) -->
@@ -56,12 +63,6 @@ multiword_detector(In, [MultiWord | Out]) :-
 	multiword_detector(End, Out).
 multiword_detector(_, []).
 */
-
-
-test_multiword(Out) :-
-	multiword_detector(['M.', 'Dupont', was, given, 500,
-			    euros, in, front, of, the, casino], Out).
-
 
 
 %%%%%
