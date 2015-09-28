@@ -1,0 +1,12 @@
+@relation parse_action
+
+@attribute top_pos_stack {nil, ROOT, ++, NN, EN, AV, AJ, IK, IP, PO, VV, AB, TP, PR, RO, ID, PN, IC, MN, UK, VN, QV, WV, IQ, SV, HV, IR, IG, AN, MV, IM, BV, KV, GV, FV, PU, SP, XX, I?, IS, IT, IU, YY}
+@attribute second_pos_stack {nil, ROOT, ++, NN, EN, AV, AJ, IK, IP, PO, VV, AB, TP, PR, RO, ID, PN, IC, MN, UK, VN, QV, WV, IQ, SV, HV, IR, IG, AN, MV, IM, BV, KV, GV, FV, PU, SP, XX, I?, IS, IT, IU, YY}
+@attribute first_pos_queue {nil, ROOT, ++, NN, EN, AV, AJ, IK, IP, PO, VV, AB, TP, PR, RO, ID, PN, IC, MN, UK, VN, QV, WV, IQ, SV, HV, IR, IG, AN, MV, IM, BV, KV, GV, FV, PU, SP, XX, I?, IS, IT, IU, YY}
+@attribute second_pos_queue {nil, ROOT, ++, NN, EN, AV, AJ, IK, IP, PO, VV, AB, TP, PR, RO, ID, PN, IC, MN, UK, VN, QV, WV, IQ, SV, HV, IR, IG, AN, MV, IM, BV, KV, GV, FV, PU, SP, XX, I?, IS, IT, IU, YY}
+@attribute can_do_leftarc {true, false}
+@attribute can_reduce {true, false}
+@attribute action {la, ra, re, sh}
+
+@data
+nil	ROOT	sh
