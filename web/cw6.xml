@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC
+        "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Assignment #6: Dependency parsing using machine learning techniques</title>
+    </head>
+    <body>
+        <!--<h1>Assignment #6: Dependency parsing using machine learning techniques</h1>-->
+        <h2>Objectives</h2>
+        <p>The objectives of this assignment are to:</p>
+        <ul>
+            <li>Extract feature vectors and train a classifier</li>
+            <li>Write a statistical dependency parser</li>
+            <li>Understand how to design parameter sets</li>
+        </ul>
+        <h2>Organization and location</h2>
+        <p>The sixth lab session will take place on</p>
+        <ul>
+            <li>Group 1: Wednesday, October 14 from 10:15 to 12:00 in the Alpha room</li>
+            <li>Group 2: Wednesday, October 14 from 10:15 to 12:00 in the Beta room</li>
+            <li>Group 3: Wednesday, October 14 from 13:15 to 15:00 in the Beta room</li>
+        </ul>
+        <p>You can work alone or collaborate with another student.</p>
+        <p>Each group will have to:</p>
+        <ul>
+            <li>Write and train a machine learning program to parse dependencies</li>
+            <li>Use different parameter sets</li>
+            <li>Evaluate the results on a corpus and comment them briefly</li>
+        </ul>
+        <h2>Programming</h2>
+        <p>This assignment is inspired by the shared task of the Tenth conference on computational natural language
+            learning, <a href="http://ilk.uvt.nl/conll/">CONLL-X</a>, and uses similar data. The conference site contains
+            a description of multilingual dependency parsing, reference papers, training and test sets for a variety of
+            languages, as well as evaluation programs. See also <a href="http://depparse.uvt.nl/SharedTaskWebsite.html">
+                CONLL 2007</a>, on the same topic.
+        </p>
+        <p>In this session, you will implement and test a dependency parser for Swedish using machine learning
+            techniques.
+        </p>
+        <h3>Choosing a training and a test sets</h3>
+        <ol>
+            <li>The CONLL-X annotated corpora and annotation scheme are available <a
+                    href="http://ilk.uvt.nl/conll/post_task_data.html">here</a>. The Swedish corpus called
+                <i>Talbanken</i>
+                was originally collected and annotated in Lund and modified by Joakim Nivre. Read details on the corpus
+                and references <a href="http://w3.msi.vxu.se/~nivre/research/talbanken.html">here</a>.
+            </li>
+            <li>In this assignment, you will use the CONLL-X Swedish corpus. Download the tar archives containing the
+                training and test sets for Swedish and uncompress them: [<a
+                        href="http://ilk.uvt.nl/conll/free_data.html">data sets</a>]. Local copies: [<a
+                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conllx/sv/swedish_talbanken05_train.conll">
+                    training set</a>] [<a
+                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conllx/sv/swedish_talbanken05_test_blind.conll">
+                    test set</a>] [<a
+                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conllx/sv/swedish_talbanken05_test.conll">
+                    test set with answers</a>].
+            </li>
+        </ol>
+        <h3>Training the classifiers</h3>
+        <p>If you have not done it in the previous assignment, learn the decision tree corresponding your data sets
+            using Weka and produce the corresponding models from your training file.
+        </p>
+        <ul>
+            <li>Start Weka. You must use version 3.7.2 or higher. You can increase the memory by typing<tt>java -Xmx6g
+                -jar weka.jar</tt>, where the
+                <tt>mx</tt>
+                parameter corresponds to the maximum heap size.
+            </li>
+            <li>Load a data file by selecting the
+                <i>Preprocess button</i>
+            </li>
+            <li>Choose and create a classifier by pressing the
+                <i>Classify</i>
+                button and then the
+                <i>Choose</i>
+                button. Use the
+                <b>J48</b>
+                decision trees.
+            </li>
+            <li>Save the corresponding model by right-clicking on the item in the
+                <i>Result list</i>
+            </li>
+        </ul>
+        <h3>Parsing the corpus and evaluating the results</h3>
+        <p>Once you have generated your models, you will embed them in Nivre's parser and compute their respective
+            efficiencies. You will carry out the following steps steps:
+        </p>
+        <ul>
+            <li>You will reuse and complement the Java code from the fifth assigment to run the parser. The parser is
+                started in the
+                <tt>Parser.java</tt>
+                file. The programming details are given in the next section.
+            </li>
+            <li>You will initialize the Weka models and couple them to your parser using <tt>WekaGlue.java</tt>. Read it
+                to understand how this works.
+            </li>
+            <li>Once you have parsed the test set, you will measure the accuracy of your parser using the CoNLL
+                evaluation script [<a href="http://ilk.uvt.nl/conll/software.html#eval">3</a>]. Local copy: [<a
+                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conllx/eval.pl">eval.pl</a>]. You
+                will run this script using the command:<tt>perl eval.pl -g gold_standard_file -s system_output -q</tt>,
+                where
+                <tt>-q</tt>
+                stands for quiet.
+            </li>
+            <li>
+                You will run the parser with the three feature sets described in the fifth assignment to carry out a
+                labelled and unlabelled dependency parsing. (Six experiments in total to carry out).
+            </li>
+        </ul>
+        <h3>Programming and running the parser</h3>
+        <p>Read the code of the program and:
+        </p>
+        <ol>
+            <li>Complement the
+                <tt>parser()</tt>
+                method in the
+                <tt>Parser.java</tt>
+                program to carry out parsing actions.
+            </li>
+            <li>Following the model of<tt>Guide4.java</tt>, write classes that extract the different feature sets.
+            </li>
+            <li>Run the program with the different feature sets and report the results. Compare them with the best
+                labelled and unlabelled scores obtained at CoNLL-X.
+            </li>
+        </ol>
+        <h2>Complement (Optional)</h2>
+        <p>Read the text
+            <i>Labeled Pseudo-Projective Dependency Parsing with Support Vector Machines</i>
+            by Joakim Nivre et al. (2006) [<a href="http://w3.msi.vxu.se/~nivre/papers/malt_shared.pdf">pdf</a>]. Read
+            the slides<a href="http://ilk.uvt.nl/conll/slides/Nivre.pdf">here</a>.
+        </p>
+    </body>
+</html>
