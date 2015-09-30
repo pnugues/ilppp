@@ -1,5 +1,5 @@
 """
-A Perl regex that does not in Python
+A Perl regex that does not work in Python
 """
 __author__ = "Pierre Nugues"
 
