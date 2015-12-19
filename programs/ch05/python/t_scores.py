@@ -40,8 +40,11 @@ def count_bigrams(words):
 def t_scores(words, freq_unigrams, freq_bigrams):
     ts = {}
     for bigram in freq_bigrams:
-        ts[bigram] = (freq_bigrams[bigram] - freq_unigrams[bigram[0]] * freq_unigrams[bigram[1]] / len(
-            words)) / math.sqrt(freq_bigrams[bigram])
+        ts[bigram] = ((freq_bigrams[bigram] -
+                      freq_unigrams[bigram[0]] *
+                      freq_unigrams[bigram[1]] /
+                      len(words)) /
+                      math.sqrt(freq_bigrams[bigram]))
     return ts
 
 
@@ -52,6 +55,6 @@ if __name__ == '__main__':
     frequency_bigrams = count_bigrams(words)
     ts = t_scores(words, frequency, frequency_bigrams)
 
-    for bigram in ts:
+    for bigram in sorted(ts, key=ts.get):
         print(ts[bigram], "\t", bigram, "\t", frequency[bigram[0]], "\t", frequency[bigram[1]], "\t",
               frequency_bigrams[bigram])

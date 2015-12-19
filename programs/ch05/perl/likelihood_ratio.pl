@@ -1,7 +1,3 @@
-use utf8;
-binmode(STDOUT, ":encoding(UTF-8)");
-binmode(STDIN, ":encoding(UTF-8)");
-
 $text = <>;
 while ($line = <>) { 
     $text .= $line;
@@ -27,8 +23,8 @@ for ($i = 0; $i < $#words; $i++) {
 	$likelihood_ratio{$bigrams[$i]} = 2*(
 	    $frequency_bigrams{$bigrams[$i]} * log($p1) + ($frequency{$words[$i]} - $frequency_bigrams{$bigrams[$i]}) * log(1 - $p1) 
 	     + ($frequency{$words[$i + 1]} - $frequency_bigrams{$bigrams[$i]}) * log($p2) + ($#words - $frequency{$words[$i]} - $frequency{$words[$i + 1]} + $frequency_bigrams{$bigrams[$i]}) * log(1 - $p2) 
-	     - $frequency_bigrams{$bigrams[$i]} * log($p) + ($frequency{$words[$i]} - $frequency_bigrams{$bigrams[$i]}) * log(1 - $p) 
-              - ($frequency{$words[$i + 1]} - $frequency_bigrams{$bigrams[$i]}) * log($p) + ($#words - $frequency{$words[$i]} - $frequency{$words[$i + 1]} + $frequency_bigrams{$bigrams[$i]}) * log(1 - $p));
+	     - $frequency_bigrams{$bigrams[$i]} * log($p) - ($frequency{$words[$i]} - $frequency_bigrams{$bigrams[$i]}) * log(1 - $p)
+              - ($frequency{$words[$i + 1]} - $frequency_bigrams{$bigrams[$i]}) * log($p) - ($#words - $frequency{$words[$i]} - $frequency{$words[$i + 1]} + $frequency_bigrams{$bigrams[$i]}) * log(1 - $p));
     }
 }
 

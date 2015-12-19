@@ -42,19 +42,25 @@ def likelihood_ratio(words, freq_unigrams, freq_bigrams):
     for bigram in freq_bigrams:
         p = freq_unigrams[bigram[1]] / len(words)
         p1 = freq_bigrams[bigram] / freq_unigrams[bigram[0]]
-        p2 = (freq_unigrams[bigram[1]] - freq_bigrams[bigram]) / (len(words) - freq_unigrams[bigram[0]])
+        p2 = ((freq_unigrams[bigram[1]] - freq_bigrams[bigram])
+              / (len(words) - freq_unigrams[bigram[0]]))
         if p1 != 1.0 and p2 != 0.0:
-            lr[bigram] = 2.0 * (freq_bigrams[bigram] * log(p1) +
-                                (freq_unigrams[bigram[0]] - freq_bigrams[bigram]) * log(1 - p1) +
-                                (freq_unigrams[bigram[1]] - freq_bigrams[bigram]) * log(p2) +
-                                (len(words) - freq_unigrams[bigram[0]] - freq_unigrams[bigram[1]] + freq_bigrams[
-                                    bigram]) * log(1 - p2) -
-                                freq_bigrams[bigram] * log(p) + (
-                                    freq_unigrams[bigram[0]] - freq_bigrams[bigram]) * log(1 - p) -
-                                (freq_unigrams[bigram[1]] - freq_bigrams[bigram]) * log(p) +
-                                (len(words) - freq_unigrams[bigram[0]] - freq_unigrams[bigram[1]] + freq_bigrams[
-                                    bigram]) * log(1 - p))
+            lr[bigram] = 2.0 * (
+                log_f(freq_bigrams[bigram],
+                      freq_unigrams[bigram[0]], p1) +
+                log_f(freq_unigrams[bigram[1]] -
+                      freq_bigrams[bigram],
+                      len(words) - freq_unigrams[bigram[0]], p2) -
+                log_f(freq_bigrams[bigram],
+                      freq_unigrams[bigram[0]], p) -
+                log_f(freq_unigrams[bigram[1]] -
+                      freq_bigrams[bigram],
+                      len(words) - freq_unigrams[bigram[0]], p))
     return lr
+
+
+def log_f(k, N, p):
+    return k * log(p) + (N - k) * log(1 - p)
 
 
 if __name__ == '__main__':
@@ -64,6 +70,6 @@ if __name__ == '__main__':
     frequency_bigrams = count_bigrams(words)
     ts = likelihood_ratio(words, frequency, frequency_bigrams)
 
-    for bigram in ts:
+    for bigram in sorted(ts, key=ts.get):
         print(ts[bigram], "\t", bigram, "\t", frequency[bigram[0]], "\t", frequency[bigram[1]], "\t",
               frequency_bigrams[bigram])

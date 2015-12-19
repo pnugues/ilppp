@@ -26,7 +26,8 @@ def count_unigrams(words):
 
 
 def count_bigrams(words):
-    bigrams = [tuple(words[inx:inx + 2]) for inx in range(len(words) - 1)]
+    bigrams = [tuple(words[inx:inx + 2])
+               for inx in range(len(words) - 1)]
 
     frequency_bigrams = {}
     for bigram in bigrams:
@@ -41,7 +42,10 @@ def mutual_info(words, freq_unigrams, freq_bigrams):
     mi = {}
     factor = len(words) * len(words) / (len(words) - 1)
     for bigram in freq_bigrams:
-        mi[bigram] = math.log(factor * freq_bigrams[bigram] / (freq_unigrams[bigram[0]] * freq_unigrams[bigram[1]]), 2)
+        mi[bigram] = (
+            math.log(factor * freq_bigrams[bigram] /
+                     (freq_unigrams[bigram[0]] *
+                      freq_unigrams[bigram[1]]), 2))
     return mi
 
 
@@ -52,7 +56,9 @@ if __name__ == '__main__':
     frequency_bigrams = count_bigrams(words)
     mi = mutual_info(words, frequency, frequency_bigrams)
 
-    for bigram in mi:
-        # if frequency_bigrams[bigram] < 10: continue
-        print(mi[bigram], "\t", bigram, "\t", frequency[bigram[0]], "\t", frequency[bigram[1]], "\t",
+    for bigram in sorted(mi.keys(), key=mi.get):
+        if frequency_bigrams[bigram] < 10: continue
+        print(mi[bigram], '\t', bigram, '\t',
+              frequency[bigram[0]], '\t',
+              frequency[bigram[1]], '\t',
               frequency_bigrams[bigram])
