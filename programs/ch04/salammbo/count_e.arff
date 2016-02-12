@@ -1,0 +1,37 @@
+@relation count_a
+
+@attribute letter_count integer
+@attribute a_count integer
+@attribute language {french, english}
+
+@data
+36961,4312,french
+43621,4993,french
+15694,1785,french
+36231,4158,french
+29945,3394,french
+40588,4535,french
+75255,8512,french
+37709,4229,french
+30899,3599,french
+25486,3002,french
+37497,4306,french
+40398,4618,french
+74105,8678,french
+76725,8870,french
+18317,2195,french
+35680,3967,english
+42514,4543,english
+15162,1570,english
+35298,3814,english
+29800,3210,english
+40255,4237,english
+74532,7834,english
+37464,4014,english
+31030,3373,english
+24843,2690,english
+36172,3790,english
+39552,4331,english
+72545,7963,english
+75352,8179,english
+18031,1994,english
