@@ -15,18 +15,18 @@ def sum_squared_errors(X, y, w):
     """
     Sum of the squared errors:
     Prediction: X.w = ŷ
-    Error: ŷ - y
+    Error (loss): y - ŷ
     :param X: The input matrix: The predictors
     :param y: The output vector: The response
     :param w: The weight vector: The model
     :return: The error
     """
-    return sum([(np.dot(X[i, :], w) - y[i]) ** 2 for i in range(len(X))])
+    return sum([(y[i] - np.dot(X[i, :], w)) ** 2 for i in range(len(X))])
 
 
 def compute_3d_matrices(data):
     """
-    Compute the 3D matrix of errors
+    Compute the 3D maty[i]rix of errors
     Axes x and y, the weights
     Axis z the error
     :param data:
