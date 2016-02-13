@@ -137,6 +137,11 @@ if __name__ == '__main__':
     print(norm1([1, 1]))
     print(heaviside([-1.4, 0, 2, -9]))
     print(transpose([[1, 3], [2, 4]]))
+    print(column([[1, 3, 5], [2, 4, 8], [1, 7, 2]], 1))
+    print(column([[1, 3, 5], [2, 4, 8], [1, 7, 2]], -1))
+    print(column([[1, 3, 5], [2, 4, 8], [1, 7, 2]], slice(0, -1, 1)))
     print(mul_mat(3, [[1, 2], [2, 4]]))
     print(mul_mat_vec([[1, 2], [2, 4]], [2, 3]))
     print(mul_mat_mat([[1, 2], [2, 4]], [[1, 3], [2, 4]]))
+    print(mul_mat_mat([[1, 2, 3]], [[1, 3], [2, 4], [1, 7]]))
+
