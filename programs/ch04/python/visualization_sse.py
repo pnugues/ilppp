@@ -26,7 +26,7 @@ def sum_squared_errors(X, y, w):
 
 def compute_3d_matrices(data):
     """
-    Compute the 3D maty[i]rix of errors
+    Compute the 3D matrix of errors
     Axes x and y, the weights
     Axis z the error
     :param data:
