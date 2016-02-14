@@ -21,7 +21,8 @@ def sum_squared_errors(X, y, w):
     :param w: The weight vector: The model
     :return: The error
     """
-    return sum([(y[i] - np.dot(X[i, :], w)) ** 2 for i in range(len(X))])
+    v = y - np.dot(X, w)
+    return np.dot(v, v)
 
 
 def compute_3d_matrices(data):
