@@ -1,5 +1,5 @@
 """
-Computing the analytic solution of regression
+Computing the analytical solution of regression
 Implementation with numpy arrays and matrices.
 Matrices are very close to matlab notation, while
 arrays are preferable overall.
