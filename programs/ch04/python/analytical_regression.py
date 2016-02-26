@@ -39,6 +39,8 @@ def regression_array(observations):
     X = np.array(observations)[:, :-1]
     y = np.array(observations)[:, -1]
     w = np.dot(np.dot(np.linalg.inv(np.dot(X.T, X)), X.T), y)
+    # Or directly with pinv()
+    # w = np.dot(np.linalg.pinv(X), y)
     y_hat = np.dot(X, w)
     sse = np.dot((y_hat - y).T, (y_hat - y))
     print("Weights", w.T)
@@ -57,11 +59,10 @@ if __name__ == '__main__':
         y = [obs[2] for obs in observations]
         lang[i] = plt.scatter(x, y, color=pattern[i][0], marker=pattern[i][1])
         # w = regression_array(observations)
-        w = regression_matrix(observations)
-        plt.plot([min(x), max(x)], [(np.matrix([1, min(x)]) * w)[0, 0],
-                                    (np.matrix([1, max(x)]) * w)[0, 0]],
+        w = np.array(regression_matrix(observations))
+        plt.plot([min(x), max(x)],
+                 [np.dot([1, min(x)], w), np.dot([1, max(x)], w)],
                  color=pattern[i][0])
-
     plt.title("Salammbô")
     plt.xlabel("Letter count")
     plt.ylabel("A count")
