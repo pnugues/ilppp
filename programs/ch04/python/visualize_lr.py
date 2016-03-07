@@ -9,6 +9,7 @@ import math
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
+from datasets import read_libsvm_file
 
 
 def logistic(x):
@@ -19,17 +20,6 @@ def logistic(x):
 
 
 logistic = np.vectorize(logistic)
-
-
-def read_data(data):
-    observations = [data[i].split() for i in range(len(data))]
-
-    y = [float(obs[0]) for obs in observations]
-    X = [['0:1'] + obs[1:] for obs in observations]
-
-    # We assume the data is not sparse
-    X = [list(map(lambda x: float(x.split(':')[1]), obs)) for obs in X]
-    return X, y
 
 
 def compute_likelihood(X, y, w):
@@ -77,8 +67,7 @@ def plot_logistic_surf(x_range, y_range, w_opt):
 
 
 if __name__ == '__main__':
-    data = open('../salammbo/salammbo_a_binary.libsvm').read().strip().split('\n')
-    X, y = read_data(data)
+    X, y = read_libsvm_file('../salammbo/salammbo_a_binary.libsvm')
 
     """
     Values found with R
