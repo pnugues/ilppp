@@ -15,14 +15,15 @@ def tokenize(text):
 
 
 def count_trigrams(words):
-    trigrams = ["\t".join(words[inx:inx + 3]) for inx in range(len(words) - 2)]
-    frequency_trigrams = {}
+    trigrams = [tuple(words[inx:inx + 3])
+                for inx in range(len(words) - 2)]
+    frequencies = {}
     for trigram in trigrams:
-        if trigram in frequency_trigrams:
-            frequency_trigrams[trigram] += 1
+        if trigram in frequencies:
+            frequencies[trigram] += 1
         else:
-            frequency_trigrams[trigram] = 1
-    return frequency_trigrams
+            frequencies[trigram] = 1
+    return frequencies
 
 
 if __name__ == '__main__':

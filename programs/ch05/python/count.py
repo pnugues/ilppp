@@ -6,11 +6,11 @@ __author__ = "Pierre Nugues"
 
 import sys
 
-import regex
+import regex as re
 
 
 def tokenize(text):
-    words = regex.findall("\p{L}+", text)
+    words = re.findall('\p{L}+', text)
     return words
 
 
@@ -28,5 +28,5 @@ if __name__ == '__main__':
     text = sys.stdin.read().lower()
     words = tokenize(text)
     frequency = count_unigrams(words)
-    for word in frequency:
-        print(frequency[word], "\t", word)
+    for word in sorted(frequency.keys(), key=frequency.get, reverse=True):
+        print(word, '\t', frequency[word])

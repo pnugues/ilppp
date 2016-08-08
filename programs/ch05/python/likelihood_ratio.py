@@ -70,6 +70,6 @@ if __name__ == '__main__':
     frequency_bigrams = count_bigrams(words)
     ts = likelihood_ratio(words, frequency, frequency_bigrams)
 
-    for bigram in sorted(ts, key=ts.get):
+    for bigram in sorted(ts, key=ts.get, reverse=True):
         print(ts[bigram], "\t", bigram, "\t", frequency[bigram[0]], "\t", frequency[bigram[1]], "\t",
               frequency_bigrams[bigram])

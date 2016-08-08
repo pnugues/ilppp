@@ -50,14 +50,17 @@ def mutual_info(words, freq_unigrams, freq_bigrams):
 
 
 if __name__ == '__main__':
+    cutoff = 1
+    if len(sys.argv) > 1:
+        cutoff = int(sys.argv[1])
     text = sys.stdin.read().lower()
     words = tokenize(text)
     frequency = count_unigrams(words)
     frequency_bigrams = count_bigrams(words)
     mi = mutual_info(words, frequency, frequency_bigrams)
 
-    for bigram in sorted(mi.keys(), key=mi.get):
-        if frequency_bigrams[bigram] < 10: continue
+    for bigram in sorted(mi.keys(), key=mi.get, reverse=True):
+        if frequency_bigrams[bigram] < cutoff: continue
         print(mi[bigram], '\t', bigram, '\t',
               frequency[bigram[0]], '\t',
               frequency[bigram[1]], '\t',

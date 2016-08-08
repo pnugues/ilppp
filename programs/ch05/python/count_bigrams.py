@@ -15,15 +15,15 @@ def tokenize(text):
 
 
 def count_bigrams(words):
-    bigrams = [words[inx] + "\t" + words[inx + 1] for inx in range(len(words) - 1)]
-
-    frequency_bigrams = {}
+    bigrams = [tuple(words[inx:inx + 2])
+               for inx in range(len(words) - 1)]
+    frequencies = {}
     for bigram in bigrams:
-        if bigram in frequency_bigrams:
-            frequency_bigrams[bigram] += 1
+        if bigram in frequencies:
+            frequencies[bigram] += 1
         else:
-            frequency_bigrams[bigram] = 1
-    return frequency_bigrams
+            frequencies[bigram] = 1
+    return frequencies
 
 
 if __name__ == '__main__':
