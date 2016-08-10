@@ -29,7 +29,7 @@ def split_rows(sentences, column_names):
     new_sentences = []
     for sentence in sentences:
         rows = sentence.split('\n')
-        sentence = [dict for row in rows]
+        sentence = [dict(zip(column_names, row.split())) for row in rows]
         new_sentences.append(sentence)
     return new_sentences
 

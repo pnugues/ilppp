@@ -148,32 +148,7 @@ if __name__ == '__main__':
 
     training_start_time = time.clock()
     print("Training the model...")
-    # classifier = linear_model.LogisticRegression(penalty='l2', dual=True, solver='liblinear')  # 91.51
-    # classifier = linear_model.LogisticRegression(penalty='l1', dual=False, solver='liblinear')  # 91.52
-    # classifier = linear_model.Perceptron() # 88.85
-    # classifier = linear_model.LogisticRegressionCV()  # 91.46
-    # classifier = tree.DecisionTreeClassifier(criterion='gini') # 91.05
-    # classifier = svm.SVC(kernel='linear') # 91.65
-    classifier = svm.SVC(C=5, kernel='poly', gamma=0.1, degree=2)  # 93.03
-    # {'kernel': 'rbf', 'C': 100, 'gamma': 0.001} 92.32
-    # {'kernel': 'rbf', 'C': 100, 'gamma': 0.01} 92.51
-    # {'degree': 2, 'kernel': 'poly', 'gamma': 0.1, 'C': 10} 92.98
-    # {'C': 10, 'kernel': 'poly', 'gamma': 100, 'degree': 2} 92.99
-    # {'C': 5, 'kernel': 'poly', 'gamma': 0.1, 'degree': 2} 93.03
-    """
-    Linear
-    # {'C': 0.5, 'kernel': 'linear'} 92.10
-    0.946 (+/-0.004) for {'kernel': 'linear', 'C': 0.1}
-    0.951 (+/-0.004) for {'kernel': 'linear', 'C': 0.25}
-    0.952 (+/-0.005) for {'kernel': 'linear', 'C': 0.5}
-    0.951 (+/-0.005) for {'kernel': 'linear', 'C': 0.75}
-    0.950 (+/-0.005) for {'kernel': 'linear', 'C': 1}
-    0.949 (+/-0.005) for {'kernel': 'linear', 'C': 1.25}
-    """
-
-    # classifier = svm.SVC(kernel='poly', C=10, gamma=100, degree=2)
-    # classifier = svm.LinearSVC() # 90.92
-    # classifier = GaussianNB()
+    classifier = linear_model.LogisticRegression(penalty='l2', dual=True, solver='liblinear')
     model = classifier.fit(X, y)
     print(model)
 
