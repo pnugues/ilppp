@@ -1,7 +1,7 @@
 """
 CoNLL 2000 file reader
-Author: Pierre Nugues
 """
+__author__ = "Pierre Nugues"
 
 
 def read_sentences(file):
@@ -18,22 +18,7 @@ def read_sentences(file):
     return sentences
 
 
-def split_rows(sentences):
-    """
-    Creates a list of sentence where each sentence is a list of lines
-    Each line is a list of columns
-    :param sentences:
-    :return:
-    """
-    new_sentences = []
-    for sentence in sentences:
-        rows = sentence.split('\n')
-        sentence = [row.split() for row in rows]
-        new_sentences.append(sentence)
-    return new_sentences
-
-
-def split_rows_dict(sentences, column_names):
+def split_rows(sentences, column_names):
     """
     Creates a list of sentence where each sentence is a list of lines
     Each line is a dictionary of columns
@@ -44,7 +29,7 @@ def split_rows_dict(sentences, column_names):
     new_sentences = []
     for sentence in sentences:
         rows = sentence.split('\n')
-        sentence = [dict(zip(column_names, row.split())) for row in rows]
+        sentence = [dict for row in rows]
         new_sentences.append(sentence)
     return new_sentences
 
@@ -56,5 +41,5 @@ if __name__ == '__main__':
     column_names = ['form', 'pos', 'chunk']
 
     sentences = read_sentences(train_file)
-    formatted_corpus = split_rows(sentences)
+    formatted_corpus = split_rows(sentences, column_names)
     print(formatted_corpus)
