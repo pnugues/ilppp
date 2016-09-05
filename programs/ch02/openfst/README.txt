@@ -3,7 +3,7 @@ Pierre Nugues
 
 1. Install OpenFst from this site: http://openfst.org
 
-2. Compile the two automata using these commands:
+2. Compile the two automata (Figs. 2.1 and 2.2) using these commands:
 $ fstcompile --isymbols=symbols.txt --osymbols=symbols.txt --acceptor fsa1.fst fsa1.bin 
 $ fstcompile --isymbols=symbols.txt --osymbols=symbols.txt --acceptor fsa2.fst fsa2.bin
 
