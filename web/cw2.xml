@@ -1,205 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC
-        "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>Assignment #2: Extracting noun groups using manually written rules</title>
+        <title>Assignment #2: Language Models</title>
     </head>
     <body>
-        <!--<h1>Assignment #2: Extracting noun groups using manually written rules</h1>-->
+        <!--<h1>Assignment #1: Language Models</h1>-->
         <h2>Objectives</h2>
         <p>The objectives of this assignment are to:</p>
         <ul>
-            <li>Write phrase-structure rules to describe partial syntactic structures</li>
-            <li>Understand the principles of the DCG parsing mechanisms</li>
-            <li>Know what syntactic chunking is</li>
-            <li>Optionally, read a short text on an industrial system</li>
+            <li>Write a program to find <i>n</i>-gram statistics</li>
+            <li>Compute the probability of a sentence</li>
+            <li>Write a short report of 1 to 2 pages on the assignment</li>
+            <li>Know what a language model is</li>
+            <li>Optionally read a short article on the importance of corpora</li>
         </ul>
         <h2>Organization and location</h2>
         <p>The second lab session will take place on</p>
         <ul>
-            <li>Group 1: Wednesday, September 16 from 10:15 to 12:00 in the Alpha room</li>
-            <li>Group 2: Wednesday, September 16 from 10:15 to 12:00 in the Beta room</li>
-            <li>Group 3: Wednesday, September 16 from 13:15 to 15:00 in the Beta room</li>
+            <li>Group 1: Tuesday, September 13 from 10:15 to 12:00 in the Beta room</li>
+            <li>Group 2: Tuesday, September 13 from 13:15 to 15:00 in the Beta room</li>
+            <!--<li>Group 3: Wednesday, September 7 from 8:15 to 10:00 in the Beta room</li>-->
+            <!--<li>Group 4: Friday, September 13 from 13:15 to 15:00 in the Gamma room</li>-->
         </ul>
-        <p>You can work alone or collaborate with another student.</p>
-        <p>Each group will have to:</p>
+        <p>You can work alone or collaborate with another student:</p>
         <ul>
-            <li>Write a set of grammar rules in Prolog to detect noun groups.</li>
-            <li>Evaluate the results and comment them briefly</li>
+            <li>Each group will have to write Python programs to count unigrams, bigrams, and trigrams in a corpus of approximately one million words and to determine the probability of a sentence.
+            </li>
+            <li>You can test you regular expression using the <a href="https://regex101.com/">regex101.com</a> site</li>
+            <li>Each student will have to write a short report of one to two pages and comment briefly the results. In your report, you must produce the tabulated results of your analysis as described below.</li>
         </ul>
-        <h2>Preparation</h2>
-        <ol>
-            <li>Make sure that you understand what shallow syntax is, and what is
-                the point of it. See page 291-292 in the book, 2nd edition, or take a look at the
-                <i>Chunk stylebook</i>
-                from Steven Abney [<a href="http://www.vinartus.com/spa/96i.pdf">pdf</a>].
-            </li>
-            <li>The lab will use the data from the
-                <a href="http://www.cnts.ua.ac.be/conll2000/chunking">CoNLL-2000
-                    shared task
-                </a>
-                on chunking. Have a look at the web page and make sure
-                that you understand how the groups are represented in the tabular
-                format (see<b>Software and Data</b>).
-            </li>
-        </ol>
         <h2>Programming</h2>
-        <h3>Choosing a training and a test sets</h3>
+        <h3>Collecting a corpus</h3>
         <ol>
-            <li>As annotated data and annotation scheme, you will use the data available from <a
-                    href="http://www.cnts.ua.ac.be/conll2000/chunking/">CONLL 2000</a>.
+            <li>Collect a corpus of at least 750,000 words. You will check the number of words using the Unix command <tt>wc -w</tt>.
             </li>
-            <li>Download both the
-                <a
-                        href="http://www.cnts.ua.ac.be/conll2000/chunking/train.txt.gz">training
-                </a>
-                and
-                <a href="http://www.cnts.ua.ac.be/conll2000/chunking/test.txt.gz">test</a>
-                texts. Decompress them using <code>gunzip</code>.
-                <br/>
-                (Local copies available here: [<a
-                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/train.txt">train.txt</a>]
-                [<a href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/test.txt">test.txt</a>].)
+            <li>Alternatively, you can retrieve a corpus of novels by Selma Lagerl&ouml;f from this URL: <a href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/Selma.txt"><tt>http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/Selma.txt</tt></a>.
             </li>
-            <li>Be sure that you have a running Prolog system. In the computer room, you will use <a
-                    href="http://www.swi-prolog.org/">SWI Prolog</a>.
+            <li>Run the <a href="https://github.com/pnugues/ilppp/tree/master/programs/ch02/python">concordance program</a> to print the lines containing a specific word, for instance <i>Nils</i>.
+            </li>
+            <li>Run the <a href="https://github.com/pnugues/ilppp/tree/master/programs/ch05/python">tokenization program</a> on your corpus and count the words using the Unix <tt>sort</tt> and <tt>uniq</tt> commands.
             </li>
         </ol>
-        <h3>Annotating the groups</h3>
+        <h3>Normalizing a corpus</h3>
         <ol>
-            <li>The two main syntactic groups are the noun groups and the verb groups, also called noun chunks and verb
-                chunks. In the program you will write, you will first consider the noun groups.
+            <li>Write a program to insert <tt>&lt;s&gt;</tt> and <tt>&lt;/s&gt;</tt> tags to delimit sentences. You can start from the tokenization and modify it. Use a simple heuristics such as: a sentence starts with a capital letter and ends with a period. Estimate roughly the accuracy of your program.
             </li>
-            <li>Find a couple of sentences in English, from a newspaper for instance, and tag manually some noun groups
-                using the tags
-                <tt>&lt;ng&gt;</tt>
-                and
-                <tt>&lt;/ng&gt;</tt>
-                to delimit the groups.
+            <li>Modify your program to remove the punctuation signs and set all the text in lower case letters.</li>
+            <li>The result should be a normalized text without punctuation signs where all the sentences are delimited with <tt>&lt;s&gt;</tt> and <tt>&lt;/s&gt;</tt> tags.
             </li>
-            <!--<li>Write an XML DTD that describes the tagged text structure.</li>
-            <li>Validate the XML document and its DTD using the <a href="http://validator.w3.org/#validate_by_input">W3C validation service</a>
-            </li>-->
-            <li>Read the annotation scheme used by CoNLL and transform your tags using the IOB2 annotation scheme.
-                (Notice the difference between the IOB and IOB2 tagging schemes.)
-            </li>
-            <li>Read the
-                <tt>convert_brackets_to_iob2/1</tt>
-                predicate in the
-                <tt>brackets_to_iob2.pl</tt>
-                file and experiment it with the
-                <tt>test_conversion_iob2/0</tt>
-                predicate. [<a href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking">Program
-                    folder</a>].
-                <br/>
-                You will start the Prolog interpreter with the command:<tt>swipl</tt>. Prolog prints a prompt:
-                <tt>?-</tt>
-                and reads your commands. You will type:
-                <pre>?- [brackets_to_iob2].</pre>
-                to load the file and
-                <pre>?- convert_brackets_to_iob2.</pre>
-                to run the predicate.
+            <li>The five last lines of the text should look like this:
+                <pre>
+&lt;s&gt; hon hade fått större kärlek av sina föräldrar än någon annan han visste och sådan kärlek måste vändas i välsignelse &lt;/s&gt;
+&lt;s&gt; när prästen sa detta kom alla människor att se bort mot klara gulla och de förundrade sig över vad de såg &lt;/s&gt;
+&lt;s&gt; prästens ord tycktes redan ha gått i uppfyllelse &lt;/s&gt;
+&lt;s&gt; där stod klara fina gulleborg ifrån skrolycka hon som var uppkallad efter själva solen vid sina föräldrars grav och lyste som en förklarad &lt;/s&gt;
+&lt;s&gt; hon var likaså vacker som den söndagen då hon gick till kyrkan i den röda klänningen om inte vackrare &lt;/s&gt;
+                </pre>
             </li>
         </ol>
-        <h3>Writing rules to detect the noun groups</h3>
+        <h3>Counting unigrams and bigrams</h3>
         <ol>
-            <li>Read the rules describing noun groups from the
-                <tt>ng.pl</tt>
-                program demonstrated in the lecture on partial parsing and try to understand them. [<a
-                        href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking">Program folder</a>]
+            <!--
+                    <li>Divide your corpus into a training set (80% of the text) and a test set (20%)</li>
+            -->
+            <li>Read and try programs to compute the frequency of unigrams and bigrams of the training set: [<a href="https://github.com/pnugues/ilppp/tree/master/programs/ch05/python">Program folder</a>].
             </li>
-            <li>Run the
-                <tt>tag_complete_file(InputFile, OutputFile)</tt>
-                predicate from the
-                <tt>group_detector.pl</tt>
-                file. <tt>InputFile</tt> is either
-                <tt>'train.txt'</tt>
-                or
-                <tt>'test.txt'</tt>
-                and
-                <tt>OutputFile</tt>
-                is the result from you tagging program.
-                <br/>
-                <tt>tag_complete_file</tt>
-                calls the
-                <tt>group_detector(TokenizedList, Result)</tt>
-                predicate seen during the lecture on partial parsing. You will also need input/output predicates that
-                you will find in the
-                <tt>conll_io.pl</tt>
-                file. You will need to have all these files in your working directory. [<a
-                        href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking">Program folder</a>]
+            <li>What is the possible number of bigrams and their real number? Explain why such a difference. What would be the possible number of 4-grams.
             </li>
-            <li>Measure the performance of the system. Use the
-                <a href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/eval.sh">
-                    <tt>eval.sh</tt>
-                </a>
-                script and the
-                <a href="http://www.cnts.ua.ac.be/conll2000/chunking/conlleval.txt">
-                    <tt>conlleval.txt</tt>
-                </a>
-                evaluation program used by the CONLL shared task. Run the command:
-                <br/>
-                <tt>sh eval.sh reference_file your_file</tt>
+            <li>Propose a solution to cope with bigrams unseen in the corpus. This topic will be discussed during the lab session.
             </li>
-            <li>Examine the rules to detect noun groups and propose
-                improvements. We will clarify this during the laboratory
-                session. You may need to consult a<a href="http://www.comp.leeds.ac.uk/amalgam/tagsets/upenn.html">
-                    description of the part-of-speech tags
-                </a>.
-            </li>
-            <li>Write more rules, and improve the existing rules,
-                iteratively. Evaluate the results on the
-                <b>training set</b>
-                to measure your progress. Improve the rules so that you
-                obtain a harmonic mean (FB1)
-                greater than 75 for the noun groups.
-                The applications
-                <code>tkdiff</code>
-                or
-                <code>kdiff3</code>
-                may be useful when you are inspecting the differences between your output and the
-                correct file.
-            </li>
-            <li>Finally, evaluate the result on the test set.</li>
         </ol>
-        <h3>Writing rules to detect the verb groups</h3>
-        <p>You will now write a program to identify verb groups. There is no accuracy to reach in this laboratory;
-            however you can easily obtain scores better than 50.
-        </p>
+        <h3>Computing the likelihood of a sentence</h3>
         <ol>
-            <li>Use the tags
-                <tt>&lt;vg&gt;</tt>
-                and
-                <tt>&lt;/vg&gt;</tt>
-                to delimit the groups on some sentences you will collect from newspapers.
+            <li>Write a program to compute a sentence's probability using unigrams. You may find useful hash tables that we saw in the mutual information program: [<a href="https://github.com/pnugues/ilppp/tree/master/programs/java/src/lppp/ch05">Program folder</a>].
             </li>
-            <li>Use your program and write rules detecting the verb groups.</li>
-            <li>Do you think a perfect detection is possible? Propose improvements.</li>
+            <li>Write a program to compute the sentence probability using bigrams.</li>
+            <li>Select five sentences in your test set and run your programs on them.</li>
+            <li>Tabulate your results as in the examples below with the sentence <i>Det var en gång en katt som hette Nils</i>:
+                <pre>
+Unigrams
+=====================================================
+wi      C(wi)   #words      P(wi)
+=====================================================
+det     22086   1086845     0.0203212049556284
+var     12852   1086845     0.0118250532504635
+en      13921   1086845     0.0128086341658654
+gång    1332    1086845     0.00122556574304524
+en      13921   1086845     0.0128086341658654
+katt    15      1086845     1.38014160252842e-05
+som     16790   1086845     0.0154483850043014
+hette   107     1086845     9.84501009803606e-05
+nils    84      1086845     7.72879297415915e-05
+&lt;/s&gt;    62283   1086845     0.057306239620185
+=====================================================
+Prob. unigrams: 4.49191263644087e-27	Entropy rate: 8.75247286930358	Perplexity: 431.277568080082
+
+Bigrams
+=====================================================
+wi      wi+1    Ci,i+1  C(i)    P(wi+1|wi)
+=====================================================
+&lt;s&gt;     det     5913    62283   0.0949376234285439
+det     var     4023    22086   0.182151589242054
+var     en      753     12852   0.0585901027077498
+en      gång    695     13921   0.0499245743840241
+gång    en      23      1332    0.0172672672672673
+en      katt    5       13921   0.000359169599885066
+katt    som     2       15      0.133333333333333
+som     hette   50      16790   0.00297796307325789
+hette   nils    0       107     *backoff:   7.72879297415915e-05
+nils    &lt;/s&gt;    2       84      0.0238095238095238
+=====================================================
+Prob. bigrams: 2.29220556082587e-19	Entropy rate: 6.19198973746961	Perplexity: 73.1096397351286
+                </pre></li>
         </ol>
-        <!--
-        <h3>Detecting multiwords (Optional)</h3>
-        <p>Depending on the content of your text, you may have to write rules describing names of persons, organizations, and countries, or dates, or number expressions - monetary expressions or percentages.
-        </p>
-        <ol>
-            <li>Write a simple rule describing a multiword in your text together with its vocabulary. Read the examples from the <a href="http://fileadmin.cs.lth.se/cs/Education/EDA171/Programs/ch09/ch90.pl"><tt>ch90.pl</tt></a> program demonstrated in the lecture on partial parsing. Use the tags <tt>&lt;ENAMEX&gt;</tt> and <tt>&lt;/ENAMEX&gt;</tt>, <tt>&lt;NUMEX&gt;</tt> and <tt>&lt;/NUMEX&gt;</tt>, <tt>&lt;TIMEX&gt;</tt> and <tt>&lt;/TIMEX&gt;</tt> to delimit the multiwords. You may find additional specifications <a href="http://www.cs.nyu.edu/cs/faculty/grishman/NEtask20.book_1.html">here</a>.
-            </li>
-            <li>Run the <tt>multiword_detector(+TokenizedList, -Result)</tt> <a href="http://fileadmin.cs.lth.se/cs/Education/EDA171/Programs/ch09/ch90.pl">program</a> from the lecture on partial parsing and observe the result.
-            </li>
-            <li>Write rules for the remaining multiwords. You may write hard-wired rules but as far as possible try to be generic in the description of the expressions.
-            </li>
-        </ol>-->
         <h2>Complement</h2>
-        <p>Read the text
-            <i>How Fastus Works</i>
-            about the
-            <a href="http://www.ai.sri.com/natural-language/projects/fastus.html">FASTUS</a>
-            system [<a href="http://www.ai.sri.com/~israel/fastus-schabes-Discern.pdf">pdf</a>]. You can additionally
-            read the
-            <a href="http://www.ai.sri.com/~appelt/ie-tutorial/">tutorial</a>
-            on information extraction by Douglas Appelt or some of Steven Abney's<a
-                    href="http://www.vinartus.com/spa/publications.html">publications</a>.
+        <p>As a complement, you can read a paper by <a href="http://researcher.watson.ibm.com/researcher/view.php?person=us-kwchurch">Church</a> and Hanks, <a href="http://www.aclweb.org/anthology/J/J90/J90-1003.pdf">Word Association Norms, Mutual Information, and Lexicography</a>, Computational Linguistics, 16(1):22-29, 1990, as well as another one on backoff by Brants et al. (2007) <a href="http://www.aclweb.org/anthology/D07-1090.pdf">Large language models in machine translation</a>.
         </p>
     </body>
 </html>

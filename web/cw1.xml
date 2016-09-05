@@ -4,121 +4,157 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>Assignment #1: Language Models</title>
+        <title>Assignment #1: Building an Inverted Index</title>
     </head>
     <body>
-        <!--<h1>Assignment #1: Language Models</h1>-->
+        <!--<h1>Assignment #1: Building an Inverted Index</h1>-->
         <h2>Objectives</h2>
         <p>The objectives of this assignment are to:</p>
         <ul>
-            <li>Write a program to find <i>n</i>-gram statistics</li>
-            <li>Compute the probability of a sentence</li>
-            <li>Write a short report of 1 to 2 pages on the assignment</li>
-            <li>Know what a language model is</li>
-            <li>Optionally read a short article on the importance of corpora</li>
+            <li>Write a program that collects all the words from a set of documents</li>
+            <li>Build an index from the words</li>
+            <li>Know what indexing is</li>
+            <li>Represent a document using the Tf.Idf value</li>
+            <li>Optionally, read a short text on an industrial system</li>
         </ul>
-        <h2>Organization and location</h2>
-        <p>The first lab session will take place on</p>
-        <ul>
-            <li>Group 1: Wednesday, September 9 from 10:15 to 12:00 in the Alpha room</li>
-            <li>Group 2: Wednesday, September 9 from 10:15 to 12:00 in the Beta room</li>
-            <li>Group 3: Wednesday, September 9 from 13:15 to 15:00 in the Beta room</li>
-            <!--<li>Group 4: Friday, September 13 from 13:15 to 15:00 in the Gamma room</li>-->
-        </ul>
-        <p>You can work alone or collaborate with another student:</p>
-        <ul>
-            <li>Each group will have to write Java programs to count unigrams, bigrams, and trigrams in a corpus of approximately one million words and to determine the probability of a sentence.
-            </li>
-            <li>You will probably need to read the <a href="https://docs.oracle.com/javase/tutorial/essential/regex/">Regular expression tutorial</a> for Java</li>
-            <li>You can test you regular expression using the <a href="https://regex101.com/">regex101.com</a> site</li>
-            <li>Each student will have to write a short report of one to two pages and comment briefly the results. In your report, you must produce the tabulated results of your analysis as described below.</li>
-        </ul>
-        <h2>Programming</h2>
-        <h3>Collecting a corpus</h3>
-        <ol>
-            <li>Collect a corpus of at least 750,000 words. You will check the number of words using the Unix command <tt>wc -w</tt>.
-            </li>
-            <li>Alternatively, you can retrieve a corpus of novels by Selma Lagerl&ouml;f from this URL: <a href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/Selma.txt"><tt>http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/Selma.txt</tt></a>.
-            </li>
-            <li>Run the <a href="https://github.com/pnugues/ilppp/tree/master/programs/java/src/lppp/ch02">concordance program</a> to print the lines containing a specific word, for instance <i>Nils</i>.
-            </li>
-            <li>Run the <a href="https://github.com/pnugues/ilppp/tree/master/programs/java/src/lppp/ch05">tokenization program</a> on your corpus and count the words using the Unix <tt>sort</tt> and <tt>uniq</tt> commands.
-            </li>
-        </ol>
-        <h3>Normalizing a corpus</h3>
-        <ol>
-            <li>Write a program to insert <tt>&lt;s&gt;</tt> and <tt>&lt;/s&gt;</tt> tags to delimit sentences. You can start from the tokenization and modify it. Use a simple heuristics such as: a sentence starts with a capital letter and ends with a period. Estimate roughly the accuracy of your program.
-            </li>
-            <li>Modify your program to remove the punctuation signs and set all the text in lower case letters.</li>
-            <li>The result should be a normalized text without punctuation signs where all the sentences are delimited with <tt>&lt;s&gt;</tt> and <tt>&lt;/s&gt;</tt> tags.
-            </li>
-            <li>The five last lines of the text should look like this:
-                <pre>
-&lt;s&gt; hon hade fått större kärlek av sina föräldrar än någon annan han visste och sådan kärlek måste vändas i välsignelse &lt;/s&gt;
-&lt;s&gt; när prästen sa detta kom alla människor att se bort mot klara gulla och de förundrade sig över vad de såg &lt;/s&gt;
-&lt;s&gt; prästens ord tycktes redan ha gått i uppfyllelse &lt;/s&gt;
-&lt;s&gt; där stod klara fina gulleborg ifrån skrolycka hon som var uppkallad efter själva solen vid sina föräldrars grav och lyste som en förklarad &lt;/s&gt;
-&lt;s&gt; hon var likaså vacker som den söndagen då hon gick till kyrkan i den röda klänningen om inte vackrare &lt;/s&gt;
-                </pre>
-            </li>
-        </ol>
-        <h3>Counting unigrams and bigrams</h3>
-        <ol>
-            <!--
-                    <li>Divide your corpus into a training set (80% of the text) and a test set (20%)</li>
-            -->
-            <li>Read and try programs to compute the frequency of unigrams and bigrams of the training set: [<a href="https://github.com/pnugues/ilppp/tree/master/programs/java/src/lppp/ch05">Program folder</a>].
-            </li>
-            <li>What is the possible number of bigrams and their real number? Explain why such a difference. What would be the possible number of 4-grams.
-            </li>
-            <li>Propose a solution to cope with bigrams unseen in the corpus. This topic will be discussed during the lab session.
-            </li>
-        </ol>
-        <h3>Computing the likelihood of a sentence</h3>
-        <ol>
-            <li>Write a program to compute a sentence's probability using unigrams. You may find useful hash tables that we saw in the mutual information program: [<a href="https://github.com/pnugues/ilppp/tree/master/programs/java/src/lppp/ch05">Program folder</a>].
-            </li>
-            <li>Write a program to compute the sentence probability using bigrams.</li>
-            <li>Select five sentences in your test set and run your programs on them.</li>
-            <li>Tabulate your results as in the examples below with the sentence <i>Det var en gång en katt som hette Nils</i>:
-                <pre>
-Unigrams
-=====================================================
-wi      C(wi)   #words      P(wi)
-=====================================================
-det     22086   1086845     0.0203212049556284
-var     12852   1086845     0.0118250532504635
-en      13921   1086845     0.0128086341658654
-gång    1332    1086845     0.00122556574304524
-en      13921   1086845     0.0128086341658654
-katt    15      1086845     1.38014160252842e-05
-som     16790   1086845     0.0154483850043014
-hette   107     1086845     9.84501009803606e-05
-nils    84      1086845     7.72879297415915e-05
-&lt;/s&gt;    62283   1086845     0.057306239620185
-=====================================================
-Prob. unigrams: 4.49191263644087e-27	Entropy rate: 8.75247286930358	Perplexity: 431.277568080082
 
-Bigrams
-=====================================================
-wi      wi+1    Ci,i+1  C(i)    P(wi+1|wi)
-=====================================================
-&lt;s&gt;     det     5913    62283   0.0949376234285439
-det     var     4023    22086   0.182151589242054
-var     en      753     12852   0.0585901027077498
-en      gång    695     13921   0.0499245743840241
-gång    en      23      1332    0.0172672672672673
-en      katt    5       13921   0.000359169599885066
-katt    som     2       15      0.133333333333333
-som     hette   50      16790   0.00297796307325789
-hette   nils    0       107     *backoff:   7.72879297415915e-05
-nils    &lt;/s&gt;    2       84      0.0238095238095238
-=====================================================
-Prob. bigrams: 2.29220556082587e-19	Entropy rate: 6.19198973746961	Perplexity: 73.1096397351286
-                </pre></li>
+        <h2>Organization and location</h2>
+        <p>The second lab session will take place on</p>
+        <ul>
+            <li>Group 1: Tuesday, September 6 from 10:15 to 12:00 in the Beta room</li>
+            <li>Group 2: Tuesday, September 6 from 13:15 to 15:00 in the Beta room</li>
+            <!--<li>Group 3: Wednesday, September 14 from 8:15 to 10:00 in the Beta room</li>-->
+        </ul>
+        <p>You can work alone or collaborate with another student.</p>
+        <p>Each group will have to:</p>
+        <ul>
+            <li>Write a Python program.</li>
+            <li>Check the results and comment them briefly</li>
+        </ul>
+        <h2>Preparation</h2>
+        <ol>
+            <li>Download the <a href="https://github.com/pnugues/ilppp/raw/master/programs/corpus/Selma.zip">Selma folder</a> and uncompress it. It contains novels by Selma Lagerlöf..
+            </li>
+            <li>Read the description of the tf-idf measure on Wikipedia 
+                (<a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">https://en.wikipedia.org/wiki/Tf-idf</a>).
+            </li>
         </ol>
+
+        <h2>Programming the Indexer</h2>
+        <p>Your program will take a corpus as input (here the Selma novels) and 
+            produce an index of all the words with their positions. you should be able to run it this way:</p>
+        <pre>$ python indexer.py folder_name</pre>
+        <p>Conceptually, the index will consist of rows with one word per row and 
+            and the list of files and positions, where this word occurs. Such a row is 
+            called a posting list.
+            You will encode the position of a word by the number of characters from the start of the file.</p>
+        <pre>
+word1: file_name pos1 pos2 pos3... file_name pos1 pos2 ...
+word2: file_name pos1 pos2 pos3... file_name pos1 pos2 ...
+...
+        </pre>
+        <p>To make programming easier, you will split this exercise into three steps and you will use
+            dictionaries to represent the postings.</p>
+        <h3>Indexing one file</h3>
+        <p>Write a program that reads one document <tt>file_name.txt</tt> and outputs an index file: 
+            <tt>file_name.idx</tt>:</p> 
+        <ol>
+            <li>The index file will contain all the unique words in the document,
+                where each word is associated with the list of its positions in the document.</li>
+            <li>You will represent this index as a dictionary where the keys will be the words and 
+                the values, the lists of positions</li>
+            <li>As words, you will consider all the strings of letters that you will set in lower case. 
+                You will not index the rest (i.e. numbers or symbols).</li>
+            <li>The word positions will correspond to the number of characters from the beginning of the file.
+                (The word offset from the beginning)</li>
+            <li>You will use <tt>finditer()</tt> to find the positions of the words. 
+                This will return you match objects, 
+                where you will get the matches and the positions with 
+                the <tt>group()</tt> and <tt>start()</tt> methods.</li>
+            <li>You will use the pickle package to write your dictionary in an file,
+                see <a href="https://wiki.python.org/moin/UsingPickle">https://wiki.python.org/moin/UsingPickle</a>.</li>
+        </ol>
+        <h3>Reading the content of a folder</h3>
+        <p>Write a function that reads all the files in a folder with a specific suffix (txt). You will need the Python os package, 
+            see <a href="https://docs.python.org/3/library/os.html">https://docs.python.org/3/library/os.html</a>. You will return the file names in a list.</p>
+        <p>You can reuse this function:</p>
+        <pre>
+def get_files(dir, suffix):
+    """
+    Returns all the files in a folder ending with suffix
+    :param dir:
+    :param suffix:
+    :return: the list of file names
+    """
+    files = []
+    for file in os.listdir(dir):
+        if file.endswith(suffix):
+            files.append(file)
+    return files
+        </pre>
+
+        <h3>Creating a master index</h3>
+        <p>Complete your program with the creation of master index, where you will associate each word
+            of the corpus with the files, where it occur and its positions. (a posting list)
+        </p>
+        <p>Below is an except of the master index with the words <i>samlar</i> and <i>ände</i>:</p>
+        <pre>
+'samlar': 
+    {'nils.txt': [53499, 120336], 
+    'gosta.txt': [317119, 414300, 543686], 
+    'osynliga.txt': [410995, 871322]}, 
+'ände': 
+    {'nils.txt': [3991], 
+    'kejsaren.txt': [51100], 
+    'marbacka.txt': [374231], 
+    'troll.txt': [39726], 
+    'osynliga.txt': [742747]},
+        </pre>
+        <p>The word <i>samlar</i>, for instance, occurs three times in the gosta text at positions 317119, 414300, and 543686.</p>
+
+        <h2>Representing Documents with tf-idf</h2>
+        <p>Once you have created the index, you will represent each document in your corpus as a word vector.
+            You will define the value of a word in a document with the tf-idf
+            metric. Tf will be the relative frequency of the term in the document and idf, the logarithm base 10 of the inverted document 
+            frequency.</p>
+        <p>You have below the tf-idf values for a few words. In our example, the word <i>gås</i> has the value
+            0 in bannlyst.txt and the value 0.000101237 in nils.txt</p>
+        <pre>
+bannlyst.txt
+    känna	0.0
+    gås	0.0
+    nils	0.0
+    et	6.2846093167673765e-06
+gosta.txt
+    känna	0.0
+    gås	0.0
+    nils	0.0
+    et	0.0
+herrgard.txt
+    känna	0.0
+    gås	0.0
+    nils	0.0
+    et	0.0
+jerusalem.txt
+    känna	0.0
+    gås	0.0
+    nils	4.778415355159037e-06
+    et	0.0
+nils.txt
+    känna	0.0
+    gås	0.00010123719421964931
+    nils	9.801209641132888e-05
+    et	0.0
+        </pre>
+        <h2>Comparing Documents</h2>
+        <p>Using the cosine similarity, compare all the pairs of documents and present your results in a matrix.</p>
+        <p>What are the two novels that are the most similar?</p>
         <h2>Complement</h2>
-        <p>As a complement, you can read a paper by <a href="http://researcher.watson.ibm.com/researcher/view.php?person=us-kwchurch">Church</a> and Hanks, <a href="http://www.aclweb.org/anthology/J/J90/J90-1003.pdf">Word Association Norms, Mutual Information, and Lexicography</a>, Computational Linguistics, 16(1):22-29, 1990, as well as another one on backoff by Brants et al. (2007) <a href="http://www.aclweb.org/anthology/D07-1090.pdf">Large language models in machine translation</a>.
+        <p>Read the text
+            <i>Challenges in Building Large-Scale Information Retrieval Systems</i>
+            about the history of
+            <a href="https://research.google.com/people/jeff/WSDM09-keynote.pdf">Google indexing</a> by 
+            <a href="https://research.google.com/pubs/jeff.html">Jeff Dean</a>.
         </p>
     </body>
 </html>
