@@ -11,10 +11,8 @@ def read_sentences(file):
     :param file:
     :return:
     """
-    f = open(file).read()
+    f = open(file).read().strip()
     sentences = f.split('\n\n')
-    # Remove the empty strings
-    sentences = filter(None, sentences)
     return sentences
 
 
