@@ -167,9 +167,9 @@ if __name__ == '__main__':
     print("Classification report for classifier %s:\n%s\n"
           % (classifier, metrics.classification_report(y_test, y_test_predicted)))
 
-    # Here we tag the test set and we save it
-    # This is redundant prediction with the piece of code above
-    # But we need to predict one sentence at a time to have the same
+    # Here we tag the test set and we save it.
+    # This prediction is redundant with the piece of code above,
+    # but we need to predict one sentence at a time to have the same
     # corpus structure
     print("Predicting the test set...")
     f_out = open('out', 'w')

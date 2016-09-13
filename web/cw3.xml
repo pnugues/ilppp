@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC
-        "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>Assignment #3: Extracting noun groups using machine learning techniques. Java version</title>
+        <title>Assignment #3: Extracting noun groups using machine learning techniques</title>
     </head>
     <body>
         <!--<h1>Assignment #3: Extracting noun groups using machine learning techniques. Java version</h1>-->
@@ -13,14 +13,14 @@
         <ul>
             <li>Write a program to detect partial syntactic structures</li>
             <li>Understand the principles of supervised machine learning techniques applied to language processing</li>
-            <li>Use a popular machine learning toolkit</li>
+            <li>Use a popular machine learning toolkit: scikit-learn</li>
         </ul>
         <h2>Organization and location</h2>
         <p>The third lab session will take place on</p>
         <ul>
-            <li>Group 1: Wednesday, September 23 from 10:15 to 12:00 in the Alpha room</li>
-            <li>Group 2: Wednesday, September 23 from 10:15 to 12:00 in the Beta room</li>
-            <li>Group 3: Wednesday, September 23 from 13:15 to 15:00 in the Beta room</li>
+            <li>Group 1: Tuesday, September 20 from 10:15 to 12:00 in the Beta room</li>
+            <li>Group 2: Tuesday, September 20 from 13:15 to 15:00 in the Beta room</li>
+            <!--<li>Group 3: Wednesday, September 21 from 8:15 to 10:00 in the Beta room</li>-->
         </ul>
         <p>You can work alone or collaborate with another student.</p>
         <p>Each group will have to:</p>
@@ -38,27 +38,13 @@
                 the previous assignment) and decompress them.
                 <br/>
                 (Local copies available here: [<a
-                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/train.txt">train.txt</a>]
+                    href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/train.txt">train.txt</a>]
                 [<a href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/test.txt">test.txt</a>].)
             </li>
-            <li>Be sure that you have a running
-                <a
-                        href="http://www.cs.waikato.ac.nz/ml/weka/">Weka
-                </a>
-                system:
-                start it by typing <tt>weka</tt>. You must use version 3.7.10 or higher. You can increase the memory by
-                typing<tt>java -Xmx2g -jar weka.jar</tt>, where the
-                <tt>mx</tt>
-                parameter corresponds to the maximum heap size.
-            </li>
-            <li>As a refresher on Java maps, i.e. name/value structures or dictionaries,
-                read this program and run it on the Selma corpus [<a
-                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/programs/chunker/src/ora/WordSort.java">
-                    link to the code</a>].
-                <br/>
-                The code is taken from Patrick Niemeyer and Daniel Leuck, Learning Java, 4th edition, 2013, O'Reilly,
-                page 392. [<a href="http://shop.oreilly.com/product/0636920023463.do">link to the book</a>].
-            </li>
+            <li>Be sure that you have the 
+                <a href="http://scikit-learn.org">scikit-learn</a>
+                package:
+                Start it by typing <tt>import sklearn</tt> in Python.</li>
         </ol>
         <h3>Baseline</h3>
         <p>Most statistical algorithms for language processing start with a so-called baseline. The baseline figure
@@ -68,132 +54,77 @@
         <ol>
             <li>Read the baseline proposed by the organizers of the
                 <a href="http://www.cnts.ua.ac.be/conll2000/chunking/">CoNLL 2000 shared task</a>
-                (In the
-                <i>Results</i>
-                Sect.). What do you think of it?
+                (In the <i>Results</i> Sect.). What do you think of it?
             </li>
             <li>Implement this baseline program. You may either create a completely new program or start from an
                 existing program that you will modify [<a
-                        href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking/chunker_java_ml/src">
+                    href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking/chunker_python/">
                     Program folder
-                </a>]. In this case:
-                <ol>
-                    <li>Modify and use the
-                        <tt>BLChunkerIncomplete</tt>
-                        program
-                        to read the training set of CoNLL 2000 and collect the most frequent chunk tag for each
-                        part-of-speech tag. You will have to complement the
-                        <tt>countAssoc()</tt>
-                        and
-                        <tt>selectBestAssoc()</tt>
-                        methods. You will also have to modify the paths in
-                        <tt>Constants.java</tt>
-                        so that they match your folder organization.
+                </a>].
+                <ul>
+                    <li>Complete the <tt>train</tt> function so that it computes the chunk 
+                        distribution for each part of speech. You will use the train file to derive your distribution and 
+                        you will store the results in a dictionary. Below, you have an excerpt of the expected results:
+                        <pre>
+{'JJR': 
+    {'I-ADVP': 17, 'I-ADJP': 45, 'I-NP': 204, 'B-ADVP': 63, 
+    'B-PP': 2, 'B-ADJP': 111, 'B-NP': 382, 'B-VP': 2, 
+    'I-VP': 11, 'O': 16}, 
+'CC': 
+    {'B-ADVP': 3, 'O': 3676, 'I-VP': 104, 'B-CONJP': 6, 
+    'I-ADVP': 30, 'I-UCP': 2, 'I-PP': 24, 'I-ADJP': 26, 
+    'I-NP': 1409, 'B-ADJP': 2, 'B-NP': 18, 'B-PP': 70, 
+    'I-PRT': 1, 'B-VP': 1}, 
+'NN': 
+    {'B-LST': 2, 'I-INTJ': 2, 'B-ADVP': 38, 'O': 37, 
+    'I-ADVP': 11, 'B-INTJ': 1, 'I-UCP': 2, 'B-UCP': 2, 
+    'I-VP': 77, 'B-PRT': 2, 'I-ADJP': 41, 'I-NP': 24456, 
+    'B-ADJP': 44, 'B-NP': 5160, 'B-PP': 15, 'B-VP': 257},
+...
+                        </pre>
                     </li>
-                    <li>Complement the
-                        <tt>tag()</tt>
-                        method to assign a part-of-speech value its most frequent chunk tag.
-                        <br/>
-                        Apply it to the test set and save the result in a result file.
-                    </li>
-                </ol>
+                    <li>For each part of speech, select the most frequent chunk. In the example above, you will
+                        have (NN, I-NP)</li>
+                    <li>Using the resulting associations, apply your chunker to the test file.</li>
+                </ul>
             </li>
 
             <li>Measure the performance of the system. Use the
                 <a href="https://github.com/pnugues/ilppp/tree/master/programs/corpus/conll2000">
                     <tt>eval.sh</tt>
                 </a>
-                script and the
+                script or the
                 <a href="http://www.cnts.ua.ac.be/conll2000/chunking/">
                     <tt>conlleval.txt</tt>
                 </a>
-                evaluation program used by the CoNLL 2000 shared task.
+                evaluation program used by the CoNLL 2000 shared task. 
+                <ul>
+                    <li><tt>conlleval.txt</tt> is the official
+                        CoNLL Perl script. It expects the two last columns of the test set to be the manually
+                        assigned chunk (gold standard) and the predicted chunk. Start it like this:
+                        <pre>
+$ conlleval.txt &lt;out
+                        </pre>
+                        where the <tt>out</tt> file contains both the gold and predicted chunk tags.
+                    </li>
+                    <li><tt>eval.sh</tt> is a convenience script 
+                        that takes two test files as input, the gold and the prediction, and appends the last column of the predication
+                        to the gold file. The output can then be passed to <tt>conlleval.txt</tt>. You run it this way:
+                        <pre>
+$ eval.sh test.txt out
+                        </pre>
+                        where <tt>test.txt</tt> is the gold test file, i.e. the test file with the answers, and the <tt>out</tt> file is your system's output.
+                    </li>
+                </ul>
             </li>
         </ol>
-        <h3>Replicating the baseline with decision trees</h3>
-        <p>In this exercise, you will replicate the baseline experiment with a popular machine-learning toolkit: <a
-                href="http://www.cs.waikato.ac.nz/ml/weka/">Weka</a>. Weka is written in Java and comes with many
-            ready-to-use algorithms.
-        </p>
-        <p>You will not write programs, but merely understand the overall process involving a machine-learning toolkit.
-            You will train and apply models using the Java code supplied in the previous section.
-        </p>
-        <ol>
-            <li>Weka uses a parameter file to learn a model. The parameter data are described by a header in the form of
-                attributes and values. Download the
-                <a href="https://github.com/pnugues/ilppp/tree/master/programs/corpus/conll2000">chunk_header.arff
+        <h3>Using Machine Learning</h3>
 
-                </a> header
-                and modify it to fit the baseline experiment. Do you need the word attribute to replicate the baseline?
-                <br/>
-                The header is hard-coded in the Java program.
-            </li>
-            <li>Read and run the
-                <tt>MLChunker</tt>
-                class from this [<a
-                        href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking/chunker_java_ml/src">
-                    program folder</a>] to
-                create a Weka-compatible training file from the training set:
-                <ul>
-                    <li>Reuse the Java program to load the training file and read the lines.
-                    </li>
-                    <li>The Java program extracts two arguments: The part of speech
-                        and the chunk type from each
-                        line and write them in an ARFF file. The fields are separated by a
-                        comma.
-                    </li>
-                </ul>
-            </li>
-            <li>From your ARFF training file, learn a decision tree using Weka and produce a model.
-                <ul>
-                    <li>Load your ARFF file by selecting the
-                        <i>Preprocess button</i>
-                    </li>
-                    <li>Choose and create a classifier by pressing the
-                        <i>Classify</i>
-                        button and then the
-                        <i>Choose</i>
-                        button. Use the
-                        <b>J48</b>
-                        decision trees.
-                    </li>
-                    <li>Save the model by right-clicking on the item in the
-                        <i>Result list</i>
-                    </li>
-                </ul>
-            </li>
-            <li>Embed your model in the Java program and measure its efficiency.
-                <ul>
-                    <li>Read the
-                        <tt>tag()</tt>
-                        method in
-                        <tt>MLChunker.java</tt>
-                        and
-                        <tt>WekaGlue.java</tt>
-                        to have Weka predict the chunk tag of your feature vector.
-                    </li>
-                    <li>Add the
-                        <tt>weka.jar</tt>
-                        library to your program. You will find it in the
-                        <tt>/usr/local/cs/EDAN20</tt>
-                        folder or you can download it from the Weka site. (Use version 3.7.10 or higher).
-                    </li>
-                    <li>Run
-                        <tt>MLChunker</tt>
-                        to read the words and parts of speech of each line of the test set and predict the chunk tag.
-                        The input to this predicate is the list of (Word, POS) pairs. The predicate will determine the
-                        chunk type and write the results in the CoNLL format: Word POS Chunk.
-                    </li>
-                    <li>Evaluate the results using the evaluation script.</li>
-                </ul>
-            </li>
-        </ol>
-        <h3>Using more features
-        </h3>
-        <p>In this exercise, you will extend the
-            <tt>MLChunker</tt>
-            program using more features. You will start from the Java program you downloaded and add one or two more
-            features so that you improve the performance of your chunker.
+        <p>In this exercise, you will apply and extend the
+            <tt>ml_chunker.py</tt>
+            program. You will start from the original 
+            program you downloaded and modify it so that you understand
+            how to improve the performance of your chunker.
         </p>
         <p>The program that won the CoNLL 2000 shared task (Kudoh and Matsumoto, 2000) used a window of five words
             around the chunk tag to identify,
@@ -263,36 +194,34 @@
             software site.
         </p>
         <ol>
-            <li>What is the feature vector that corresponds to the baseline?</li>
-            <li>Extract a set of features from the training set to improve the baseline. Use for instance (
-                <i>t
+            <li>What is the feature vector that corresponds to the program?</li>
+            <li>What is the performance of the chunker?</li>
+            <li>Remove the lexical features (the words) and measure the performance</li>
+            <li>What is the classifier used in the program? Try two other classifiers and measure their performance.
+                Be aware that support vector machines take a long time to train: up to one hour.</li>
+        </ol>
+        <h3>Improving the Chunker</h3>
+        <p>Implement one of these two options, the first one being easier.</p>
+        <ol>
+            <li>Use the dynamic features, <i>c
+                    <sub>i-2</sub>
+                </i>
+                ,
+                <i>c
                     <sub>i-1</sub>
-                </i>
-                ,
-                <i>t
-                    <sub>i</sub>
-                </i>
-                ) or better, (
-                <i>t
-                    <sub>i-1</sub>
-                </i>
-                ,
-                <i>t
-                    <sub>i</sub>
-                </i>
-                ,
-                <i>t
-                    <sub>i+1</sub>
-                </i>
-                ). In the beginning and end of the sentence, the feature vector will overflow as there is no
-                <i>t
-                    <sub>-1</sub>
-                </i>
-                . Use padding codes such as BOS and EOS (beginning of sentence, end of sentence)
+                </i>, and train a new model. You will need to modify the 
+                <tt>extract_features_sent</tt> and <tt>predict</tt> functions. Be aware that 
+                when you predict the test set, you do not know the dynamic features in advance and you must
+                not read them from the test file. You need to reuse the two previous chunk tags that you have predicted.
             </li>
-            <li>Train and embed your classifier in your Java program and measure its efficiency on the test set. You
-                need to reach a global accuracy F1 score of 81 to pass this laboratory.
+            <li>
+                Apply a beam search using the probability output of logistic regression or 
+                the score if you use support vector machines.
             </li>
         </ol>
+        <p>You
+            need to reach a global F1 score of 92 to pass this laboratory.
+        </p>
+
     </body>
 </html>

@@ -147,7 +147,7 @@ nils.txt
     et	0.0
         </pre>
         <h2>Comparing Documents</h2>
-        <p>Using the cosine similarity, compare all the pairs of documents and present your results in a matrix.</p>
+        <p>Using the cosine similarity, compare all the pairs of documents with their tfidf representation and present your results in a matrix.</p>
         <p>What are the two novels that are the most similar?</p>
         <h2>Complement</h2>
         <p>Read the text
