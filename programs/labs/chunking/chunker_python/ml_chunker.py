@@ -123,6 +123,24 @@ def encode_classes(y_symbols):
     return y, dict_classes, inv_dict_classes
 
 
+def predict(test_sentences, feature_names, f_out):
+    for test_sentence in test_sentences:
+        X_test_dict, y_test_symbols = extract_features_sent(test_sentence, w_size, feature_names)
+        # Vectorize the test sentence and one hot encoding
+        X_test = vec.transform(X_test_dict)
+        # Predicts the chunks and returns numbers
+        y_test_predicted = classifier.predict(X_test)
+        # Converts to chunk names
+        y_test_predicted_symbols = list(dict_classes[i] for i in y_test_predicted)
+        # Appends the predicted chunks as a last column and saves the rows
+        rows = test_sentence.splitlines()
+        rows = [rows[i] + ' ' + y_test_predicted_symbols[i] for i in range(len(rows))]
+        for row in rows:
+            f_out.write(row + '\n')
+        f_out.write('\n')
+    f_out.close()
+
+
 if __name__ == '__main__':
     start_time = time.clock()
     train_corpus = '../../corpus/conll2000/train.txt'
@@ -173,21 +191,7 @@ if __name__ == '__main__':
     # corpus structure
     print("Predicting the test set...")
     f_out = open('out', 'w')
-    for test_sentence in test_sentences:
-        X_test_dict, y_test_symbols = extract_features_sent(test_sentence, w_size, feature_names)
-        # Vectorize the test sentence and one hot encoding
-        X_test = vec.transform(X_test_dict)
-        # Predicts the chunks and returns numbers
-        y_test_predicted = classifier.predict(X_test)
-        # Converts to chunk names
-        y_test_predicted_symbols = list(dict_classes[i] for i in y_test_predicted)
-        # Appends the predicted chunks as a last column and saves the rows
-        rows = test_sentence.splitlines()
-        rows = [rows[i] + ' ' + y_test_predicted_symbols[i] for i in range(len(rows))]
-        for row in rows:
-            f_out.write(row + '\n')
-        f_out.write('\n')
-    f_out.close()
+    predict(test_sentences, feature_names, f_out)
 
     end_time = time.clock()
     print("Training time:", (test_start_time - training_start_time) / 60)
