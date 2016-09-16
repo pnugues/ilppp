@@ -90,10 +90,10 @@
             </li>
 
             <li>Measure the performance of the system. Use the
-                <a href="https://github.com/pnugues/ilppp/tree/master/programs/corpus/conll2000">
+ <!--               <a href="https://github.com/pnugues/ilppp/tree/master/programs/corpus/conll2000">
                     <tt>eval.sh</tt>
                 </a>
-                script or the
+                script or the-->
                 <a href="http://www.cnts.ua.ac.be/conll2000/chunking/">
                     <tt>conlleval.txt</tt>
                 </a>
@@ -105,16 +105,21 @@
                         <pre>
 $ conlleval.txt &lt;out
                         </pre>
-                        where the <tt>out</tt> file contains both the gold and predicted chunk tags.
+                        where the <tt>out</tt> file contains both the gold and predicted chunk tags. <tt>conlleval.txt</tt> is 
+                        a Perl script. Perl is installed on most Unix distributions. If it is not installed on your machine, you need to install it.
+                        Make also sure that
+                        you have the execution rights. Otherwise change them with:<pre>
+$ chmod +x conlleval.txt
+                        </pre>
                     </li>
-                    <li><tt>eval.sh</tt> is a convenience script 
+                    <!--<li><tt>eval.sh</tt> is a convenience script 
                         that takes two test files as input, the gold and the prediction, and appends the last column of the predication
                         to the gold file. The output can then be passed to <tt>conlleval.txt</tt>. You run it this way:
                         <pre>
 $ eval.sh test.txt out
                         </pre>
                         where <tt>test.txt</tt> is the gold test file, i.e. the test file with the answers, and the <tt>out</tt> file is your system's output.
-                    </li>
+                    </li>-->
                 </ul>
             </li>
         </ol>
@@ -215,7 +220,7 @@ $ eval.sh test.txt out
                 not read them from the test file. You need to reuse the two previous chunk tags that you have predicted.
             </li>
             <li>
-                Apply a beam search using the probability output of logistic regression or 
+                If you know what beam search is, apply it using the probability output of logistic regression or 
                 the score if you use support vector machines.
             </li>
         </ol>

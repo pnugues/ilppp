@@ -98,7 +98,7 @@
             </li>
             <li>Once you have parsed the test set, you will measure the accuracy of your parser using the CoNLL
                 evaluation script [<a href="http://ilk.uvt.nl/conll/software.html#eval">3</a>]. Local copy: [<a
-                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conllx/eval.pl">eval.pl</a>]. You
+                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conllx/eval.txt">eval.pl</a>]. You
                 will run this script using the command:<tt>perl eval.pl -g gold_standard_file -s system_output -q</tt>,
                 where
                 <tt>-q</tt>
