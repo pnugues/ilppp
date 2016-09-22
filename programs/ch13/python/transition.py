@@ -179,7 +179,8 @@ if __name__ == '__main__':
             stack, queue, state, trans = dparser.reference(stack, queue, state)
             transitions.append(trans)
         stack, state = empty_stack(stack, state)
-        # equal_graphs(sentence, state)
+        print('Equal graphs:', equal_graphs(sentence, state))
+
         # Poorman's projectivization to have well-formed graphs.
         for word in sentence:
             word['head'] = state['heads'][word['id']]
