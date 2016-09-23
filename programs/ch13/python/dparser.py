@@ -8,12 +8,14 @@ import transition
 
 def reference(stack, queue, state):
     """
+    Gold standard parsing
     Produces a sequence of transitions from a manually-annotated corpus:
     sh, re, ra.deprel, la.deprel
-    :param stack:
-    :param queue:
-    :param state:
-    :return: The transitions
+    :param stack: The stack
+    :param queue: The input list
+    :param state: The set of relations already parsed
+    :return: the transition and the grammatical function (deprel) in the
+    form of transition.deprel
     """
     # Right arc
     if stack and stack[0]['id'] == queue[0]['head']:
