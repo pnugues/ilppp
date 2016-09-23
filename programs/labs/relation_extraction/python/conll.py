@@ -1,5 +1,5 @@
 """
-CoNLL-X and CoNLL-U file readers
+CoNLL-X and CoNLL-U file readers and writers
 """
 __author__ = "Pierre Nugues"
 
@@ -53,6 +53,25 @@ def split_rows(sentences, column_names):
         sentence = start + sentence
         new_sentences.append(sentence)
     return new_sentences
+
+
+def save(file, formatted_corpus, column_names):
+    f_out = open(file, 'w')
+    for sentence in formatted_corpus:
+        for row in sentence[1:]:
+            # print(row, flush=True)
+            for col in column_names[:-1]:
+                if col in row:
+                    f_out.write(row[col] + '\t')
+                else:
+                    f_out.write('_\t')
+            col = column_names[-1]
+            if col in row:
+                f_out.write(row[col] + '\n')
+            else:
+                f_out.write('_\n')
+        f_out.write('\n')
+    f_out.close()
 
 
 if __name__ == '__main__':
