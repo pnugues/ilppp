@@ -6,7 +6,7 @@ The parser state is represented as a dictionary
 
 __author__ = "Pierre Nugues"
 
-import conll_reader
+import conll
 import dparser
 
 
@@ -159,8 +159,8 @@ if __name__ == '__main__':
     column_names_2006 = ['id', 'form', 'lemma', 'cpostag', 'postag', 'feats', 'head', 'deprel', 'phead', 'pdeprel']
     column_names_2006_test = ['id', 'form', 'lemma', 'cpostag', 'postag', 'feats']
 
-    sentences = conll_reader.read_sentences(train_file)
-    formatted_corpus = conll_reader.split_rows(sentences, column_names_2006)
+    sentences = conll.read_sentences(train_file)
+    formatted_corpus = conll.split_rows(sentences, column_names_2006)
 
     sent_cnt = 0
     for sentence in formatted_corpus:

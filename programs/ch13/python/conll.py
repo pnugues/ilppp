@@ -1,5 +1,5 @@
 """
-CoNLL-X and CoNLL-U file readers
+CoNLL-X and CoNLL-U file readers and writers
 """
 __author__ = "Pierre Nugues"
 
@@ -55,12 +55,31 @@ def split_rows(sentences, column_names):
     return new_sentences
 
 
+def save(file, formatted_corpus, column_names):
+    f_out = open(file, 'w')
+    for sentence in formatted_corpus:
+        for row in sentence[1:]:
+            # print(row, flush=True)
+            for col in column_names[:-1]:
+                if col in row:
+                    f_out.write(row[col] + '\t')
+                else:
+                    f_out.write('_\t')
+            col = column_names[-1]
+            if col in row:
+                f_out.write(row[col] + '\n')
+            else:
+                f_out.write('_\n')
+        f_out.write('\n')
+    f_out.close()
+
+
 if __name__ == '__main__':
     column_names_2006 = ['id', 'form', 'lemma', 'cpostag', 'postag', 'feats', 'head', 'deprel', 'phead', 'pdeprel']
 
-    train_file = '../../../corpus/conllx/sv/swedish_talbanken05_train.conll'
+    train_file = '../../corpus/conllx/sv/swedish_talbanken05_train.conll'
     # train_file = 'test_x'
-    test_file = '../../../corpus/conllx/sv/swedish_talbanken05_test.conll'
+    test_file = '../../corpus/conllx/sv/swedish_talbanken05_test.conll'
 
     sentences = read_sentences(train_file)
     formatted_corpus = split_rows(sentences, column_names_2006)
@@ -69,7 +88,7 @@ if __name__ == '__main__':
 
     column_names_u = ['id', 'form', 'lemma', 'upostag', 'xpostag', 'feats', 'head', 'deprel', 'deps', 'misc']
 
-    files = get_files('../../../corpus/ud-treebanks-v1.3/', 'train.conllu')
+    files = get_files('../../corpus/ud-treebanks-v1.3/', 'train.conllu')
     for train_file in files:
         sentences = read_sentences(train_file)
         formatted_corpus = split_rows(sentences, column_names_u)

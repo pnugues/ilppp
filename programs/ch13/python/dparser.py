@@ -8,7 +8,7 @@ import transition
 
 def reference(stack, queue, state):
     """
-    Produces a sequence of transitions from a manually-annotated corpus
+    Produces a sequence of transitions from a manually-annotated corpus:
     sh, re, ra.deprel, la.deprel
     :param stack:
     :param queue:
