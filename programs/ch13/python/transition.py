@@ -1,7 +1,7 @@
 """
 Transitions for Nivre's parser
-The data structures consist of the stack, the queue, and the parser state
-The parser state is represented as a dictionary
+The parser state consists of the stack, the queue, and the partial graph
+The partial graph is represented as a dictionary
 """
 
 __author__ = "Pierre Nugues"
@@ -10,31 +10,31 @@ import conll
 import dparser
 
 
-def shift(stack, queue, state):
+def shift(stack, queue, graph):
     """
     Shift the first word in the queue onto the stack
     :param stack:
     :param queue:
-    :param state:
+    :param graph:
     :return:
     """
     stack = [queue[0]] + stack
     queue = queue[1:]
-    return stack, queue, state
+    return stack, queue, graph
 
 
-def reduce(stack, queue, state):
+def reduce(stack, queue, graph):
     """
     Remove the first item from the stack
     :param stack:
     :param queue:
-    :param state:
+    :param graph:
     :return:
     """
-    return stack[1:], queue, state
+    return stack[1:], queue, graph
 
 
-def right_arc(stack, queue, state, deprel=False):
+def right_arc(stack, queue, graph, deprel=False):
     """
     Creates an arc from the top of the stack to the first in the queue
     and shifts
@@ -43,20 +43,20 @@ def right_arc(stack, queue, state, deprel=False):
     argument has a value
     :param stack:
     :param queue:
-    :param state:
+    :param graph:
     :param deprel: either read from the manually-annotated corpus (value false)
     or assigned by the parser
     :return:
     """
-    state['heads'][queue[0]['id']] = stack[0]['id']
+    graph['heads'][queue[0]['id']] = stack[0]['id']
     if deprel:
-        state['deprels'][queue[0]['id']] = deprel
+        graph['deprels'][queue[0]['id']] = deprel
     else:
-        state['deprels'][queue[0]['id']] = queue[0]['deprel']
-    return shift(stack, queue, state)
+        graph['deprels'][queue[0]['id']] = queue[0]['deprel']
+    return shift(stack, queue, graph)
 
 
-def left_arc(stack, queue, state, deprel=False):
+def left_arc(stack, queue, graph, deprel=False):
     """
     Creates an arc from the first in the queue to the top of the stack
     and reduces it.
@@ -65,44 +65,44 @@ def left_arc(stack, queue, state, deprel=False):
     argument has a value
     :param stack:
     :param queue:
-    :param state:
+    :param graph:
     :param deprel: either read from the manually-annotated corpus (value false)
     or assigned by the parser
     :return:
     """
-    state['heads'][stack[0]['id']] = queue[0]['id']
+    graph['heads'][stack[0]['id']] = queue[0]['id']
     if deprel:
-        state['deprels'][stack[0]['id']] = deprel
+        graph['deprels'][stack[0]['id']] = deprel
     else:
-        state['deprels'][stack[0]['id']] = stack[0]['deprel']
-    return reduce(stack, queue, state)
+        graph['deprels'][stack[0]['id']] = stack[0]['deprel']
+    return reduce(stack, queue, graph)
 
 
-def can_reduce(stack, state):
+def can_reduce(stack, graph):
     """
     Checks that the top of the stack has a head
     :param stack:
-    :param state:
+    :param graph:
     :return:
     """
     if not stack:
         return False
-    if stack[0]['id'] in state['heads']:
+    if stack[0]['id'] in graph['heads']:
         return True
     else:
         return False
 
 
-def can_leftarc(stack, state):
+def can_leftarc(stack, graph):
     """
     Checks that the top of the has no head
     :param stack:
-    :param state:
+    :param graph:
     :return:
     """
     if not stack:
         return False
-    if stack[0]['id'] in state['heads']:
+    if stack[0]['id'] in graph['heads']:
         return False
     else:
         return True
@@ -120,32 +120,32 @@ def can_rightarc(stack):
         return True
 
 
-def empty_stack(stack, state):
+def empty_stack(stack, graph):
     """
     Pops the items in the stack. If they have no head, they are assigned
     a ROOT head
     :param stack:
-    :param state:
+    :param graph:
     :return:
     """
     for word in stack:
-        if word['id'] not in state['heads']:
-            state['heads'][word['id']] = '0'
-            state['deprels'][word['id']] = 'ROOT'
+        if word['id'] not in graph['heads']:
+            graph['heads'][word['id']] = '0'
+            graph['deprels'][word['id']] = 'ROOT'
     stack = []
-    return stack, state
+    return stack, graph
 
 
-def equal_graphs(sentence, state):
+def equal_graphs(sentence, graph):
     """
-    Checks that the state corresponds to the gold standard annotation of a sentence
+    Checks that the graph corresponds to the gold standard annotation of a sentence
     :param sentence:
-    :param state:
+    :param graph:
     :return:
     """
     equal = True
     for word in sentence:
-        if word['id'] in state['heads'] and word['head'] == state['heads'][word['id']]:
+        if word['id'] in graph['heads'] and word['head'] == graph['heads'][word['id']]:
             pass
         else:
             print(word, flush=True)
