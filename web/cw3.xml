@@ -14,6 +14,7 @@
             <li>Write a program to detect partial syntactic structures</li>
             <li>Understand the principles of supervised machine learning techniques applied to language processing</li>
             <li>Use a popular machine learning toolkit: scikit-learn</li>
+            <li>Write a short report of 1 to 2 pages on the assignment</li>
         </ul>
         <h2>Organization and location</h2>
         <p>The third lab session will take place on</p>
@@ -86,14 +87,34 @@
                     <li>For each part of speech, select the most frequent chunk. In the example above, you will
                         have (NN, I-NP)</li>
                     <li>Using the resulting associations, apply your chunker to the test file.</li>
+                    <li>You will store your results in an output file that has four columns. The 
+                        three first columns will be the input columns from the test file: word, part of speech, 
+                        and gold-standard chunk. You
+                        will append the predicted chunk as the 4th column. Your output file should look like 
+                        the excerpt below. Here the
+                        gold-standard chunks and the predicted chunks are exactly the same:
+                        <pre>
+Rockwell NNP B-NP B-NP
+International NNP I-NP I-NP
+Corp. NNP I-NP I-NP
+'s POS B-NP B-NP
+Tulsa NNP I-NP I-NP
+unit NN I-NP I-NP
+said VBD B-VP B-VP
+it PRP B-NP B-NP
+                        </pre>
+                        The CoNLL 2000 evaluation script 
+                        will use these
+                        two last columns, chunk and predicted chunk, to compute the performance.
+                    </li>
                 </ul>
             </li>
 
             <li>Measure the performance of the system. Use the
- <!--               <a href="https://github.com/pnugues/ilppp/tree/master/programs/corpus/conll2000">
-                    <tt>eval.sh</tt>
-                </a>
-                script or the-->
+                <!--               <a href="https://github.com/pnugues/ilppp/tree/master/programs/corpus/conll2000">
+                                   <tt>eval.sh</tt>
+                               </a>
+                               script or the-->
                 <a href="http://www.cnts.ua.ac.be/conll2000/chunking/">
                     <tt>conlleval.txt</tt>
                 </a>
@@ -101,16 +122,32 @@
                 <ul>
                     <li><tt>conlleval.txt</tt> is the official
                         CoNLL Perl script. It expects the two last columns of the test set to be the manually
-                        assigned chunk (gold standard) and the predicted chunk. Start it like this:
+                        assigned chunk (gold standard) and the predicted chunk.
+                    </li>
+                    <li>
+                        Start it like this:
                         <pre>
 $ conlleval.txt &lt;out
                         </pre>
                         where the <tt>out</tt> file contains both the gold and predicted chunk tags. <tt>conlleval.txt</tt> is 
-                        a Perl script. Perl is installed on most Unix distributions. If it is not installed on your machine, you need to install it.
+                        a Perl script.
+                    </li>
+                    <li>Perl is installed on most Unix distributions. If it is not installed on your machine, you need to install it.
                         Make also sure that
                         you have the execution rights. Otherwise change them with:<pre>
 $ chmod +x conlleval.txt
                         </pre>
+                    </li>
+                    <li>The <tt>conlleval.txt</tt> script expects the new lines to be <tt>\n</tt> as in Unix.
+                        If you run your Python program on Windows, your new lines will be <tt>\r\n</tt>.
+                        To have the correct new lines, add this parameter to <tt>open()</tt>: 
+                        <tt>newline='\n’</tt> like this:
+                        <pre>
+f_out = open('out', ‘w’, newline='\n’)
+                        </pre>
+                    </li>
+                    <li>The complete description of the CoNLL 2000 evaluation script is available here: 
+                        <a href="http://www.cnts.ua.ac.be/conll2000/chunking/output.html">http://www.cnts.ua.ac.be/conll2000/chunking/output.html</a>.
                     </li>
                     <!--<li><tt>eval.sh</tt> is a convenience script 
                         that takes two test files as input, the gold and the prediction, and appends the last column of the predication
@@ -129,7 +166,7 @@ $ eval.sh test.txt out
             <tt>ml_chunker.py</tt>
             program. You will start from the original 
             program you downloaded and modify it so that you understand
-            how to improve the performance of your chunker.
+            how to improve the performance of your chunker. You will not add new features to the feature vector.
         </p>
         <p>The program that won the CoNLL 2000 shared task (Kudoh and Matsumoto, 2000) used a window of five words
             around the chunk tag to identify,
@@ -199,16 +236,16 @@ $ eval.sh test.txt out
             software site.
         </p>
         <ol>
-            <li>What is the feature vector that corresponds to the program?</li>
+            <li>What is the feature vector that corresponds to the program? Is it the same Kudoh and Matsumoto used in their experiment?</li>
             <li>What is the performance of the chunker?</li>
-            <li>Remove the lexical features (the words) and measure the performance</li>
-            <li>What is the classifier used in the program? Try two other classifiers and measure their performance.
+            <li>Remove the lexical features (the words) from the feature vector and measure the performance. You should observe a decrease.</li>
+            <li>What is the classifier used in the program? Try two other classifiers and measure their performance: decision trees, perceptron, support vector machines, etc..
                 Be aware that support vector machines take a long time to train: up to one hour.</li>
         </ol>
         <h3>Improving the Chunker</h3>
         <p>Implement one of these two options, the first one being easier.</p>
         <ol>
-            <li>Use the dynamic features, <i>c
+            <li>Complement the feature vector used in the previous section with the two dynamic features, <i>c
                     <sub>i-2</sub>
                 </i>
                 ,

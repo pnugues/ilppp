@@ -15,6 +15,7 @@
             <li>Extract the subject–verb pairs from a parsed corpus</li>
             <li>Extend the extraction to subject–verb–object triples</li>
             <li>Understand how dependency parsing can help create a knowledge base</li>
+            <li>Write a short report of 1 to 2 pages on the assignment</li>
         </ul>
         <h2>Organization and location</h2>
         <p>The fourth lab session will take place on</p>
@@ -27,7 +28,7 @@
         <ul>
             <li>Extract all the subject–verb pairs and subject–verb–object triples from a parsed corpus</li>
             <li>Rank the pairs and triples by frequency</li>
-            <li>Optionnally, create a simple cofererence solver for the Swedish <i>som</i> ‘who’ pronoun</li>
+            <li>Optionally, create a simple coreference solver for the Swedish <i>som</i> ‘who’ pronoun</li>
         </ul>
         <h2>Programming</h2>
         <p>This assignment is inspired by the Prismatic knowledge base used in the IBM Watson system. See <a href="http://www.aclweb.org/anthology/W/W10/W10-0915.pdf">this paper</a> for details.
@@ -45,7 +46,7 @@
         <h3>Extracting the subject–verb pairs and subject–verb–object triples</h3>
         <p>You will extract all the subject–verb pairs and the subject–verb–object 
             triples from the training corpus. To start the program, 
-            you can use the CoNLL-X reader available <a href="https://raw.githubusercontent.com/pnugues/ilppp/master/programs/labs/relation_extraction/python/conll_reader.py">here</a>.
+            you can use the CoNLL-X reader available <a href="https://raw.githubusercontent.com/pnugues/ilppp/master/programs/labs/relation_extraction/python/conll.py">here</a>.
             This program will enable you to read the other corpora.
             You can also reprogram one using the model of CoNLL 2000. You will
             find the description of the CoNLL-X format [<a href="http://ilk.uvt.nl/conll/#dataformat">here</a>].
@@ -136,7 +137,7 @@
                     </pre>
                 </li>
             </ul></li>
-            <li>Some corpora have sentence numbers. Here you solve it by discading lines starting with a <tt>#</tt>. This is already done in the CoNLL reader.</li>
+            <li>Some corpora have sentence numbers. Here you solve it by discarding lines starting with a <tt>#</tt>. This is already done in the CoNLL reader.</li>
             <li>All the corpora in the universal dependencies format use the same function names: <tt>nsubj</tt> and <tt>dobj</tt> for the subject and direct object.</li>
             <li>Report the five most frequent pairs and triples you obtained in three languages. Preferably, languages you can decipher so that you can check the tuples are relevant.
             Otherwise, use Google Translate.</li>
