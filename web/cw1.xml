@@ -116,7 +116,7 @@ def get_files(dir, suffix):
         <h2>Representing Documents with tf-idf</h2>
         <p>Once you have created the index, you will represent each document in your corpus as a word vector.
             You will define the value of a word in a document with the tf-idf
-            metric. Tf will be the relative frequency of the term in the document and idf, the logarithm base 10 of the inverted document 
+            metric. Tf will be the relative frequency of the term in the document and idf, the logarithm base 10 of the inverse document 
             frequency.</p>
         <p>You have below the tf-idf values for a few words. In our example, the word <i>gås</i> has the value
             0 in bannlyst.txt and the value 0.000101237 in nils.txt</p>
