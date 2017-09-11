@@ -49,7 +49,7 @@ def split_rows(sentences, column_names):
     start = [dict(zip(column_names, root_values))]
     for sentence in sentences:
         rows = sentence.split('\n')
-        sentence = [dict(zip(column_names, row.split())) for row in rows if row[0] != '#']
+        sentence = [dict(zip(column_names, row.split('\t'))) for row in rows if row[0] != '#']
         sentence = start + sentence
         new_sentences.append(sentence)
     return new_sentences
@@ -77,9 +77,9 @@ def save(file, formatted_corpus, column_names):
 if __name__ == '__main__':
     column_names_2006 = ['id', 'form', 'lemma', 'cpostag', 'postag', 'feats', 'head', 'deprel', 'phead', 'pdeprel']
 
-    train_file = '../../../corpus/conllx/sv/swedish_talbanken05_train.conll'
+    train_file = '../../corpus/conllx/sv/swedish_talbanken05_train.conll'
     # train_file = 'test_x'
-    test_file = '../../../corpus/conllx/sv/swedish_talbanken05_test.conll'
+    test_file = '../../corpus/conllx/sv/swedish_talbanken05_test.conll'
 
     sentences = read_sentences(train_file)
     formatted_corpus = split_rows(sentences, column_names_2006)
@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
     column_names_u = ['id', 'form', 'lemma', 'upostag', 'xpostag', 'feats', 'head', 'deprel', 'deps', 'misc']
 
-    files = get_files('../../../corpus/ud-treebanks-v1.4/', 'train.conllu')
+    files = get_files('../../corpus/ud-treebanks-v2.0/', 'train.conllu')
     for train_file in files:
         sentences = read_sentences(train_file)
         formatted_corpus = split_rows(sentences, column_names_u)
