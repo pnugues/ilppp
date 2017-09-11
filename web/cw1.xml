@@ -93,6 +93,19 @@
                 see <a href="https://wiki.python.org/moin/UsingPickle">https://wiki.python.org/moin/UsingPickle</a>.
             </li>
         </ol>
+        <p>Below is an excerpt of the index of the bannlyst text for the words <i>gjord</i>, <i>uppklarnande</i>, and
+            <i>stjärnor</i>. The data is stored in a dictionary:
+        </p>
+        <pre>
+            {...
+            'gjord': [8551, 183692, 220875],
+            'uppklarnande': [8567],
+            'stjärnor': [8590], ...
+            }
+        </pre>
+        <p>The word <i>gjord</i> occurs three times in the text at positions 8551, 183692, and 220875, <i>uppklarnande</i>, once at
+            position 8567, and <i>stjärnor</i>, once at position 8590.
+        </p>
         <h3>Reading the content of a folder</h3>
         <p>Write a function that reads all the files in a folder with a specific suffix (txt). You will need the Python
             os package,

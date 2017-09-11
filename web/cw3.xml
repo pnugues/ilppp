@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC
-    "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>Assignment #3: Extracting noun groups using machine learning techniques</title>
@@ -19,33 +19,34 @@
         <h2>Organization and location</h2>
         <p>The third lab session will take place on</p>
         <ul>
-            <li>Group 1: Tuesday, September 20 from 10:15 to 12:00 in the Beta room</li>
-            <li>Group 2: Tuesday, September 20 from 13:15 to 15:00 in the Beta room</li>
-            <!--<li>Group 3: Wednesday, September 21 from 8:15 to 10:00 in the Beta room</li>-->
+            <li>Group 1: Tuesday, September 19 from 8:15 to 10:00 in the Beta room</li>
+            <li>Group 2: Tuesday, September 19 from 13:15 to 15:00 in the Beta room</li>
+            <li>Group 3: Thursday, September 21 from 10:15 to 12:00 in the Alpha room</li>
         </ul>
         <p>You can work alone or collaborate with another student.</p>
         <p>Each group will have to:</p>
         <ul>
-            <li>Write and train a machine learning program to detect noun groups.</li>
+            <li>Write and train a machine-learning program to detect noun groups.</li>
             <li>Evaluate the results and comment them briefly.</li>
         </ul>
         <h2>Programming</h2>
         <h3>Choosing a training and a test sets</h3>
         <ol>
             <li>As annotated data and annotation scheme, you will use the data available from <a
-                    href="http://www.cnts.ua.ac.be/conll2000/chunking/">CoNLL 2000</a>.
+                    href="https://www.clips.uantwerpen.be/conll2000/chunking/">CoNLL 2000</a>.
             </li>
             <li>Download both the training and test sets (the same as in
                 the previous assignment) and decompress them.
                 <br/>
                 (Local copies available here: [<a
-                    href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/train.txt">train.txt</a>]
+                        href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/train.txt">train.txt</a>]
                 [<a href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conll2000/test.txt">test.txt</a>].)
             </li>
-            <li>Be sure that you have the 
+            <li>Be sure that you have the
                 <a href="http://scikit-learn.org">scikit-learn</a>
                 package:
-                Start it by typing <tt>import sklearn</tt> in Python.</li>
+                Start it by typing <tt>import sklearn</tt> in Python.
+            </li>
         </ol>
         <h3>Baseline</h3>
         <p>Most statistical algorithms for language processing start with a so-called baseline. The baseline figure
@@ -54,43 +55,45 @@
         </p>
         <ol>
             <li>Read the baseline proposed by the organizers of the
-                <a href="http://www.cnts.ua.ac.be/conll2000/chunking/">CoNLL 2000 shared task</a>
+                <a href="https://www.clips.uantwerpen.be/conll2000/chunking/">CoNLL 2000 shared task</a>
                 (In the <i>Results</i> Sect.). What do you think of it?
             </li>
             <li>Implement this baseline program. You may either create a completely new program or start from an
                 existing program that you will modify [<a
-                    href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking/chunker_python/">
+                        href="https://github.com/pnugues/ilppp/tree/master/programs/labs/chunking/chunker_python/">
                     Program folder
                 </a>].
                 <ul>
-                    <li>Complete the <tt>train</tt> function so that it computes the chunk 
-                        distribution for each part of speech. You will use the train file to derive your distribution and 
+                    <li>Complete the <tt>train</tt> function so that it computes the chunk
+                        distribution for each part of speech. You will use the train file to derive your distribution
+                        and
                         you will store the results in a dictionary. Below, you have an excerpt of the expected results:
                         <pre>
-{'JJR': 
-    {'I-ADVP': 17, 'I-ADJP': 45, 'I-NP': 204, 'B-ADVP': 63, 
-    'B-PP': 2, 'B-ADJP': 111, 'B-NP': 382, 'B-VP': 2, 
-    'I-VP': 11, 'O': 16}, 
-'CC': 
-    {'B-ADVP': 3, 'O': 3676, 'I-VP': 104, 'B-CONJP': 6, 
-    'I-ADVP': 30, 'I-UCP': 2, 'I-PP': 24, 'I-ADJP': 26, 
-    'I-NP': 1409, 'B-ADJP': 2, 'B-NP': 18, 'B-PP': 70, 
-    'I-PRT': 1, 'B-VP': 1}, 
-'NN': 
-    {'B-LST': 2, 'I-INTJ': 2, 'B-ADVP': 38, 'O': 37, 
-    'I-ADVP': 11, 'B-INTJ': 1, 'I-UCP': 2, 'B-UCP': 2, 
-    'I-VP': 77, 'B-PRT': 2, 'I-ADJP': 41, 'I-NP': 24456, 
-    'B-ADJP': 44, 'B-NP': 5160, 'B-PP': 15, 'B-VP': 257},
+{'JJR':
+{'I-ADVP': 17, 'I-ADJP': 45, 'I-NP': 204, 'B-ADVP': 63,
+'B-PP': 2, 'B-ADJP': 111, 'B-NP': 382, 'B-VP': 2,
+'I-VP': 11, 'O': 16},
+'CC':
+{'B-ADVP': 3, 'O': 3676, 'I-VP': 104, 'B-CONJP': 6,
+'I-ADVP': 30, 'I-UCP': 2, 'I-PP': 24, 'I-ADJP': 26,
+'I-NP': 1409, 'B-ADJP': 2, 'B-NP': 18, 'B-PP': 70,
+'I-PRT': 1, 'B-VP': 1},
+'NN':
+{'B-LST': 2, 'I-INTJ': 2, 'B-ADVP': 38, 'O': 37,
+'I-ADVP': 11, 'B-INTJ': 1, 'I-UCP': 2, 'B-UCP': 2,
+'I-VP': 77, 'B-PRT': 2, 'I-ADJP': 41, 'I-NP': 24456,
+'B-ADJP': 44, 'B-NP': 5160, 'B-PP': 15, 'B-VP': 257},
 ...
                         </pre>
                     </li>
                     <li>For each part of speech, select the most frequent chunk. In the example above, you will
-                        have (NN, I-NP)</li>
+                        have (NN, I-NP)
+                    </li>
                     <li>Using the resulting associations, apply your chunker to the test file.</li>
-                    <li>You will store your results in an output file that has four columns. The 
-                        three first columns will be the input columns from the test file: word, part of speech, 
+                    <li>You will store your results in an output file that has four columns. The
+                        three first columns will be the input columns from the test file: word, part of speech,
                         and gold-standard chunk. You
-                        will append the predicted chunk as the 4th column. Your output file should look like 
+                        will append the predicted chunk as the 4th column. Your output file should look like
                         the excerpt below. Here the
                         gold-standard chunks and the predicted chunks are exactly the same:
                         <pre>
@@ -103,7 +106,7 @@ unit NN I-NP I-NP
 said VBD B-VP B-VP
 it PRP B-NP B-NP
                         </pre>
-                        The CoNLL 2000 evaluation script 
+                        The CoNLL 2000 evaluation script
                         will use these
                         two last columns, chunk and predicted chunk, to compute the performance.
                     </li>
@@ -115,39 +118,46 @@ it PRP B-NP B-NP
                                    <tt>eval.sh</tt>
                                </a>
                                script or the-->
-                <a href="http://www.cnts.ua.ac.be/conll2000/chunking/">
+                <a href="https://www.clips.uantwerpen.be/conll2000/chunking/">
                     <tt>conlleval.txt</tt>
                 </a>
-                evaluation program used by the CoNLL 2000 shared task. 
+                evaluation program used by the CoNLL 2000 shared task.
                 <ul>
-                    <li><tt>conlleval.txt</tt> is the official
+                    <li>
+                        <tt>conlleval.txt</tt>
+                        is the official
                         CoNLL Perl script. It expects the two last columns of the test set to be the manually
                         assigned chunk (gold standard) and the predicted chunk.
                     </li>
                     <li>
                         Start it like this:
                         <pre>
-$ conlleval.txt &lt;out
+                            $ conlleval.txt &lt;out
                         </pre>
-                        where the <tt>out</tt> file contains both the gold and predicted chunk tags. <tt>conlleval.txt</tt> is 
+                        where the <tt>out</tt> file contains both the gold and predicted chunk tags. <tt>conlleval.txt
+                    </tt> is
                         a Perl script.
                     </li>
-                    <li>Perl is installed on most Unix distributions. If it is not installed on your machine, you need to install it.
+                    <li>Perl is installed on most Unix distributions. If it is not installed on your machine, you need
+                        to install it.
                         Make also sure that
-                        you have the execution rights. Otherwise change them with:<pre>
-$ chmod +x conlleval.txt
+                        you have the execution rights. Otherwise change them with:
+                        <pre>
+                            $ chmod +x conlleval.txt
                         </pre>
                     </li>
                     <li>The <tt>conlleval.txt</tt> script expects the new lines to be <tt>\n</tt> as in Unix.
                         If you run your Python program on Windows, your new lines will be <tt>\r\n</tt>.
-                        To have the correct new lines, add this parameter to <tt>open()</tt>: 
-                        <tt>newline='\n’</tt> like this:
+                        To have the correct new lines, add this parameter to <tt>open()</tt>:
+                        <tt>newline='\n’</tt>
+                        like this:
                         <pre>
-f_out = open('out', ‘w’, newline='\n’)
+                            f_out = open('out', ‘w’, newline='\n’)
                         </pre>
                     </li>
-                    <li>The complete description of the CoNLL 2000 evaluation script is available here: 
-                        <a href="http://www.cnts.ua.ac.be/conll2000/chunking/output.html">http://www.cnts.ua.ac.be/conll2000/chunking/output.html</a>.
+                    <li>The complete description of the CoNLL 2000 evaluation script is available here:
+                        <a href="https://www.clips.uantwerpen.be/conll2000/chunking/output.html">
+                            https://www.clips.uantwerpen.be/conll2000/chunking/output.html</a>.
                     </li>
                     <!--<li><tt>eval.sh</tt> is a convenience script 
                         that takes two test files as input, the gold and the prediction, and appends the last column of the predication
@@ -164,7 +174,7 @@ $ eval.sh test.txt out
 
         <p>In this exercise, you will apply and extend the
             <tt>ml_chunker.py</tt>
-            program. You will start from the original 
+            program. You will start from the original
             program you downloaded and modify it so that you understand
             how to improve the performance of your chunker. You will not add new features to the feature vector.
         </p>
@@ -230,34 +240,43 @@ $ eval.sh test.txt out
         </ul>
         <p>The two last parameters are said to be dynamic because the program computes them at run-time. Kudoh and
             Matsumoto trained a classifier based on support vector machines. Read
-            <a href="http://www.cnts.ua.ac.be/conll2000/pdf/14244kud.pdf">Kudoh and Matsumoto's paper</a>
+            <a href="http://www.clips.uantwerpen.be/conll2000/pdf/14244kud.pdf">Kudoh and Matsumoto's paper</a>
             and the
             <a href="http://www.chasen.org/~taku/software/yamcha/">Yamcha</a>
             software site.
         </p>
         <ol>
-            <li>What is the feature vector that corresponds to the program? Is it the same Kudoh and Matsumoto used in their experiment?</li>
+            <li>What is the feature vector that corresponds to the program? Is it the same Kudoh and Matsumoto used in
+                their experiment?
+            </li>
             <li>What is the performance of the chunker?</li>
-            <li>Remove the lexical features (the words) from the feature vector and measure the performance. You should observe a decrease.</li>
-            <li>What is the classifier used in the program? Try two other classifiers and measure their performance: decision trees, perceptron, support vector machines, etc..
-                Be aware that support vector machines take a long time to train: up to one hour.</li>
+            <li>Remove the lexical features (the words) from the feature vector and measure the performance. You should
+                observe a decrease.
+            </li>
+            <li>What is the classifier used in the program? Try two other classifiers and measure their performance:
+                decision trees, perceptron, support vector machines, etc..
+                Be aware that support vector machines take a long time to train: up to one hour.
+            </li>
         </ol>
         <h3>Improving the Chunker</h3>
         <p>Implement one of these two options, the first one being easier.</p>
         <ol>
-            <li>Complement the feature vector used in the previous section with the two dynamic features, <i>c
+            <li>Complement the feature vector used in the previous section with the two dynamic features,
+                <i>c
                     <sub>i-2</sub>
                 </i>
                 ,
                 <i>c
                     <sub>i-1</sub>
-                </i>, and train a new model. You will need to modify the 
-                <tt>extract_features_sent</tt> and <tt>predict</tt> functions. Be aware that 
+                </i>
+                , and train a new model. You will need to modify the
+                <tt>extract_features_sent</tt>
+                and <tt>predict</tt> functions. Be aware that
                 when you predict the test set, you do not know the dynamic features in advance and you must
                 not read them from the test file. You need to reuse the two previous chunk tags that you have predicted.
             </li>
             <li>
-                If you know what beam search is, apply it using the probability output of logistic regression or 
+                If you know what beam search is, apply it using the probability output of logistic regression or
                 the score if you use support vector machines.
             </li>
         </ol>
