@@ -805,6 +805,9 @@
                     <li>The <a href="http://cogcomp.cs.illinois.edu/page/demos/">Illinois named entity tagger</a> from
                         the University of Illinois
                     </li>
+                    <li>The <a href="http://vilde.cs.lth.se:9000/#/">Langforia multilingual pipelines</a> from
+                        Lund University
+                    </li>
                 </ul>
             </li>
             <li>Annotation resources:
