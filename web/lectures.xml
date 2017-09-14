@@ -787,8 +787,9 @@
                     <li><a href="http://www.opencalais.com/">Calais</a>, an information extraction system
                     </li>
                     <li>Visualizing and monitoring events and disasters on a map at <a
-                            href="http://press.jrc.it/geo?type=event&amp;format=html&amp;language=all">EMM labs</a>,
-                        part of the <a href="http://emm.jrc.it/overview.html">Europe media monitor</a>. A key to the
+                            href="http://emm.newsbrief.eu/emmMap/?type=event&language=&language=all">EMM labs</a>,
+                        part of the Europe media monitor.
+                        The infromation extraction part of the <a href="http://emm.newsbrief.eu/NewsBrief/eventedition/en/latest_en.html">event detector</a>. A key to the
                         symbols used is available from <a href="http://press.jrc.it/aboutrtevents.html">this page</a>.
                         See also their <a href="http://emm.newsexplorer.eu/NewsExplorer/entities/en/1510.html">name
                             explorer</a>.
