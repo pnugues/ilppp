@@ -36,7 +36,7 @@ def extract_features_sent(sentence, w_size, feature_names):
     Extract the features from one sentence
     returns X and y, where X is a list of dictionaries and
     y is a list of symbols
-    :param sentence:
+    :param sentence: string containing the CoNLL structure of a sentence
     :param w_size:
     :return:
     """
