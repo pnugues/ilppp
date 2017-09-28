@@ -56,6 +56,11 @@
             <li>Download <a href="http://code.google.com/p/whatswrong/">What's wrong with my NLP</a> and use it to check
                 your representations.
             </li>
+            <li>Apply the dependency parser for Swedish of the <a href="http://vilde.cs.lth.se:9000/">Langforia
+                pipelines
+            </a> to these sentences. Link to Lanforia pipelines:
+                <a href="http://vilde.cs.lth.se:9000/">http://vilde.cs.lth.se:9000/</a>
+            </li>
         </ol>
         <h3>Extracting the subject–verb pairs and subject–verb–object triples</h3>
         <p>You will extract all the subject–verb pairs and the subject–verb–object
@@ -65,7 +70,8 @@
                 here</a>.
             This program will enable you to read the other corpora.
             You can also reprogram one using the model of CoNLL 2000. You will
-            find the description of the CoNLL-X format [<a href="http://ilk.uvt.nl/conll/#dataformat">here</a>].
+            find the description of the CoNLL-X format [<a href="http://ilk.uvt.nl/conll/#dataformat">here</a>]. Archive
+            <a href="https://web.archive.org/web/20161105025307/http://ilk.uvt.nl/conll/">here</a>.
         </p>
         <p>You can design the program you want. However, here are some hints on the results:
         </p>
@@ -81,11 +87,11 @@
             <li>Sort your pairs by order of frequency and give the five most frequent pairs. Here are the frequencies
                 you should find:
                 <pre>
-537
-261
-211
-171
-161
+                    537
+                    261
+                    211
+                    171
+                    161
                 </pre>
             </li>
             <li>Extract all the subject–verb–object triples of the corpus. The object function uses the <tt>OO</tt> code.
@@ -94,11 +100,11 @@
             <li>Sort your triples by order of frequency and give the five most frequent pairs. Here are the frequencies
                 you should find:
                 <pre>
-37
-36
-36
-19
-17
+                    37
+                    36
+                    36
+                    19
+                    17
                 </pre>
             </li>
         </ul>
@@ -141,15 +147,15 @@
                 </table>
                 In the corpora, you have the original tokens as well as the multiwords as with <i>vámonos al mar</i>.
                 <pre>
-1-2 vámonos _
-1 vamos ir
-2 nos nosotros
-3-4 al _
-3 a a
-4 el el
-5 mar mar
+                    1-2 vámonos _
+                    1 vamos ir
+                    2 nos nosotros
+                    3-4 al _
+                    3 a a
+                    4 el el
+                    5 mar mar
                 </pre>Read the format description for the details: [<a
-    href="http://universaldependencies.org/format.html">CoNLL-U format</a>].
+                        href="http://universaldependencies.org/format.html">CoNLL-U format</a>].
             </li>
             <li>If you represent the sentences as lists, the item indexes are not reliable: In the format description,
                 the token at position 1 is <i>vamos</i> and not <i>vámonos</i>.
@@ -173,8 +179,8 @@
 'den', 'id': '2', 'deprel': 'SS', 'cpostag': 'PO', 'head': '1'},
 '0': {'pdeprel': 'ROOT', 'lemma': 'ROOT', 'postag': 'ROOT', 'phead': '0', 'feats': 'ROOT',
 'form': 'ROOT', 'id': '0', 'deprel': 'ROOT', 'cpostag': 'ROOT', 'head': '0'},
-'4': {'pdeprel': '_', 'lemma': '_', 'postag': 'PR', 'phead': '_', 'feats': '_', 'form': 'i',
-                            'id': '4', 'deprel': 'RA', 'cpostag': 'PR', 'head': '1'}}
+ '4': {'pdeprel': '_', 'lemma': '_', 'postag': 'PR', 'phead': '_', 'feats': '_', 'form': 'i',
+'id': '4', 'deprel': 'RA', 'cpostag': 'PR', 'head': '1'}}
                         </pre>
                     </li>
                 </ul>
@@ -183,7 +189,7 @@
                 This is already done in the CoNLL reader.
             </li>
             <li>All the corpora in the universal dependencies format use the same function names: <tt>nsubj</tt> and <tt>
-                dobj
+                obj
             </tt> for the subject and direct object.
             </li>
             <li>Report the five most frequent pairs and triples you obtained in three languages. Preferably, languages
