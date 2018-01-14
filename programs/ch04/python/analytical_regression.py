@@ -32,11 +32,11 @@ def regression_array(X, y):
     :param observations:
     :return: weights, ŷ, sse
     """
-    w = np.dot(np.dot(np.linalg.inv(np.dot(X.T, X)), X.T), y)
+    w = (np.linalg.inv(X.T @ X) @ X.T) @ y
     # Or directly with pinv()
-    # w = np.dot(np.linalg.pinv(X), y)
-    y_hat = np.dot(X, w)
-    sse = np.dot((y_hat - y).T, (y_hat - y))
+    # w = np.linalg.pinv(X) @ y
+    y_hat = X @ w
+    sse = (y_hat - y).T @ (y_hat - y)
     return w, y_hat, sse
 
 
@@ -63,7 +63,7 @@ if __name__ == '__main__':
         print("Weights", w.T)
         print("SSE", sse)
         plt.plot([min(x_l), max(x_l)],
-                 [np.dot([1, min(x_l)], w), np.dot([1, max(x_l)], w)],
+                 [([1, min(x_l)] @ w), ([1, max(x_l)] @ w)],
                  color=pattern[i][0])
     plt.title("Salammbô")
     plt.xlabel("Letter count")
@@ -90,7 +90,7 @@ if __name__ == '__main__':
 
         w = np.array(w)
         plt.plot([min(x_l), max(x_l)],
-                 [np.dot([1, min(x_l)], w), np.dot([1, max(x_l)], w)],
+                 [([1, min(x_l)] @ w), ([1, max(x_l)] @ w)],
                  color=pattern[i][0])
     plt.title("Salammbô")
     plt.xlabel("Letter count")
