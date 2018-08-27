@@ -12,7 +12,7 @@
             <b>This page is provisional. It will be updated in due time.</b>
             <b>There can be last minute changes in the timetable that do not show on this page. Please always check the
                 official times here:
-                <a href="https://se.timeedit.net/web/lu/db1/lth1/ri1X50gQ3560YfQQ15Z5778Y0Zy7007335Y57Q545.html">
+                <a href="https://cloud.timeedit.net/lu/web/lth1/ri13Q603200037QQ53ZZ555004yYW37776765604Q551.html">
                     https://se.timeedit.net/web/lu/db1/lth1/
                 </a>
             </b>
@@ -21,13 +21,13 @@
         <ul>
             <li>Typically, each assignment is done by a group of two students. The programming results of it are shown
                 to the instructor who validates it during a laboratory session. You can register to a laboratory group here: <a
-                        href="https://sam.cs.lth.se/LabsSelectSession?occasionId=499">
-                    https://sam.cs.lth.se/LabsSelectSession?occasionId=499</a>.
+                        href="https://sam.cs.lth.se/LabsSelectSession?occasionId=552">
+                    https://sam.cs.lth.se/LabsSelectSession?occasionId=552</a>.
             </li>
             <li>After the lab, each and every student writes a report of one to two pages to describe how s/he carried
                 out the assignment, her/his results, and gives a conclusion. You need both to validate your program and
-                hand in a short report to complete your assignment. You can use <a href="https://www.sharelatex.com">
-                    sharelatex
+                hand in a short report to complete your assignment. You can use <a href="https://v2.overleaf.com">
+                    overleaf
                 </a> to write this report.
             </li>
             <li>Attendance to the laboratory sessions is compulsory. If you are unable to attend, you must report it to
@@ -35,9 +35,9 @@
             </li>
             <li>We will use Python and scikit-learn in the assignments. The laboratory session of week 1 (lab 0) is
                 intended to review some basic features of Python as well as scikit-learn.
-                <br/>Group 1, August 29, 2017, 08:15 to 10:00, in the Beta room, group 2, August 29, 2017, 13:15 to
-                15:00, in the Beta room, and group 3, August 31,
-                2017, 10:15 to 12:00, in the Alpha room.
+                <br/>Group 1/2, September 4, 2018, 08:15 to 10:00, in the Beta room, group 3, September 4, 2018, 13:15 to
+                15:00, in the Beta room, and group 4, September 4,
+                2018, 15:15 to 17:00, in the Beta room.
             </li>
             <li>
                 <a href="https://www.continuum.io/downloads">Anaconda</a>
@@ -56,29 +56,29 @@
             </li>
             <li>First assignment:
                 <a href="http://cs.lth.se/edan20/coursework/assignment-1/">Building an inverted index</a>
-                <br/>September 5 and 7, 2017.
+                <br/>September 11, 2018.
             </li>
             <li>Second assignment:
                 <a href="http://cs.lth.se/edan20/coursework/assignment-2/">Language models</a>
-                <br/>September 12 and 14, 2017.
+                <br/>September 18, 2018.
             </li>
             <li>Third assignment: <a href="http://cs.lth.se/edan20/coursework/assignment-3/">Extracting noun groups
                 using machine learning techniques
             </a> (statistical chunking)
-                <br/>September 19 and 21, 2017.
+                <br/>September 25, 2018.
             </li>
             <li>Fourth assignment:
                 <a href="http://cs.lth.se/edan20/coursework/assignment-4/">Extraction of subject—verb—object triples</a>
-                <br/>September 26 and 28, 2017.
+                <br/>October 2, 2018.
             </li>
             <li>Fifth assignment:
                 <a href="http://cs.lth.se/edan20/coursework/assignment-5/">Dependency parsing</a>
-                <br/>October 3 and 5, 2017.
+                <br/>October 9, 2018.
             </li>
             <li>Sixth assignment: <a href="http://cs.lth.se/edan20/coursework/assignment-6/">Dependency parsing using
                 machine learning techniques
             </a> (statistical parsing)
-                <br/>October 10 and 12, 2017.
+                <br/>October 16, 2018.
             </li>
         </ul>
         <h2>Programming resources</h2>
@@ -94,6 +94,9 @@
             </li>
             <li>
                 <a href="https://www.tensorflow.org/">TensorFlow</a>
+            </li>
+            <li>
+                <a href="http://dask.pydata.org/">Dask</a>
             </li>
         </ul>
     </body>

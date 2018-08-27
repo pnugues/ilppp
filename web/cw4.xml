@@ -80,7 +80,7 @@
                 as keys.
             </li>
             <li>Extract all the subject-verb pairs in the corpus. The subject function uses the <tt>SS</tt> code in the
-                Swedish corpus of CoNLL-X.
+                Swedish corpus of CoNLL-X. In the extraction, do not check the part of speech of the verb in the pair.
             </li>
             <li>Compute the total number of pairs. You should find 18885 pairs.
             </li>

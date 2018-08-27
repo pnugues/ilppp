@@ -121,7 +121,8 @@
                         the previous one with at least two
                         features. You can read
                         <a href="http://www.aclweb.org/anthology/C/C10/C10-1093.pdf">this paper</a>
-                        (Table 6) to build your vector.
+                        (Table 6) to build your vector. In this paper, Sect. 4 contains the description of the
+                        feature codes: LEX, POS, fw, etc.
                     </li>
                 </ul>
             </li>
@@ -140,13 +141,13 @@
             with their function using this notation for example:<tt>la.++</tt>, <tt>la.+A</tt>, <tt>la.+F</tt>,
             <tt>la.AA</tt>, <tt>la.AG</tt>, etc. where the prefix is the action and the suffix is the function.
         </p>
-        <p>Modify the program so that it produces a sequence of actions only (without the functions).</p>
+        <!--<p>Modify the program so that it produces a sequence of actions only (without the functions).</p>-->
         <!--<p>Read the complete list of actions extracted from the Swedish corpus in CoNLL-X <a
                 href="http://fileadmin.cs.lth.se/cs/Education/EDAN20/corpus/conllx/sv/domain_functions.arff">here</a>.
         </p>-->
         <h3>Extracting features (I)</h3>
         <p>The final goal is to parse the Swedish corpus in CoNLL-X and produce
-            a labelled and unlabelled dependency
+            a labelled dependency
             graph. You will show the parsing results at the end of the 6th assignment.
             In this assignment, you will only
             generate the scikit-learn models.
@@ -200,7 +201,7 @@ def extract(stack, queue, graph, feature_names, sentence):
         <p>The first lines of your features for the 4 parameters (<b>x</b>) and labelled
             actions (y) should look like the excerpt below, where the columns correspond to
             stack0_POS, stack1_POS, stack0_word, stack1_word,
-            queue0_POS, queue1_POS, queue0_word, queue1_word, can-la, can-re, and the transition value:
+            queue0_POS, queue1_POS, queue0_word, queue1_word, can-re, can-la, and the transition value:
         </p>
         <pre>
 x = ['nil', 'nil', 'nil', 'nil', 'ROOT', 'NN', 'ROOT', 'Äktenskapet', False, False], y = sh
