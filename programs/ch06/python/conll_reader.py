@@ -81,5 +81,6 @@ if __name__ == '__main__':
     print(X_dict[1])
     tok = Token({'id': '1', 'form': 'La', 'lemma': 'el', 'cpos': 'd', 'pos': 'da', 'feats': 'num=s|gen=f'})
     print(tok['form'])
+    print('form' in tok)
 
     save('out', X_dict, column_names)
