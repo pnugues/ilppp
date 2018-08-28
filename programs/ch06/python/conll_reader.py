@@ -14,28 +14,25 @@ def save(file, formatted_corpus, column_names):
     :param column_names:
     :return:
     """
-    f_out = open(file, 'w')
-    for sentence in formatted_corpus:
-        for row in sentence:
-            for col in column_names[:-1]:
-                if col in row.keys():
-                    f_out.write(row[col] + '\t')
-                else:
-                    f_out.write('_\t')
-            col = column_names[-1]
-            if col in row.keys():
-                f_out.write(row[col] + '\n')
-            else:
-                f_out.write('_\n')
-        f_out.write('\n')
-    f_out.close()
+    with open(file, 'w') as f_out:
+        for sentence in formatted_corpus:
+            sentence_lst = []
+            for row in sentence:
+                items = map(lambda x: row.get(x, '_'), column_names)
+                sentence_lst += '\t'.join(items) + '\n'
+            sentence_lst += '\n'
+            f_out.write(''.join(sentence_lst))
 
 
 class Token:
 
     def __init__(self, token):
         self._content = token
-        self.keys = token.keys
+        self.keys = token.keys()
+        self.get = token.get
+
+    def __contains__(self, item):
+        return item in self.keys
 
     def __getitem__(self, item):
         return self._content[item]
