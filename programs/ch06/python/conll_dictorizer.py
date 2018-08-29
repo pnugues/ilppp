@@ -5,6 +5,8 @@ Version with a class modeled as a vectorizer
 """
 __author__ = "Pierre Nugues"
 
+import regex as re
+
 
 def save(file, formatted_corpus, column_names):
     """
@@ -37,13 +39,16 @@ class Token:
     def __getitem__(self, item):
         return self._content[item]
 
+    def __setitem__(self, item, value):
+        self._content[item] = value
+
     def __repr__(self):
         return str(self._content)
 
 
 class CoNLLDictorizer:
 
-    def __init__(self, column_names, sent_sep='\n\n', col_sep=' '):
+    def __init__(self, column_names, sent_sep='\n\n', col_sep=' +'):
         self.column_names = column_names
         self.sent_sep = sent_sep
         self.col_sep = col_sep
@@ -53,16 +58,16 @@ class CoNLLDictorizer:
 
     def transform(self, corpus):
         corpus = corpus.strip()
-        sentences = corpus.split(self.sent_sep)
+        sentences = re.split(self.sent_sep, corpus)
         return list(map(self._split_in_words, sentences))
 
     def fit_transform(self, corpus):
         return self.transform(corpus)
 
     def _split_in_words(self, sentence):
-        rows = sentence.split('\n')
+        rows = re.split('\n', sentence)
         return [Token(dict(zip(self.column_names,
-                               row.split(self.col_sep))))
+                               re.split(self.col_sep, row))))
                 for row in rows]
 
 
