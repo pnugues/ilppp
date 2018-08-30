@@ -8,16 +8,16 @@ __author__ = "Pierre Nugues"
 import regex as re
 
 
-def save(file, formatted_corpus, column_names):
+def save(file, corpus_dict, column_names):
     """
     Saves the corpus in a file
     :param file:
-    :param formatted_corpus:
+    :param corpus_dict:
     :param column_names:
     :return:
     """
     with open(file, 'w') as f_out:
-        for sentence in formatted_corpus:
+        for sentence in corpus_dict:
             sentence_lst = []
             for row in sentence:
                 items = map(lambda x: row.get(x, '_'), column_names)
@@ -77,15 +77,15 @@ if __name__ == '__main__':
     column_names = ['id', 'form', 'lemma', 'cpos', 'pos', 'feats']
     train = open(train_file).read().strip()
     conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
-    X_dict = conll_dict.transform(train)
+    train_dict = conll_dict.transform(train)
 
-    print(X_dict[0])
-    print(X_dict[0][0])
-    print(type(X_dict[0][0]))
-    print(X_dict[0][0]['form'])
-    print(X_dict[1])
+    print(train_dict[0])
+    print(train_dict[0][0])
+    print(type(train_dict[0][0]))
+    print(train_dict[0][0]['form'])
+    print(train_dict[1])
     tok = Token({'id': '1', 'form': 'La', 'lemma': 'el', 'cpos': 'd', 'pos': 'da', 'feats': 'num=s|gen=f'})
     print(tok['form'])
     print('form' in tok)
 
-    save('out', X_dict, column_names)
+    save('out', train_dict, column_names)
