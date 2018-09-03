@@ -26,24 +26,8 @@ def save(file, corpus_dict, column_names):
             f_out.write(''.join(sentence_lst))
 
 
-class Token:
-
-    def __init__(self, token):
-        self._content = token
-        self.keys = token.keys()
-        self.get = token.get
-
-    def __contains__(self, item):
-        return item in self.keys
-
-    def __getitem__(self, item):
-        return self._content[item]
-
-    def __setitem__(self, item, value):
-        self._content[item] = value
-
-    def __repr__(self):
-        return str(self._content)
+class Token(dict):
+    pass
 
 
 class CoNLLDictorizer:
@@ -89,3 +73,32 @@ if __name__ == '__main__':
     print('form' in tok)
 
     save('out', train_dict, column_names)
+
+    tok_dict = {'id': '1', 'form': 'La', 'lemma': 'el', 'cpos': 'd', 'pos': 'da', 'feats': 'num=s|gen=f'}
+    tok_dict2 = {'id': '1', 'form': 'La', 'lemma': 'el', 'cpos': 'd', 'pos': 'da', 'feats': 'num=s|gen=f'}
+
+    tok_set = set(tok_dict)
+    print(tok_set)
+
+    tok_set = tok_set.union(tok_dict2)
+    print(tok_set)
+
+    print(tok.keys())
+
+    # exit()
+    word_set = set()
+    word_set = set(tok_dict.values())
+    print(list(word_set))
+
+    word_set = set()
+    word_set = set(tok.values())
+    print(list(word_set))
+
+    word_set = set()
+    word_set.update(tok.values())
+    print(list(word_set))
+
+    word_set = set()
+    print("Tok val", tok.values())
+    word_set = word_set.union(set(tok.values()))
+    print(list(word_set))
