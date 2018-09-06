@@ -40,7 +40,7 @@
                 2018, 15:15 to 17:00, in the Beta room.
             </li>
             <li>
-                <a href="https://www.continuum.io/downloads">Anaconda</a>
+                <a href="https://www.anaconda.com/download/">Anaconda</a>
                 and <a href="https://www.jetbrains.com/pycharm/">Pycharm</a> are the recommended programming
                 environments. Both are free.
             </li>
@@ -85,6 +85,9 @@
         <ul>
             <li>
                 <a href="http://www.python.org/">Python</a>
+            </li>
+            <li>
+                <a href="https://www.anaconda.com/download/">Anaconda</a>
             </li>
             <li>
                 <a href="http://scikit-learn.org/">scikit-learn</a>
