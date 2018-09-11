@@ -76,6 +76,14 @@
                 <br/>
                 <tt>$ jupyter notebook</tt>
             </li>
+            <li>
+                On LTH machines, the <tt>regex</tt> module is not available from PyCharm by default.
+                You need first to configure your environment. To do so, in the File menu, select
+                Settings..., then Project and Project Interpreter. In the Project Interpreter box,
+                on the top of the right pane, add the new interpreter by pressing the cog icon, and Add...
+                Then select Anaconda Python:
+                <tt>/usr/local/anaconda/bin/python</tt>
+            </li>
         </ol>
         <h2>Course of the lab</h2>
         <p>In the lab session, your instructors will walk you through Python, Unix, and scikit-learn. You will:</p>
