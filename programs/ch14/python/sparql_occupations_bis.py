@@ -14,17 +14,15 @@ PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?item ?itemLabel ?_subclass_of ?_subclass_ofLabel
+SELECT DISTINCT ?occupation ?itemLabelOcc
 WHERE {
-  ?item wdt:P31 wd:Q28640; # instance of Profession
-        wdt:P279 ?_subclass_of. # subclass of
+  ?item  wdt:P31 wd:Q5 .
+  ?item wdt:P106 ?occupation .
   OPTIONAL {
-    ?item rdfs:label ?itemLabel filter (lang(?itemLabel) = "en") .
-  }
-  OPTIONAL {
-    ?_subclass_of rdfs:label ?_subclass_ofLabel filter (lang(?_subclass_ofLabel) = "en") .
-  }
-}'''
+    ?occupation rdfs:label ?itemLabelOcc filter (lang(?itemLabelOcc) = "en") .
+  }  
+}
+LIMIT 1000'''
 
 url = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql'
 data = requests.get(url, params={'query': query, 'format': 'json'}).json()
@@ -32,9 +30,8 @@ data = requests.get(url, params={'query': query, 'format': 'json'}).json()
 profession = []
 for item in data['results']['bindings']:
     profession.append({
-        'id': item['item']['value'],
-        'name': item.get('itemLabel', {}).get('value'),
-        'subclass': item.get('_subclass_ofLabel', {}).get('value')})
+        'id': item.get('occupation', {}).get('value'),
+        'occupation': item.get('itemLabelOcc', {}).get('value')})
 
 df = pd.DataFrame(profession)
 print(len(df))
