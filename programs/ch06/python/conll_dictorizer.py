@@ -32,7 +32,7 @@ class Token(dict):
 
 class CoNLLDictorizer:
 
-    def __init__(self, column_names, sent_sep='\n\n', col_sep=' +'):
+    def __init__(self, column_names, sent_sep='\n\n', col_sep='\t+'):
         self.column_names = column_names
         self.sent_sep = sent_sep
         self.col_sep = col_sep
@@ -50,6 +50,7 @@ class CoNLLDictorizer:
 
     def _split_in_words(self, sentence):
         rows = re.split('\n', sentence)
+        rows = [row for row in rows if row[0] != '#']
         return [Token(dict(zip(self.column_names,
                                re.split(self.col_sep, row))))
                 for row in rows]
@@ -57,48 +58,50 @@ class CoNLLDictorizer:
 
 if __name__ == '__main__':
     train_file = 'test.txt'
+    BASE_DIR = '/Users/pierre/Documents/Cours/EDAN20/corpus/ud-treebanks-v2.3/UD_English-EWT/'
+    train_file = BASE_DIR + 'en_ewt-ud-train.conllu'
+    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS', 'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
 
-    column_names = ['id', 'form', 'lemma', 'cpos', 'pos', 'feats']
+    column_names = list(map(str.lower, column_names))
+
     train = open(train_file).read().strip()
-    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
+    conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train)
 
-    print(train_dict[0])
-    print(train_dict[0][0])
-    print(type(train_dict[0][0]))
-    print(train_dict[0][0]['form'])
-    print(train_dict[1])
-    tok = Token({'id': '1', 'form': 'La', 'lemma': 'el', 'cpos': 'd', 'pos': 'da', 'feats': 'num=s|gen=f'})
-    print(tok['form'])
-    print('form' in tok)
-
+    print('First sentence:', train_dict[0])
+    print('First word:', train_dict[0][0])
+    print('Type of the first word', type(train_dict[0][0]))
+    print('Form of the first word', train_dict[0][0]['form'])
+    print('Second sentence:', train_dict[1])
     save('out', train_dict, column_names)
+
+    print('Creating a token')
+    # column_names = ['id', 'form', 'lemma', 'cpos', 'pos', 'feats']
+    tok = Token({'id': '1', 'form': 'La', 'lemma': 'el', 'cpos': 'd', 'pos': 'da', 'feats': 'num=s|gen=f'})
+    print('Keys:', tok.keys())
+    print('The form:', tok['form'])
+    print('Is key form in token?', 'form' in tok)
 
     tok_dict = {'id': '1', 'form': 'La', 'lemma': 'el', 'cpos': 'd', 'pos': 'da', 'feats': 'num=s|gen=f'}
     tok_dict2 = {'id': '1', 'form': 'La', 'lemma': 'el', 'cpos': 'd', 'pos': 'da', 'feats': 'num=s|gen=f'}
 
     tok_set = set(tok_dict)
-    print(tok_set)
-
+    print('Keys:', tok_set)
     tok_set = tok_set.union(tok_dict2)
     print(tok_set)
 
-    print(tok.keys())
-
     # exit()
-    word_set = set()
     word_set = set(tok_dict.values())
-    print(list(word_set))
+    print('Values:', list(word_set))
 
-    word_set = set()
     word_set = set(tok.values())
     print(list(word_set))
 
     word_set = set()
     word_set.update(tok.values())
-    print(list(word_set))
+    print('Values:', list(word_set))
 
     word_set = set()
-    print("Tok val", tok.values())
+    print("Token values:", tok.values())
     word_set = word_set.union(set(tok.values()))
-    print(list(word_set))
+    print('Values:', list(word_set))
