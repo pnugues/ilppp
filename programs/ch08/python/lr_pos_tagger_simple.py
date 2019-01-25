@@ -1,14 +1,16 @@
 # coding=utf-8
 """
-Feature extractors.
+A simple POS tagger using a context of five words and logistic regression.
+To run the POS tagger, just type
+python lr_pos_tagger_simple.py
 """
 __author__ = "Pierre Nugues"
 
 import sys
 import os
+import time
 from sklearn.feature_extraction import DictVectorizer
 from sklearn import linear_model
-import time
 import datasets
 from context_dictorizer import ContextDictorizer, evaluate
 
@@ -24,53 +26,51 @@ def predict(test_sentence, context_dictorizer, dict_vectorizer):
     :param test_sentence:
     :return:
     """
-    X_dict, y = context_dictorizer.transform([test_sentence], training_step=False)
+    X_dict, y = context_dictorizer.transform([test_sentence],
+                                             training_step=False)
     y_pred_vec = []
     for x_dict in X_dict:
         # Vectorize the feature dict
         x_vec = dict_vectorizer.transform(x_dict)
         y_pred = classifier.predict(x_vec)
         y_pred_vec.append(y_pred[0])
-    # print('X', X_test_dict)
-    rows = test_sentence
+
     # We add the predictions in the ppos column
-    for row, y_pred in zip(rows, y_pred_vec):
+    for row, y_pred in zip(test_sentence, y_pred_vec):
         row['ppos'] = y_pred
     return test_sentence
 
 
 if __name__ == '__main__':
     # Universal dependencies otherwise, Penn Treebank
-    UD = True
+    UD = False
     start_time = time.clock()
-
     if UD:
-        train_sentences, dev_sentences, test_sentences, column_names = datasets.load_internet_ud_en_ewt()
+        train_sentences, dev_sentences, test_sentences, column_names = datasets.load_ud_en_ewt()
     else:
         train_sentences, dev_sentences, test_sentences, column_names = datasets.load_conll2009_pos()
 
-    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
+    conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
 
     if UD:
-        context_dictorizer = ContextDictorizer(output='upos')
-    else:
         context_dictorizer = ContextDictorizer()
+    else:
+        context_dictorizer = ContextDictorizer(output='pos')
     context_dictorizer.fit(train_dict)
-
-    # We print the features to check they match Table 8.1 in my book (second edition)
-    # We use the training step extraction with the dynamic features
-    context_dictorizer.print_example(train_dict)
-
     # Feature and response extraction
     X_dict, y = context_dictorizer.transform(train_dict)
     print(X_dict[0])
     print(y[0])
 
+    # We print the features to check they match Table 8.1 in my book (second edition)
+    # We use the training step extraction with the dynamic features
+    context_dictorizer.print_example(train_dict)
+
     # We transform the symbols into numbers
     print('Vectorizing the features...')
-    dict_vectorizer = DictVectorizer(sparse=True)
+    dict_vectorizer = DictVectorizer()
     X = dict_vectorizer.fit_transform(X_dict)
 
     print('Fitting the model...')
@@ -94,6 +94,7 @@ if __name__ == '__main__':
     print('Elapsed time:', time.clock() - start_time)
 
     """
+    Results:
     Penn Treebank
     Accuracy, lexical model (dual):
     width 1: 0.950690061724114
