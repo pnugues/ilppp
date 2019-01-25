@@ -1,11 +1,12 @@
 # coding=utf-8
 """
-CoNLL 2009 file readers and writers for the parts of speech.
-Version with a class modeled as a vectorizer
+CoNLL file readers and writers.
+Use a class modeled as a vectorizer
 """
 __author__ = "Pierre Nugues"
 
 import regex as re
+from urllib.request import urlopen
 
 
 def save(file, corpus_dict, column_names):
@@ -57,16 +58,22 @@ class CoNLLDictorizer:
 
 
 if __name__ == '__main__':
-    train_file = 'test.txt'
-    BASE_DIR = '/Users/pierre/Documents/Cours/EDAN20/corpus/ud-treebanks-v2.3/UD_English-EWT/'
-    train_file = BASE_DIR + 'en_ewt-ud-train.conllu'
-    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS', 'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
+    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS',
+                    'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
 
     column_names = list(map(str.lower, column_names))
 
-    train = open(train_file).read().strip()
+    url = 'https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/master/'
+    train_file = url + 'en_ewt-ud-train.conllu'
+    dev_file = url + 'en_ewt-ud-dev.conllu'
+    test_file = url + 'en_ewt-ud-test.conllu'
+
+    train_sentences = urlopen(train_file).read().decode('utf-8').strip()
+    dev_sentences = urlopen(dev_file).read().decode('utf-8').strip()
+    test_sentences = urlopen(test_file).read().decode('utf-8').strip()
+
     conll_dict = CoNLLDictorizer(column_names)
-    train_dict = conll_dict.transform(train)
+    train_dict = conll_dict.transform(train_sentences)
 
     print('First sentence:', train_dict[0])
     print('First word:', train_dict[0][0])
@@ -74,6 +81,20 @@ if __name__ == '__main__':
     print('Form of the first word', train_dict[0][0]['form'])
     print('Second sentence:', train_dict[1])
     save('out', train_dict, column_names)
+
+    url = 'https://raw.githubusercontent.com/UniversalDependencies/UD_French-GSD/master/'
+    train_file = url + 'fr_gsd-ud-train.conllu'
+    dev_file = url + 'fr_gsd-ud-dev.conllu'
+    test_file = url + 'fr_gsd-ud-test.conllu'
+
+    train_sentences = urlopen(train_file).read().decode('utf-8').strip()
+    dev_sentences = urlopen(dev_file).read().decode('utf-8').strip()
+    test_sentences = urlopen(test_file).read().decode('utf-8').strip()
+
+    conll_dict = CoNLLDictorizer(column_names)
+    train_dict = conll_dict.transform(train_sentences)
+
+    print('First sentence French:', train_dict[1])
 
     print('Creating a token')
     # column_names = ['id', 'form', 'lemma', 'cpos', 'pos', 'feats']
