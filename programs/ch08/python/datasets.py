@@ -1,5 +1,8 @@
 """
-Program to load CoNLL datasets
+Program to load CoNLL datasets.
+Sof of the corpora are available from github.
+For some others, you need to obtain them from LDC or other sources
+and store them in your computer. You will have to edit the paths.
 """
 import sys, os
 import numpy as np
@@ -12,6 +15,11 @@ from ch06.python.conll_dictorizer import CoNLLDictorizer
 
 
 def load_conll2009_pos(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/conll2009/'):
+    """
+    The CoNLL English corpus up to the parts of speech
+    :param BASE_DIR:
+    :return:
+    """
     train_file = BASE_DIR + 'en/CoNLL2009-ST-English-train-pos.txt'
     dev_file = BASE_DIR + 'en/CoNLL2009-ST-English-development-pos.txt'
     test_file = BASE_DIR + 'en/CoNLL2009-ST-test-words-pos.txt'
@@ -27,6 +35,12 @@ def load_conll2009_pos(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/con
 
 
 def load_conll2003_en(BASE_DIR='/Users/pierre/Projets/Corpora/CoNLL2003/'):
+    """
+    CoNLL 2003
+    Source: https://www.clips.uantwerpen.be/conll2003/ner/
+    :param BASE_DIR:
+    :return:
+    """
     train_file = BASE_DIR + 'NER-data/eng.train'
     dev_file = BASE_DIR + 'NER-data/eng.valid'
     test_file = BASE_DIR + 'NER-data/eng.test'
@@ -39,22 +53,13 @@ def load_conll2003_en(BASE_DIR='/Users/pierre/Projets/Corpora/CoNLL2003/'):
     return train_sentences, dev_sentences, test_sentences, column_names
 
 
-def load_ud_en_ewt(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/ud-treebanks-v2.3/UD_English-EWT/'):
-    train_file = BASE_DIR + 'en_ewt-ud-train.conllu'
-    dev_file = BASE_DIR + 'en_ewt-ud-dev.conllu'
-    test_file = BASE_DIR + 'en_ewt-ud-test.conllu'
-
-    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS',
-                    'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
-
-    column_names = list(map(str.lower, column_names))
-    train_sentences = open(train_file).read().strip()
-    dev_sentences = open(dev_file).read().strip()
-    test_sentences = open(test_file).read().strip()
-    return train_sentences, dev_sentences, test_sentences, column_names
-
-
-def load_internet_ud_en_ewt(url='https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/master/'):
+def load_ud_en_ewt(url='https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/master/'):
+    """
+    The English Web treebank from github
+    Source: https://universaldependencies.org/
+    :param url:
+    :return:
+    """
     train_file = url + 'en_ewt-ud-train.conllu'
     dev_file = url + 'en_ewt-ud-dev.conllu'
     test_file = url + 'en_ewt-ud-test.conllu'
@@ -69,8 +74,13 @@ def load_internet_ud_en_ewt(url='https://raw.githubusercontent.com/UniversalDepe
     return train_sentences, dev_sentences, test_sentences, column_names
 
 
-def load_internet_ud_en_talbanken(url=
-                                  'https://raw.githubusercontent.com/UniversalDependencies/UD_Swedish-Talbanken/master/'):
+def load_ud_en_talbanken(url='https://raw.githubusercontent.com/UniversalDependencies/UD_Swedish-Talbanken/master/'):
+    """
+    The Swedish talbanken
+    Source: https://universaldependencies.org/
+    :param url:
+    :return:
+    """
     train_file = url + 'sv_talbanken-ud-train.conllu'
     dev_file = url + 'sv_talbanken-ud-dev.conllu'
     test_file = url + 'sv_talbanken-ud-test.conllu'
@@ -85,7 +95,29 @@ def load_internet_ud_en_talbanken(url=
     return train_sentences, dev_sentences, test_sentences, column_names
 
 
+def load(url='https://raw.githubusercontent.com/UniversalDependencies/UD_French-GSD/master/'):
+    train_file = url + 'fr_gsd-ud-train.conllu'
+    dev_file = url + 'fr_gsd-ud-dev.conllu'
+    test_file = url + 'fr_gsd-ud-test.conllu'
+
+    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS',
+                    'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
+
+    column_names = list(map(str.lower, column_names))
+
+    train_sentences = urlopen(train_file).read().decode('utf-8').strip()
+    dev_sentences = urlopen(dev_file).read().decode('utf-8').strip()
+    test_sentences = urlopen(test_file).read().decode('utf-8').strip()
+    return train_sentences, dev_sentences, test_sentences, column_names
+
+
 def load_suc_3(BASE_DIR='/Users/pierre/Projets/Corpora/svenska/SUC3.0/corpus/conll/'):
+    """
+    The Swedish SUC corpus
+    Source: https://spraakbanken.gu.se/swe/resurs/suc3
+    :param BASE_DIR:
+    :return:
+    """
     train_file = BASE_DIR + 'suc-train.conll'
     dev_file = BASE_DIR + 'suc-dev.conll'
     test_file = BASE_DIR + 'suc-test.conll'
@@ -103,7 +135,8 @@ def load_suc_3(BASE_DIR='/Users/pierre/Projets/Corpora/svenska/SUC3.0/corpus/con
 
 def load_embeddings(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/'):
     """
-    Return the embeddings in the from of a dictionary
+    Return the Glove embeddings in the from of a dictionary
+    Source: https://nlp.stanford.edu/projects/glove/
     :param file:
     :return:
     """
@@ -120,13 +153,13 @@ def load_embeddings(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/'):
 
 if __name__ == '__main__':
     train_sentences, dev_sentences, test_sentences, column_names = load_internet_ud_en_talbanken()
-    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
+    conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
     print(train_dict[1])
 
     train_sentences, dev_sentences, test_sentences, column_names = load_conll2009_pos()
-    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
+    conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
     print(train_dict[1])
@@ -138,19 +171,19 @@ if __name__ == '__main__':
     print(train_dict[1])
 
     train_sentences, dev_sentences, test_sentences, column_names = load_ud_en_ewt()
-    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
+    conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
     print(train_dict[1])
 
     train_sentences, dev_sentences, test_sentences, column_names = load_internet_ud_en_ewt()
-    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
+    conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
     print(train_dict[1])
 
     train_sentences, dev_sentences, test_sentences, column_names = load_suc_3()
-    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
+    conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
     print(train_dict[1])

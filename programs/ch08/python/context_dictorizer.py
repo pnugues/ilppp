@@ -1,6 +1,10 @@
 # coding=utf-8
 """
-CoNLL context dictorizers for the parts of speech that creates word windows of a certain size
+CoNLL context dictorizer that creates word windows of a certain size
+centered on the current word for all the words of a corpus.
+This dictorizer is to format data for a part-of-speech tagger
+The result is an X matrix, where each row corresponds to the context of a word
+and a y vector representing the parts of speech
 """
 __author__ = "Pierre Nugues"
 import sys
@@ -25,7 +29,11 @@ class ContextDictorizer():
     If the test_step is True, returns y = []
     """
 
-    def __init__(self, input='form', output='pos', w_size=2, tolower=True):
+    def __init__(self,
+                 input='form',
+                 output='upos',
+                 w_size=2,
+                 tolower=True):
         self.BOS_symbol = '__BOS__'
         self.EOS_symbol = '__EOS__'
         self.input = input
@@ -34,7 +42,8 @@ class ContextDictorizer():
         self.tolower = tolower
         # To be sure the names are ordered
         zeros = math.ceil(math.log10(2 * w_size + 1))
-        self.feature_names = [input + '_' + str(i).zfill(zeros) for i in range(2 * w_size + 1)]
+        self.feature_names = [input + '_' + str(i).zfill(zeros)
+                              for i in range(2 * w_size + 1)]
 
     def fit(self, sentences):
         """
@@ -124,14 +133,14 @@ def evaluate(sentences, gold, system):
 if __name__ == '__main__':
     train_sentences, dev_sentences, test_sentences, column_names = datasets.load_conll2009_pos()
 
-    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
+    conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
 
     good, bad = evaluate(train_dict, 'pos', 'ppos')
     print('Accuracy:', good / (good + bad))
 
-    context_dictorizer = ContextDictorizer()
+    context_dictorizer = ContextDictorizer(output='pos')
     context_dictorizer.fit(train_dict)
     X_dict, y = context_dictorizer.transform(train_dict)
 
@@ -141,11 +150,11 @@ if __name__ == '__main__':
 
     test_file2 = 'simple_pos_test.txt'
     test2 = open(test_file2).read().strip()
-    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
+    conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(test2)
     print(train_dict[0])
 
-    context_dictorizer = ContextDictorizer()
+    context_dictorizer = ContextDictorizer(output='pos')
     context_dictorizer.fit(train_dict)
     X_dict, y = context_dictorizer.transform(train_dict)
 
@@ -154,11 +163,11 @@ if __name__ == '__main__':
 
     train_sentences, dev_sentences, test_sentences, column_names = datasets.load_internet_ud_en_ewt()
 
-    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
+    conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
 
-    context_dictorizer = ContextDictorizer(input='form', output='upos')
+    context_dictorizer = ContextDictorizer()
     context_dictorizer.fit(train_dict)
     X_dict, y = context_dictorizer.transform(train_dict)
 
