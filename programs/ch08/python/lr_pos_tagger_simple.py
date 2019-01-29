@@ -22,7 +22,9 @@ from ch06.python.conll_dictorizer import CoNLLDictorizer
 CORPUS = 'PTB' # 'EWT'  # or 'PTB'
 
 
-def predict_sentence(sentence, model, context_dictorizer, dict_vectorizer):
+def predict_sentence(sentence, model,
+                     context_dictorizer,
+                     dict_vectorizer):
     """
     Prediction using the words (lexical values)
     :param sentence:
