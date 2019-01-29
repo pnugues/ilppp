@@ -31,7 +31,7 @@ class ContextDictorizer():
 
     def __init__(self,
                  input='form',
-                 output='upos',
+                 output='pos',
                  w_size=2,
                  tolower=True):
         self.BOS_symbol = '__BOS__'
@@ -161,7 +161,7 @@ if __name__ == '__main__':
     print(X_dict[0])
     print(y[0])
 
-    train_sentences, dev_sentences, test_sentences, column_names = datasets.load_internet_ud_en_ewt()
+    train_sentences, dev_sentences, test_sentences, column_names = datasets.load_ud_en_ewt()
 
     conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)

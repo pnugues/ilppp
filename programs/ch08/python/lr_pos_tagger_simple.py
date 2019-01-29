@@ -19,33 +19,50 @@ sys.path.append(os.path.abspath(
 
 from ch06.python.conll_dictorizer import CoNLLDictorizer
 
+CORPUS = 'PTB' # 'EWT'  # or 'PTB'
 
-def predict(test_sentence, context_dictorizer, dict_vectorizer):
+
+def predict_sentence(sentence, model, context_dictorizer, dict_vectorizer):
     """
     Prediction using the words (lexical values)
-    :param test_sentence:
+    :param sentence:
     :return:
     """
-    X_dict, y = context_dictorizer.transform([test_sentence],
+    X_dict, y = context_dictorizer.transform([sentence],
                                              training_step=False)
     y_pred_vec = []
     for x_dict in X_dict:
         # Vectorize the feature dict
         x_vec = dict_vectorizer.transform(x_dict)
-        y_pred = classifier.predict(x_vec)
+        y_pred = model.predict(x_vec)
         y_pred_vec.append(y_pred[0])
 
     # We add the predictions in the ppos column
-    for row, y_pred in zip(test_sentence, y_pred_vec):
+    for row, y_pred in zip(sentence, y_pred_vec):
         row['ppos'] = y_pred
-    return test_sentence
+    return sentence
+
+
+def sentence_to_conll(sentence):
+    """
+    Convert a sentence to a CoNLL dict
+    :param sentence:
+    :return:
+    """
+    column_names = ['id', 'form']
+    sentence = list(enumerate(sentence.split(), start=1))
+    conll_cols = ''
+    for tuple in sentence:
+        conll_cols += str(tuple[0]) + '\t' + tuple[1] + '\n'
+
+    conll_dict = CoNLLDictorizer(column_names)
+    sent_dict = conll_dict.transform(conll_cols)
+    return sent_dict[0]
 
 
 if __name__ == '__main__':
-    # Universal dependencies otherwise, Penn Treebank
-    UD = False
     start_time = time.clock()
-    if UD:
+    if CORPUS == 'EWT':
         train_sentences, dev_sentences, test_sentences, column_names = datasets.load_ud_en_ewt()
     else:
         train_sentences, dev_sentences, test_sentences, column_names = datasets.load_conll2009_pos()
@@ -54,10 +71,7 @@ if __name__ == '__main__':
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
 
-    if UD:
-        context_dictorizer = ContextDictorizer()
-    else:
-        context_dictorizer = ContextDictorizer(output='pos')
+    context_dictorizer = ContextDictorizer()
     context_dictorizer.fit(train_dict)
     # Feature and response extraction
     X_dict, y = context_dictorizer.transform(train_dict)
@@ -83,14 +97,30 @@ if __name__ == '__main__':
     print(train_dict[0])
 
     print("Predicting the test set...")
-    for test_sentence in test_dict:
-        test_sentence = predict(test_sentence, context_dictorizer, dict_vectorizer)
+    for sentence in test_dict:
+        sentence = predict_sentence(sentence,
+                                    model,
+                                    context_dictorizer,
+                                    dict_vectorizer)
 
-    if UD:
-        good, bad = evaluate(test_dict, 'upos', 'ppos')
-    else:
-        good, bad = evaluate(test_dict, 'pos', 'ppos')
+    good, bad = evaluate(test_dict, 'pos', 'ppos')
     print('Accuracy, lexical model:', good / (good + bad))
+
+    # Tag sentences
+    sentences = ['That round table might collapse .',
+                 'The man can learn well .',
+                 'The man can swim .',
+                 'The man can simwo .',
+                 'that round table might collapsex']
+    for sentence in sentences:
+        sentence = sentence_to_conll(sentence.lower())
+        y_test_pred_cat = predict_sentence(sentence,
+                                           model,
+                                           context_dictorizer,
+                                           dict_vectorizer)
+        print([y['form'] for y in y_test_pred_cat])
+        print([y['ppos'] for y in y_test_pred_cat])
+
     print('Elapsed time:', time.clock() - start_time)
 
     """

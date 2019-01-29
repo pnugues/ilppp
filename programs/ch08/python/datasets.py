@@ -25,8 +25,9 @@ def load_conll2009_pos(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/con
     test_file = BASE_DIR + 'en/CoNLL2009-ST-test-words-pos.txt'
     test2_file = join(dirname(__file__), 'simple_pos_test.txt')
 
-    column_names = ['id', 'form', 'lemma', 'plemma', 'pos', 'ppos']
+    column_names = ['ID', 'FORM', 'LEMMA', 'PLEMMA', 'POS', 'PPOS']
 
+    column_names = list(map(str.lower, column_names))
     train_sentences = open(train_file).read().strip()
     dev_sentences = open(dev_file).read().strip()
     test_sentences = open(test_file).read().strip()
@@ -45,8 +46,9 @@ def load_conll2003_en(BASE_DIR='/Users/pierre/Projets/Corpora/CoNLL2003/'):
     dev_file = BASE_DIR + 'NER-data/eng.valid'
     test_file = BASE_DIR + 'NER-data/eng.test'
 
-    column_names = ['form', 'ppos', 'pchunk', 'ner']
+    column_names = ['FORM', 'PPOS', 'PCHUNK', 'NER']
 
+    column_names = list(map(str.lower, column_names))
     train_sentences = open(train_file).read().strip()
     dev_sentences = open(dev_file).read().strip()
     test_sentences = open(test_file).read().strip()
@@ -56,6 +58,7 @@ def load_conll2003_en(BASE_DIR='/Users/pierre/Projets/Corpora/CoNLL2003/'):
 def load_ud_en_ewt(url='https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/master/'):
     """
     The English Web treebank from github
+    Changed column name UPOS to POS
     Source: https://universaldependencies.org/
     :param url:
     :return:
@@ -64,7 +67,7 @@ def load_ud_en_ewt(url='https://raw.githubusercontent.com/UniversalDependencies/
     dev_file = url + 'en_ewt-ud-dev.conllu'
     test_file = url + 'en_ewt-ud-test.conllu'
 
-    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS',
+    column_names = ['ID', 'FORM', 'LEMMA', 'POS', 'XPOS',
                     'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
 
     column_names = list(map(str.lower, column_names))
@@ -76,7 +79,8 @@ def load_ud_en_ewt(url='https://raw.githubusercontent.com/UniversalDependencies/
 
 def load_ud_en_talbanken(url='https://raw.githubusercontent.com/UniversalDependencies/UD_Swedish-Talbanken/master/'):
     """
-    The Swedish talbanken
+    The Swedish talbanken from the Universal Dependency corpus.
+    Changed column name UPOS to POS
     Source: https://universaldependencies.org/
     :param url:
     :return:
@@ -85,7 +89,7 @@ def load_ud_en_talbanken(url='https://raw.githubusercontent.com/UniversalDepende
     dev_file = url + 'sv_talbanken-ud-dev.conllu'
     test_file = url + 'sv_talbanken-ud-test.conllu'
 
-    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS',
+    column_names = ['ID', 'FORM', 'LEMMA', 'POS', 'XPOS',
                     'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
 
     column_names = list(map(str.lower, column_names))
@@ -96,15 +100,20 @@ def load_ud_en_talbanken(url='https://raw.githubusercontent.com/UniversalDepende
 
 
 def load(url='https://raw.githubusercontent.com/UniversalDependencies/UD_French-GSD/master/'):
+    """
+    French Universal Dependency corpus.
+    Changed column name UPOS to POS
+    :param url:
+    :return:
+    """
     train_file = url + 'fr_gsd-ud-train.conllu'
     dev_file = url + 'fr_gsd-ud-dev.conllu'
     test_file = url + 'fr_gsd-ud-test.conllu'
 
-    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS',
+    column_names = ['ID', 'FORM', 'LEMMA', 'POS', 'XPOS',
                     'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
 
     column_names = list(map(str.lower, column_names))
-
     train_sentences = urlopen(train_file).read().decode('utf-8').strip()
     dev_sentences = urlopen(dev_file).read().decode('utf-8').strip()
     test_sentences = urlopen(test_file).read().decode('utf-8').strip()
@@ -152,12 +161,6 @@ def load_embeddings(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/'):
 
 
 if __name__ == '__main__':
-    train_sentences, dev_sentences, test_sentences, column_names = load_internet_ud_en_talbanken()
-    conll_dict = CoNLLDictorizer(column_names)
-    train_dict = conll_dict.transform(train_sentences)
-    print(train_dict[0])
-    print(train_dict[1])
-
     train_sentences, dev_sentences, test_sentences, column_names = load_conll2009_pos()
     conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)
@@ -171,12 +174,6 @@ if __name__ == '__main__':
     print(train_dict[1])
 
     train_sentences, dev_sentences, test_sentences, column_names = load_ud_en_ewt()
-    conll_dict = CoNLLDictorizer(column_names)
-    train_dict = conll_dict.transform(train_sentences)
-    print(train_dict[0])
-    print(train_dict[1])
-
-    train_sentences, dev_sentences, test_sentences, column_names = load_internet_ud_en_ewt()
     conll_dict = CoNLLDictorizer(column_names)
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
