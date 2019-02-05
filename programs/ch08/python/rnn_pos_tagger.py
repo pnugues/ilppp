@@ -17,9 +17,10 @@ sys.path.append(os.path.abspath(
 
 from ch06.python.conll_dictorizer import CoNLLDictorizer
 
+TYPE = 'LSTM'  # 'RNN'  # or 'LSTM'
 OPTIMIZER = 'rmsprop'
 EMBEDDING_DIM = 100
-EMBEDDING_INIT = 4
+EMBEDDING_INIT = 4  # Glove
 EMBEDDING_INITIALIZER = False
 BATCH_SIZE = 128
 EPOCHS = 100
@@ -30,7 +31,6 @@ RECURRENT_DROPOUT = 0.2
 OUTPUT_DROPOUT = 0.0
 PATIENCE = 4
 CORPUS = 'EWT'  # or 'PTB'
-TYPE = 'LSTM'  # 'RNN'  # or 'LSTM'
 VILDE = True  # The computing machine
 
 if EMBEDDING_INIT != 4:
@@ -259,7 +259,6 @@ else:
                                embeddings_initializer=embed_init,
                                trainable=True,
                                mask_zero=True))
-# Best configuration
 model.add(layers.Dropout(INPUT_DROPOUT))
 if TYPE == 'RNN':
     model.add(layers.Bidirectional(
@@ -274,29 +273,6 @@ else:
                     dropout=DROPOUT,
                     recurrent_dropout=RECURRENT_DROPOUT)))
 model.add(layers.Dropout(OUTPUT_DROPOUT))
-"""
-# Legacy. No improvement over TYPE = 2
-if TYPE == 1:
-    model.add(layers.SimpleRNN(NB_CLASSES + 1, return_sequences=True))
-elif TYPE == 2:
-    model.add(layers.Bidirectional(layers.SimpleRNN(NB_CLASSES + 1, return_sequences=True)))
-elif TYPE == 3:
-    model.add(layers.Bidirectional(layers.SimpleRNN(NB_CLASSES + 1, return_sequences=True)))
-    model.add(layers.Bidirectional(layers.SimpleRNN(NB_CLASSES + 1, return_sequences=True)))
-elif TYPE == 4:
-    model.add(layers.Bidirectional(layers.SimpleRNN(NB_CLASSES + 1, return_sequences=True)))
-    model.add(layers.Dense(NB_CLASSES + 1, activation='relu'))
-elif TYPE == 5:
-    model.add(layers.Bidirectional(layers.SimpleRNN(NB_CLASSES + 1, return_sequences=True)))
-    model.add(layers.Bidirectional(layers.SimpleRNN(NB_CLASSES + 1, return_sequences=True)))
-    model.add(layers.Dense(NB_CLASSES + 1, activation='relu'))
-elif TYPE == 6:
-    model.add(layers.Bidirectional(layers.SimpleRNN(NB_CLASSES + 1, return_sequences=True)))
-    model.add(layers.Bidirectional(layers.SimpleRNN(NB_CLASSES + 1, return_sequences=True)))
-    model.add(layers.Dense(NB_CLASSES + 1, activation='relu'))
-    model.add(layers.Dense(NB_CLASSES + 1, activation='relu'))
-"""
-# model.add(layers.TimeDistributed(layers.Dense(NB_CLASSES + 1, activation='softmax')))
 model.add(layers.Dense(NB_CLASSES + 1, activation='softmax'))
 model.compile(loss='categorical_crossentropy',
               optimizer=OPTIMIZER,
@@ -399,4 +375,3 @@ plt.title('Training and validation accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.show()
-
