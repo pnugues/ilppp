@@ -22,7 +22,7 @@ OPTIMIZER = 'rmsprop'
 SCALER = True
 NUM_LAYERS = 1  # 1 --> one layer, 2 --> two layers
 DROPOUT = 0.0  # Dropout between the two layers
-BATCH_SIZE = 32
+BATCH_SIZE = 128
 EPOCHS = 100
 MINI_CORPUS = False
 CORPUS = 'EWT'  # or 'PTB'
@@ -165,7 +165,8 @@ model = build_model(X.shape[1],
                     num_layers=NUM_LAYERS,
                     dropout=DROPOUT)
 
-# Fitting the model
+# Callback to stop when the validation score does not increase
+# and keep the best model
 callback_lists = [
     callbacks.EarlyStopping(
         monitor='val_acc',
@@ -173,6 +174,7 @@ callback_lists = [
         restore_best_weights=True
     )
 ]
+# Fitting the model
 history = model.fit(X, y,
                     epochs=EPOCHS,
                     batch_size=BATCH_SIZE,
@@ -198,11 +200,30 @@ test_loss, test_acc = model.evaluate(X_test, y_test)
 print('Configuration', config)
 print('Loss:', test_loss)
 print('Accuracy:', test_acc)
+print('Time:', (time.perf_counter() - start_time) / 60)
 
-acc = history.history['acc']
-val_acc = history.history['val_acc']
+# Tag some sentences
+sentences = ['That round table might collapse .',
+             'The man can learn well .',
+             'The man can swim .',
+             'The man can simwo .',
+             'that round table might collapsex']
+for sentence in sentences:
+    sent_dict = sentence_to_conll(sentence.lower())
+    y_test_pred_cat = predict_sentence(sent_dict,
+                                       model,
+                                       context_dictorizer,
+                                       dict_vectorizer,
+                                       scaler,
+                                       idx2pos)
+    print([y['form'] for y in y_test_pred_cat])
+    print([y['ppos'] for y in y_test_pred_cat])
+
+# Show the training curves
 loss = history.history['loss']
 val_loss = history.history['val_loss']
+acc = history.history['acc']
+val_acc = history.history['val_acc']
 
 epochs = range(1, len(acc) + 1)
 plt.plot(epochs, loss, 'bo', label='Training loss')
@@ -222,23 +243,3 @@ plt.title('Training and validation accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.show()
-
-# Tag sentences
-sentences = ['That round table might collapse .',
-             'The man can learn well .',
-             'The man can swim .',
-             'The man can simwo .',
-             'that round table might collapsex']
-for sentence in sentences:
-    sent_dict = sentence_to_conll(sentence.lower())
-    y_test_pred_cat = predict_sentence(sent_dict,
-                                       model,
-                                       context_dictorizer,
-                                       dict_vectorizer,
-                                       scaler,
-                                       idx2pos)
-    print([y['form'] for y in y_test_pred_cat])
-    print([y['ppos'] for y in y_test_pred_cat])
-
-print('Time:', (time.perf_counter() - start_time) / 60)
-

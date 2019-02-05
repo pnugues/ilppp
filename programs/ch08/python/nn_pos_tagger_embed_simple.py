@@ -12,11 +12,11 @@ sys.path.append(os.path.abspath(
 
 from ch06.python.conll_dictorizer import CoNLLDictorizer
 
-OPTIMIZER = 'rmsprop'
+OPTIMIZER = 'nadam'
 EMBEDDING_DIM = 100
 W_SIZE = 2
 BATCH_SIZE = 128
-EPOCHS = 1
+EPOCHS = 100
 MINI_CORPUS = False
 CORPUS = 'EWT'  # or 'PTB'
 VILDE = False  # The computing machine
@@ -169,6 +169,8 @@ callback_lists = [
         restore_best_weights=True
     )
 ]
+# Callback to stop when the validation score does not increase
+# and keep the best model
 history = model.fit(X, y,
                     epochs=EPOCHS,
                     batch_size=BATCH_SIZE,
@@ -189,10 +191,29 @@ print(config)
 print('Loss:', test_loss)
 print('Accuracy:', test_acc)
 
-acc = history.history['acc']
-val_acc = history.history['val_acc']
+# Tag some sentences
+sentences = ['That round table might collapse .',
+             'The man can learn well .',
+             'The man can swim .',
+             'The man can simwo .',
+             'that round table might collapsex']
+
+for sentence in sentences:
+    sent_dict = sentence_to_conll(sentence.lower())
+    sent_dict = predict_sentence(sent_dict,
+                                 model,
+                                 context_dictorizer,
+                                 dict_vect,
+                                 word2idx,
+                                 idx2pos)
+    print([word['form'] for word in sent_dict])
+    print([word['ppos'] for word in sent_dict])
+
+# Show the training curves
 loss = history.history['loss']
 val_loss = history.history['val_loss']
+acc = history.history['acc']
+val_acc = history.history['val_acc']
 
 epochs = range(1, len(acc) + 1)
 plt.plot(epochs, loss, 'bo', label='Training loss')
@@ -212,20 +233,3 @@ plt.title('Training and validation accuracy')
 plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.show()
-
-sentences = ['That round table might collapse .',
-             'The man can learn well .',
-             'The man can swim .',
-             'The man can simwo .',
-             'that round table might collapsex']
-
-for sentence in sentences:
-    sent_dict = sentence_to_conll(sentence.lower())
-    sent_dict = predict_sentence(sent_dict,
-                                 model,
-                                 context_dictorizer,
-                                 dict_vect,
-                                 word2idx,
-                                 idx2pos)
-    print([word['form'] for word in sent_dict])
-    print([word['ppos'] for word in sent_dict])
