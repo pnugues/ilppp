@@ -1,4 +1,6 @@
 """
+Simple RNN and LSTM POS taggers
+As output layer, they use either a dense layer or CRFs
 __author__ = "Pierre Nugues"
 """
 import sys
@@ -8,78 +10,161 @@ import numpy as np
 from keras import models, layers, callbacks
 from keras.utils import to_categorical
 from keras.preprocessing.sequence import pad_sequences
-from keras.initializers import Constant
+from keras_contrib.layers import CRF
 import matplotlib.pyplot as plt
 import datasets
+from rnn_preprocessing import build_sequences, to_index
+from rnn_scorer import eval
 
 sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from ch06.python.conll_dictorizer import CoNLLDictorizer
 
-TYPE = 'LSTM'  # 'RNN'  # or 'LSTM'
+CORPUS = 'EWT'  # 'EWT' or 'PTB'
+TYPE = 'RNN'  # 'RNN' or 'LSTM'
+OUTPUT_LAYER = 'DENSE'  # 'CRF' or 'DENSE'
 OPTIMIZER = 'rmsprop'
 EMBEDDING_DIM = 100
-EMBEDDING_INIT = 4  # Glove
-EMBEDDING_INITIALIZER = False
 BATCH_SIZE = 128
-EPOCHS = 100
-UNIT_MULTIPLIER = 4
+EPOCHS = 1
+UNIT_MULTIPLIER = 4  # The number of units is computed from the number of POS tags: UNIT_MULTIPLIER x #POS
 INPUT_DROPOUT = 0.2
 DROPOUT = 0.0
 RECURRENT_DROPOUT = 0.2
 OUTPUT_DROPOUT = 0.0
 PATIENCE = 4
-CORPUS = 'EWT'  # or 'PTB'
-VILDE = True  # The computing machine
+VILDE = False  # The computing machine
 
-if EMBEDDING_INIT != 4:
-    EMBEDDING_INITIALIZER = True
-
-config = {'Type': TYPE, 'Optimizer': OPTIMIZER, 'Embedding dim': EMBEDDING_DIM,
-          'Unit multiplier': UNIT_MULTIPLIER, 'Input dropout': INPUT_DROPOUT,
-          'Internal dropout': DROPOUT,
-          'Recurrent dropout': RECURRENT_DROPOUT, 'Output dropout': OUTPUT_DROPOUT,
-          'Embedding init': EMBEDDING_INIT, 'Batch size': BATCH_SIZE,
-          'Epochs': EPOCHS, 'Corpus': CORPUS}
+config = {'Corpus': CORPUS, 'Type': TYPE, 'output layer': OUTPUT_LAYER,
+          'Optimizer': OPTIMIZER, 'Batch size': BATCH_SIZE, 'Epochs': EPOCHS,
+          'Unit multiplier': UNIT_MULTIPLIER, 'Embedding dim': EMBEDDING_DIM,
+          'Input dropout': INPUT_DROPOUT, 'Internal dropout': DROPOUT,
+          'Recurrent dropout': RECURRENT_DROPOUT, 'Output dropout': OUTPUT_DROPOUT}
 
 
-def build_sequences(corpus_dict,
-                    key_x='form',
-                    key_y='pos',
-                    tolower=True):
-    """
-    Creates sequences from a list of dictionaries
-    :param corpus_dict:
-    :param key_x:
-    :param key_y:
-    :return:
-    """
-    X = []
-    Y = []
-    for sentence in corpus_dict:
-        x = [word[key_x] for word in sentence]
-        y = [word[key_y] for word in sentence]
-        if tolower:
-            x = list(map(str.lower, x))
-        X += [x]
-        Y += [y]
-    return X, Y
+def build_model_rnn(vocabulary_words,
+                    embedding_matrix,
+                    embedding_dim,
+                    nb_classes,
+                    unit_multiplier=1,
+                    input_dropout=0.0,
+                    dropout=0.0,
+                    recurrent_dropout=0.0,
+                    ouptput_dropout=0.0,
+                    optimizer='rmsprop'):
+    model = models.Sequential()
+    model.add(layers.Embedding(len(vocabulary_words) + 2,
+                               embedding_dim,
+                               weights=[embedding_matrix],
+                               trainable=True,
+                               mask_zero=True))
+    model.add(layers.Dropout(input_dropout))
+    model.add(layers.Bidirectional(
+        layers.SimpleRNN(unit_multiplier * (nb_classes + 1),
+                         return_sequences=True,
+                         dropout=dropout,
+                         recurrent_dropout=recurrent_dropout)))
+    model.add(layers.Dropout(ouptput_dropout))
+    model.add(layers.Dense(nb_classes + 1, activation='softmax'))
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=optimizer,
+                  metrics=['acc'])
+    return model
 
 
-def to_index(X, idx):
-    """
-    Convert the word lists (or POS lists) to indexes
-    :param X: List of word (or POS) lists
-    :param idx: word to number dictionary
-    :return:
-    """
-    X_idx = []
-    for x in X:
-        # We map the unknown symbols to one
-        x_idx = list(map(lambda x: idx.get(x, 1), x))
-        X_idx += [x_idx]
-    return X_idx
+def build_model_lstm(vocabulary_words,
+                     embedding_matrix,
+                     embedding_dim,
+                     nb_classes,
+                     unit_multiplier=1,
+                     input_dropout=0.0,
+                     dropout=0.0,
+                     recurrent_dropout=0.0,
+                     ouptput_dropout=0.0,
+                     optimizer='rmsprop'):
+    model = models.Sequential()
+    model.add(layers.Embedding(len(vocabulary_words) + 2,
+                               embedding_dim,
+                               weights=[embedding_matrix],
+                               trainable=True,
+                               mask_zero=True))
+    model.add(layers.Dropout(input_dropout))
+    model.add(layers.Bidirectional(
+        layers.LSTM(unit_multiplier * (nb_classes + 1),
+                    return_sequences=True,
+                    dropout=dropout,
+                    recurrent_dropout=recurrent_dropout)))
+    model.add(layers.Dropout(ouptput_dropout))
+    model.add(layers.Dense(nb_classes + 1, activation='softmax'))
+    model.compile(loss='categorical_crossentropy',
+                  optimizer=optimizer,
+                  metrics=['acc'])
+    return model
+
+
+def build_model_rnn_crf(vocabulary_words,
+                        embedding_matrix,
+                        embedding_dim,
+                        nb_classes,
+                        unit_multiplier=1,
+                        input_dropout=0.0,
+                        dropout=0.0,
+                        recurrent_dropout=0.0,
+                        ouptput_dropout=0.0,
+                        optimizer='rmsprop'):
+    input = models.Input(shape=(None,))
+    model = layers.Embedding(len(vocabulary_words) + 2,
+                             embedding_dim,
+                             weights=[embedding_matrix],
+                             trainable=True,
+                             mask_zero=True)(input)
+    model = layers.Dropout(input_dropout)(model)
+    model = layers.Bidirectional(
+        layers.SimpleRNN(unit_multiplier * (nb_classes + 1),
+                         return_sequences=True,
+                         dropout=dropout,
+                         recurrent_dropout=recurrent_dropout))(model)
+    model = layers.Dropout(ouptput_dropout)(model)
+    crf = CRF((nb_classes + 1))  # CRF layer
+    out = crf(model)  # output
+    model = models.Model(input, out)
+    model.compile(optimizer=optimizer,
+                  loss=crf.loss_function,
+                  metrics=[crf.accuracy])
+    return model
+
+
+def build_model_lstm_crf(vocabulary_words,
+                         embedding_matrix,
+                         embedding_dim,
+                         nb_classes,
+                         unit_multiplier=1,
+                         input_dropout=0.0,
+                         dropout=0.0,
+                         recurrent_dropout=0.0,
+                         ouptput_dropout=0.0,
+                         optimizer='rmsprop'):
+    input = models.Input(shape=(None,))
+    model = layers.Embedding(len(vocabulary_words) + 2,
+                             embedding_dim,
+                             weights=[embedding_matrix],
+                             trainable=True,
+                             mask_zero=True)(input)
+    model = layers.Dropout(input_dropout)(model)
+    model = layers.Bidirectional(
+        layers.LSTM(unit_multiplier * (nb_classes + 1),
+                    return_sequences=True,
+                    dropout=dropout,
+                    recurrent_dropout=recurrent_dropout))(model)
+    model = layers.Dropout(ouptput_dropout)(model)
+    crf = CRF((nb_classes + 1))  # CRF layer
+    out = crf(model)  # output
+    model = models.Model(input, out)
+    model.compile(optimizer=optimizer,
+                  loss=crf.loss_function,
+                  metrics=[crf.accuracy])
+    return model
 
 
 def predict_wordlist(x, model, word2idx, idx2pos):
@@ -92,7 +177,7 @@ def predict_wordlist(x, model, word2idx, idx2pos):
     return y_pred
 
 
-def predict_sentence(sentence, model, word2idx, idx2pos, verbose=False):
+def predict_sentence(sentence, model, word2idx, idx2pos):
     # Predict one sentence
     wordlist = sentence.split()
     poslist = predict_wordlist(wordlist, model, word2idx, idx2pos)
@@ -119,115 +204,89 @@ def predict_padded_testset(X_test_cat, model, word2idx, idx2pos):
     return Y_test_pred
 
 
-def eval(X_test_cat, Y_test_cat, Y_test_pred, word2idx):
-    total, correct, total_ukn, correct_ukn = 0, 0, 0, 0
-    for id_s, x_test_cat in enumerate(X_test_cat):
-        for id_w, word in enumerate(x_test_cat):
-            total += 1
-            if Y_test_pred[id_s][id_w] == Y_test_cat[id_s][id_w]:
-                correct += 1
-            # The word is not in the dictionary
-            if word not in word2idx:
-                total_ukn += 1
-                if Y_test_pred[id_s][id_w] == Y_test_cat[id_s][id_w]:
-                    correct_ukn += 1
-    return total, correct, total_ukn, correct_ukn
+def main():
+    start_time = time.perf_counter()
+    print('Starting:', config)
 
-
-start_time = time.perf_counter()
-print('Starting:', config)
-
-# Loading the corpus
-if CORPUS == 'EWT':
-    train_sentences, dev_sentences, test_sentences, column_names = \
-        datasets.load_ud_en_ewt()
-else:  # PTB
-    if VILDE:
+    # Loading the corpus
+    if CORPUS == 'EWT':
         train_sentences, dev_sentences, test_sentences, column_names = \
-            datasets.load_conll2009_pos(
-                BASE_DIR='/home/pierre/Cours/EDAN20/corpus/conll2009/')
-    else:
-        train_sentences, dev_sentences, test_sentences, column_names = \
-            datasets.load_conll2009_pos()
+            datasets.load_ud_en_ewt()
+    else:  # PTB
+        if VILDE:
+            train_sentences, dev_sentences, test_sentences, column_names = \
+                datasets.load_conll2009_pos(
+                    BASE_DIR='/home/pierre/Cours/EDAN20/corpus/conll2009/')
+        else:
+            train_sentences, dev_sentences, test_sentences, column_names = \
+                datasets.load_conll2009_pos()
 
-conll_dict = CoNLLDictorizer(column_names)
-train_dict = conll_dict.transform(train_sentences)
-dev_dict = conll_dict.transform(dev_sentences)
-test_dict = conll_dict.transform(test_sentences)
+    conll_dict = CoNLLDictorizer(column_names)
+    train_dict = conll_dict.transform(train_sentences)
+    dev_dict = conll_dict.transform(dev_sentences)
+    test_dict = conll_dict.transform(test_sentences)
 
-X_train_cat, Y_train_cat = build_sequences(train_dict)
-X_dev_cat, Y_dev_cat = build_sequences(dev_dict)
-print('First sentence, words', X_train_cat[0])
-print('First sentence, POS', Y_train_cat[0])
+    X_train_cat, Y_train_cat = build_sequences(train_dict)
+    X_dev_cat, Y_dev_cat = build_sequences(dev_dict)
+    print('First sentence, words', X_train_cat[0])
+    print('First sentence, POS', Y_train_cat[0])
 
-# We collect the words, parts of speech and we create the indices
-vocabulary_words = sorted(set([word
-                               for sentence in X_train_cat
-                               for word in sentence]))
-print('#', len(vocabulary_words), 'words')
+    # We collect the words, parts of speech and we create the indices
+    vocabulary_words = sorted(set([word
+                                   for sentence in X_train_cat
+                                   for word in sentence]))
+    print('#', len(vocabulary_words), 'words')
 
-# If we use an embedding matrix, we collect the words in the file
-if EMBEDDING_INIT == 4:
+    # The embedding matrix, we collect the words in the file
     if VILDE:
-        embeddings_dict = datasets.load_embeddings(
+        embeddings_dict = datasets.load_glove_vectors(
             BASE_DIR='/home/pierre/Cours/EDAN20/corpus/')
     else:
-        embeddings_dict = datasets.load_embeddings()
+        embeddings_dict = datasets.load_glove_vectors()
     embeddings_words = embeddings_dict.keys()
-    print('Words in GloVe:', len(embeddings_dict.keys()))
+    print('Words in embedding file:', len(embeddings_dict.keys()))
     vocabulary_words = sorted(set(vocabulary_words +
                                   list(embeddings_words)))
     print('# unique words in the vocabulary: embeddings and corpus:',
           len(vocabulary_words))
 
-pos = sorted(set([pos
-                  for sentence in Y_train_cat
-                  for pos in sentence]))
-NB_CLASSES = len(pos)
-print('#', NB_CLASSES, 'Parts of speech:', pos)
+    pos = sorted(set([pos
+                      for sentence in Y_train_cat
+                      for pos in sentence]))
+    NB_CLASSES = len(pos)
+    print('#', NB_CLASSES, 'Parts of speech:', pos)
 
-# We create the indexes
-# We start at two to make provision for
-# the padding symbol 0 in RNN and LSTMs and unknown words, 1
-idx2word = dict(enumerate(vocabulary_words, start=2))
-idx2pos = dict(enumerate(pos, start=1))
-word2idx = {v: k for k, v in idx2word.items()}
-pos2idx = {v: k for k, v in idx2pos.items()}
-print('word index:', list(word2idx.items())[:10])
-print('POS index:', list(pos2idx.items())[:10])
+    # We create the indexes
+    # We start at two to make provision for
+    # the padding symbol 0 in RNN and LSTMs and unknown words, 1
+    idx2word = dict(enumerate(vocabulary_words, start=2))
+    idx2pos = dict(enumerate(pos, start=1))
+    word2idx = {v: k for k, v in idx2word.items()}
+    pos2idx = {v: k for k, v in idx2pos.items()}
+    print('word index:', list(word2idx.items())[:10])
+    print('POS index:', list(pos2idx.items())[:10])
 
-# We create the parallel sequences of indexes
-X_train_idx = to_index(X_train_cat, word2idx)
-Y_train_idx = to_index(Y_train_cat, pos2idx)
-X_dev_idx = to_index(X_dev_cat, word2idx)
-Y_dev_idx = to_index(Y_dev_cat, pos2idx)
-print('First sentences, word indices', X_train_idx[:3])
-print('First sentences, POS indices', Y_train_idx[:3])
+    # We create the parallel sequences of indexes
+    X_train_idx = to_index(X_train_cat, word2idx)
+    Y_train_idx = to_index(Y_train_cat, pos2idx)
+    X_dev_idx = to_index(X_dev_cat, word2idx)
+    Y_dev_idx = to_index(Y_dev_cat, pos2idx)
+    print('First sentences, word indices', X_train_idx[:3])
+    print('First sentences, POS indices', Y_train_idx[:3])
 
-X_train = pad_sequences(X_train_idx)
-Y_train = pad_sequences(Y_train_idx)
-X_dev = pad_sequences(X_dev_idx)
-Y_dev = pad_sequences(Y_dev_idx)
-print('Padded X:', X_train[0])
-print('Padded Y:', Y_train[0])
+    X_train = pad_sequences(X_train_idx)
+    Y_train = pad_sequences(Y_train_idx)
+    X_dev = pad_sequences(X_dev_idx)
+    Y_dev = pad_sequences(Y_dev_idx)
+    print('Padded X:', X_train[0])
+    print('Padded Y:', Y_train[0])
 
-# The number of POS classes, and 0 (padding symbol)
-Y_train = to_categorical(Y_train, num_classes=len(pos) + 1)
-Y_dev = to_categorical(Y_dev, num_classes=len(pos) + 1)
-print('Padded categorical Y:', Y_train[0])
+    # The number of POS classes, and 0 (padding symbol)
+    Y_train = to_categorical(Y_train, num_classes=len(pos) + 1)
+    Y_dev = to_categorical(Y_dev, num_classes=len(pos) + 1)
+    print('Padded categorical Y:', Y_train[0])
 
-np.random.seed(1234567)
-if EMBEDDING_INIT == 1:
-    # One hot encoding: very large matrix
-    EMBEDDING_DIM = len(vocabulary_words) + 2
-    embedding_matrix = np.eye(len(vocabulary_words) + 2)
-    embed_init = 'identity'
-elif EMBEDDING_INIT == 2:  # Embeddings with a random init
-    embed_init = 'uniform'
-elif EMBEDDING_INIT == 3:  # Embeddings with a zero init
-    embed_init = 'zeros'
-elif EMBEDDING_INIT == 4:  # GloVe
-    EMBEDDING_DIM = 100
+    np.random.seed(1234567)
     embedding_matrix = np.random.uniform(-0.05, 0.05,
                                          (len(vocabulary_words) + 2,
                                           EMBEDDING_DIM)
@@ -238,140 +297,162 @@ elif EMBEDDING_INIT == 4:  # GloVe
             # If the words are in the embeddings,
             # we fill them with a value
             embedding_matrix[word2idx[word]] = embeddings_dict[word]
-    if EMBEDDING_INITIALIZER:
-        embed_init = Constant(embedding_matrix)
-
     # print('Embedding:', embedding_matrix)
     print('Shape of embedding matrix:', embedding_matrix.shape)
     print('Embedding of table', embedding_matrix[word2idx['table']])
     print('Embedding of the padding symbol, idx 0, random numbers', embedding_matrix[0])
 
-model = models.Sequential()
-if not EMBEDDING_INITIALIZER:  # We use the weights
-    model.add(layers.Embedding(len(vocabulary_words) + 2,
-                               EMBEDDING_DIM,
-                               weights=[embedding_matrix],
-                               trainable=True,
-                               mask_zero=True))
-else:
-    model.add(layers.Embedding(len(vocabulary_words) + 2,
-                               EMBEDDING_DIM,
-                               embeddings_initializer=embed_init,
-                               trainable=True,
-                               mask_zero=True))
-model.add(layers.Dropout(INPUT_DROPOUT))
-if TYPE == 'RNN':
-    model.add(layers.Bidirectional(
-        layers.SimpleRNN(UNIT_MULTIPLIER * (NB_CLASSES + 1),
-                         return_sequences=True,
-                         dropout=DROPOUT,
-                         recurrent_dropout=RECURRENT_DROPOUT)))
-else:
-    model.add(layers.Bidirectional(
-        layers.LSTM(UNIT_MULTIPLIER * (NB_CLASSES + 1),
-                    return_sequences=True,
-                    dropout=DROPOUT,
-                    recurrent_dropout=RECURRENT_DROPOUT)))
-model.add(layers.Dropout(OUTPUT_DROPOUT))
-model.add(layers.Dense(NB_CLASSES + 1, activation='softmax'))
-model.compile(loss='categorical_crossentropy',
-              optimizer=OPTIMIZER,
-              metrics=['acc'])
-model.summary()
+    if TYPE == 'RNN' and OUTPUT_LAYER == 'DENSE':
+        model = build_model_rnn(vocabulary_words,
+                                embedding_matrix,
+                                EMBEDDING_DIM,
+                                NB_CLASSES,
+                                unit_multiplier=UNIT_MULTIPLIER,
+                                input_dropout=INPUT_DROPOUT,
+                                dropout=DROPOUT,
+                                recurrent_dropout=RECURRENT_DROPOUT,
+                                ouptput_dropout=OUTPUT_DROPOUT,
+                                optimizer=OPTIMIZER)
+    elif TYPE == 'LSTM' and OUTPUT_LAYER == 'DENSE':
+        model = build_model_lstm(vocabulary_words,
+                                 embedding_matrix,
+                                 EMBEDDING_DIM,
+                                 NB_CLASSES,
+                                 unit_multiplier=UNIT_MULTIPLIER,
+                                 input_dropout=INPUT_DROPOUT,
+                                 dropout=DROPOUT,
+                                 recurrent_dropout=RECURRENT_DROPOUT,
+                                 ouptput_dropout=OUTPUT_DROPOUT,
+                                 optimizer=OPTIMIZER)
+    elif TYPE == 'RNN' and OUTPUT_LAYER == 'CRF':
+        model = build_model_rnn_crf(vocabulary_words,
+                                    embedding_matrix,
+                                    EMBEDDING_DIM,
+                                    NB_CLASSES,
+                                    unit_multiplier=UNIT_MULTIPLIER,
+                                    input_dropout=INPUT_DROPOUT,
+                                    dropout=DROPOUT,
+                                    recurrent_dropout=RECURRENT_DROPOUT,
+                                    ouptput_dropout=OUTPUT_DROPOUT,
+                                    optimizer=OPTIMIZER)
+    elif TYPE == 'LSTM' and OUTPUT_LAYER == 'CRF':
+        model = build_model_lstm_crf(vocabulary_words,
+                                     embedding_matrix,
+                                     EMBEDDING_DIM,
+                                     NB_CLASSES,
+                                     unit_multiplier=UNIT_MULTIPLIER,
+                                     input_dropout=INPUT_DROPOUT,
+                                     dropout=DROPOUT,
+                                     recurrent_dropout=RECURRENT_DROPOUT,
+                                     ouptput_dropout=OUTPUT_DROPOUT,
+                                     optimizer=OPTIMIZER)
+    model.summary()
 
-# Callback to stop when the validation score does not increase
-# and keep the best model
-callback_lists = [
-    callbacks.EarlyStopping(
-        monitor='val_acc',
-        patience=PATIENCE,
-        restore_best_weights=True
-    )
-]
-# Fitting the model
-history = model.fit(X_train, Y_train,
-                    epochs=EPOCHS,
-                    batch_size=BATCH_SIZE,
-                    callbacks=callback_lists,
-                    validation_data=(X_dev, Y_dev))
+    if OUTPUT_LAYER == 'DENSE':
+        MONITOR = 'val_acc'
+    else:
+        MONITOR = 'val_crf_viterbi_accuracy'
 
-# In X_dict, we replace the words with their index
-X_test_cat, Y_test_cat = build_sequences(test_dict)
+    # Callback to stop when the validation score does not increase
+    # and keep the best model
+    callback_lists = [
+        callbacks.EarlyStopping(
+            monitor=MONITOR,
+            patience=PATIENCE,
+            restore_best_weights=True
+        )
+    ]
+    # Fitting the model
+    history = model.fit(X_train, Y_train,
+                        epochs=EPOCHS,
+                        batch_size=BATCH_SIZE,
+                        callbacks=callback_lists,
+                        validation_data=(X_dev, Y_dev))
 
-# We create the parallel sequences of indexes
-X_test_idx = to_index(X_test_cat, word2idx)
-Y_test_idx = to_index(Y_test_cat, pos2idx)
-print('X[0] test idx', X_test_idx[0])
-print('Y[0] test idx', Y_test_idx[0])
+    # In X_dict, we replace the words with their index
+    X_test_cat, Y_test_cat = build_sequences(test_dict)
 
-X_test_padded = pad_sequences(X_test_idx)
-Y_test_padded = pad_sequences(Y_test_idx)
-print('X[0] test idx padded', X_test_padded[0])
-print('Y[0] test idx padded', Y_test_padded[0])
+    # We create the parallel sequences of indexes
+    X_test_idx = to_index(X_test_cat, word2idx)
+    Y_test_idx = to_index(Y_test_cat, pos2idx)
+    print('X[0] test idx', X_test_idx[0])
+    print('Y[0] test idx', Y_test_idx[0])
 
-# One extra symbol for 0 (padding)
-Y_test_padded_vectorized = to_categorical(Y_test_padded,
-                                          num_classes=len(pos) + 1)
-print('Y[0] test idx padded vectorized', Y_test_padded_vectorized[0])
+    X_test_padded = pad_sequences(X_test_idx)
+    Y_test_padded = pad_sequences(Y_test_idx)
+    print('X[0] test idx padded', X_test_padded[0])
+    print('Y[0] test idx padded', Y_test_padded[0])
 
-print(X_test_padded.shape)
-print(Y_test_padded_vectorized.shape)
+    # One extra symbol for 0 (padding)
+    Y_test_padded_vectorized = to_categorical(Y_test_padded,
+                                              num_classes=len(pos) + 1)
+    print('Y[0] test idx padded vectorized', Y_test_padded_vectorized[0])
 
-# Evaluates the model
-test_loss, test_acc = model.evaluate(X_test_padded,
-                                     Y_test_padded_vectorized)
-print('Batch evaluation')
-print('Configuration', config)
-print('Loss:', test_loss)
-print('Accuracy:', test_acc)
-print('Time:', (time.perf_counter() - start_time) / 60)
+    print(X_test_padded.shape)
+    print(Y_test_padded_vectorized.shape)
 
-print('Evaluation of padded sentences')
-Y_test_pred = predict_padded_testset(X_test_cat, model, word2idx, idx2pos)
-total, correct, total_ukn, correct_ukn = eval(X_test_cat, Y_test_cat, Y_test_pred, word2idx)
-print('total %d, correct %d, accuracy %f' % (total, correct, correct / total))
-if total_ukn != 0:
-    print('total unknown %d, correct %d, accuracy %f' % (total_ukn, correct_ukn, correct_ukn / total_ukn))
+    # Evaluates the model
+    test_loss, test_acc = model.evaluate(X_test_padded,
+                                         Y_test_padded_vectorized)
+    print('Batch evaluation')
+    print('Configuration', config)
+    print('Loss:', test_loss)
+    print('Accuracy:', test_acc)
+    print('Time:', (time.perf_counter() - start_time) / 60)
 
-print('Evaluation of individual sentences')
-Y_test_pred = [predict_wordlist(x, model, word2idx, idx2pos)
-               for x in X_test_cat]
-total, correct, total_ukn, correct_ukn = eval(X_test_cat, Y_test_cat, Y_test_pred, word2idx)
-print('total %d, correct %d, accuracy %f' % (total, correct, correct / total))
-if total_ukn != 0:
-    print('total unknown %d, correct %d, accuracy %f' % (total_ukn, correct_ukn, correct_ukn / total_ukn))
+    print('Evaluation of padded sentences')
+    Y_test_pred = predict_padded_testset(X_test_cat, model, word2idx, idx2pos)
+    total, correct, total_ukn, correct_ukn = eval(X_test_cat, Y_test_cat, Y_test_pred, word2idx)
+    print('total %d, correct %d, accuracy %f' % (total, correct, correct / total))
+    if total_ukn != 0:
+        print('total unknown %d, correct %d, accuracy %f' % (total_ukn, correct_ukn, correct_ukn / total_ukn))
 
-# Tagging a few sentences
-sentences = ['That round table might collapse .',
-             'The man can learn well .',
-             'The man can swim .',
-             'The man can simwo .',
-             'that round table might collapsex', ]
-for sentence in sentences:
-    y_test_pred_cat = predict_sentence(sentence.lower(), model, word2idx, idx2pos)
-    print(sentence)
-    print(y_test_pred_cat)
+    print('Evaluation of individual sentences')
+    Y_test_pred = [predict_wordlist(x, model, word2idx, idx2pos)
+                   for x in X_test_cat]
+    total, correct, total_ukn, correct_ukn = eval(X_test_cat, Y_test_cat, Y_test_pred, word2idx)
+    print('total %d, correct %d, accuracy %f' % (total, correct, correct / total))
+    if total_ukn != 0:
+        print('total unknown %d, correct %d, accuracy %f' % (total_ukn, correct_ukn, correct_ukn / total_ukn))
 
-# Show the training curves
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-acc = history.history['acc']
-val_acc = history.history['val_acc']
+    # Tagging a few sentences
+    sentences = ['That round table might collapse .',
+                 'The man can learn well .',
+                 'The man can swim .',
+                 'The man can simwo .',
+                 'that round table might collapsex', ]
+    for sentence in sentences:
+        y_test_pred_cat = predict_sentence(sentence.lower(), model, word2idx, idx2pos)
+        print(sentence)
+        print(y_test_pred_cat)
 
-epochs = range(1, len(acc) + 1)
-plt.plot(epochs, loss, 'bo', label='Training loss')
-plt.plot(epochs, val_loss, 'b', label='Validation loss')
-plt.plot('Training and validation loss')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.legend()
-plt.show()
+    # Show the training curves
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+    if OUTPUT_LAYER == 'DENSE':
+        acc = history.history['acc']
+        val_acc = history.history['val_acc']
+    elif OUTPUT_LAYER == 'CRF':
+        acc = history.history['crf_viterbi_accuracy']
+        val_acc = history.history['val_crf_viterbi_accuracy']
+    epochs = range(1, len(acc) + 1)
+    plt.plot(epochs, loss, 'bo', label='Training loss')
+    plt.plot(epochs, val_loss, 'b', label='Validation loss')
+    plt.plot('Training and validation loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.show()
 
-plt.clf()
+    plt.clf()
 
-plt.plot(epochs, acc, 'bo', label='Training acc')
-plt.plot(epochs, val_acc, 'b', label='Validation acc')
-plt.title('Training and validation accuracy')
-plt.xlabel('Epochs')
-plt.ylabel('Loss')
-plt.show()
+    plt.plot(epochs, acc, 'bo', label='Training acc')
+    plt.plot(epochs, val_acc, 'b', label='Validation acc')
+    plt.title('Training and validation accuracy')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.show()
+
+
+if __name__ == '__main__':
+    main()

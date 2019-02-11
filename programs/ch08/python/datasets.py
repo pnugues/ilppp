@@ -1,8 +1,9 @@
 """
-Program to load CoNLL datasets.
-Sof of the corpora are available from github.
+Functions to load CoNLL datasets.
+Some of the corpora are available from github.
 For some others, you need to obtain them from LDC or other sources
 and store them in your computer. You will have to edit the paths.
+__author__ = "Pierre Nugues"
 """
 import sys, os
 import numpy as np
@@ -99,7 +100,7 @@ def load_ud_en_talbanken(url='https://raw.githubusercontent.com/UniversalDepende
     return train_sentences, dev_sentences, test_sentences, column_names
 
 
-def load(url='https://raw.githubusercontent.com/UniversalDependencies/UD_French-GSD/master/'):
+def load_ud_fr_gsd(url='https://raw.githubusercontent.com/UniversalDependencies/UD_French-GSD/master/'):
     """
     French Universal Dependency corpus.
     Changed column name UPOS to POS
@@ -142,21 +143,45 @@ def load_suc_3(BASE_DIR='/Users/pierre/Projets/Corpora/svenska/SUC3.0/corpus/con
     return train_sentences, dev_sentences, test_sentences, column_names
 
 
-def load_embeddings(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/'):
+def load_glove_vectors(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/'):
     """
     Return the Glove embeddings in the from of a dictionary
     Source: https://nlp.stanford.edu/projects/glove/
     :param file:
     :return:
     """
-    file = BASE_DIR + 'glove.6B.100d.txt'
-    glove = open(file)
+    fname = BASE_DIR + 'glove.6B.100d.txt'
+    fobj = open(fname)
     embeddings_dict = {}
-    for line in glove:
+    for line in fobj:
         values = line.strip().split()
         word = values[0]
-        embeddings_dict[word] = np.array(values[1:])
-    glove.close()
+        embeddings_dict[word] = np.array(values[1:]).astype(np.float32)
+    fobj.close()
+    return embeddings_dict
+
+
+def load_fasttext_vectors(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/', lc=True):
+    """
+    Returns the Fasttext embeddings
+    Source: https://fasttext.cc/docs/en/english-vectors.html
+    :param BASE_DIR:
+    :param lc:
+    :return:
+    """
+    fname = BASE_DIR + 'wiki-news-300d-1M-subword.vec'
+    fobj = open(fname)
+    n, d = map(int, fobj.readline().split())
+    # print(n, d)
+    embeddings_dict = {}
+    for line in fobj:
+        values = line.strip().split()
+        word = values[0]
+        if lc:
+            word = word.lower()
+            if word in embeddings_dict:
+                continue
+        embeddings_dict[word] = np.array(values[1:]).astype(np.float32)
     return embeddings_dict
 
 
@@ -185,5 +210,8 @@ if __name__ == '__main__':
     print(train_dict[0])
     print(train_dict[1])
 
-    embeddings_dict = load_embeddings()
+    embeddings_dict = load_glove_vectors()
+    print(embeddings_dict['table'])
+
+    embeddings_dict = load_fasttext_vectors()
     print(embeddings_dict['table'])
