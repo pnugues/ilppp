@@ -371,7 +371,7 @@ def main():
 
     # In X_dict, we replace the words with their index
     X_test_cat, Y_test_cat = build_sequences(test_dict)
-
+    
     # We create the parallel sequences of indexes
     X_test_idx = to_index(X_test_cat, word2idx)
     Y_test_idx = to_index(Y_test_cat, pos2idx)
@@ -393,7 +393,8 @@ def main():
 
     # Evaluates the model
     test_loss, test_acc = model.evaluate(X_test_padded,
-                                         Y_test_padded_vectorized)
+                                         Y_test_padded_vectorized,
+                                         batch_size=BATCH_SIZE)
     print('Batch evaluation')
     print('Configuration', config)
     print('Loss:', test_loss)
