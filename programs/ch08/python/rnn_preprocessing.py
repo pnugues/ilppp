@@ -2,7 +2,6 @@
 Preprocessing functions for RNNs
 __author__ = "Pierre Nugues"
 """
-from keras.preprocessing.sequence import pad_sequences
 
 
 def build_sequences(corpus_dict,
@@ -43,17 +42,31 @@ def to_index(X, idx, UKN_IDX=1):
     return X_idx
 
 
-def to_char_index(X, idx, MAX_LEN_CHARS):
+def to_char_index(X, idx, UKN_IDX=1):
     """
     Convert the word lists (or POS lists) to char indexes
     :param X: List of word (or POS) lists
-    :param idx: word to number dictionary
-    :return:
+    :param idx: char to number dictionary
+    :return: A list of x, where x is a list of char lists
     """
     X_idx = []
     for xl in X:
         # We map the unknown symbols to one
-        x_idx = [list(map(lambda x: idx.get(x, 1), list(x))) for x in xl]
-        x_idx = pad_sequences(x_idx, maxlen=MAX_LEN_CHARS)
+        x_idx = [list(map(lambda x: idx.get(x, UKN_IDX), list(x))) for x in xl]
         X_idx += [x_idx]
     return X_idx
+
+
+if __name__ == '__main__':
+    X = [['the', 'big', 'cat'],
+         ['a', 'small', 'mouse']]
+    words = [w for l in X for w in l]
+    characters = []
+    for word in words:
+        characters.extend(word)
+    characters = sorted(list(set(characters)))
+    idx2char = dict(enumerate(characters, start=1))
+    char2idx = {v: k for k, v in idx2char.items()}
+    print(idx2char)
+    print(char2idx)
+    print(to_char_index(X, char2idx))
