@@ -20,7 +20,8 @@ def paint_half_plane(xr, yr, v, sign, color):
 
 
 if __name__ == '__main__':
-    two_chapters = True
+    # This Boolean is to visualize either all the chapters or two of them
+    two_chapters = False
     data_fr = open('../salammbo/salammbo_a_fr.tsv').read().strip().split('\n')
     data_en = open('../salammbo/salammbo_a_en.tsv').read().strip().split('\n')
     data_fr = [list(map(int, data_fr[i].split('\t')))[::-1] for i in range(len(data_fr))]
@@ -29,6 +30,10 @@ if __name__ == '__main__':
     yr = np.linspace(-100, 100, 150)
     plt.xlim(0.06, 0.07)
     plt.ylim(-100, 100)
+    # plt.plot([0.065883207], [0.049203592], 'b.')
+
+    # circle = plt.Circle((0.065883207, 0.049203592), 0.0001, color='blue')
+    # plt.gca().add_patch(circle)
     if two_chapters:
         data_fr = data_fr[0:2]
         data_en = data_en[0:2]

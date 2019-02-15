@@ -113,7 +113,10 @@ if __name__ == '__main__':
 
     # Singular matrix with regularization
     w, y_hat, se, sse = regression_matrix(X, y, reg=0.01)
-    print(w, y_hat, se, sse)
+    print('Weights:', w)
+    print('Predictions:', y_hat)
+    print('Errors:', se)
+    print('SSE:', sse)
 
     # Trying regularization with a quasi singular matrix
     print('Trying regularization with a quasi singular matrix')
@@ -124,9 +127,17 @@ if __name__ == '__main__':
     print('X:', X)
     print('y:', y)
     # No regularization
+    print('No regularization:')
     w, y_hat, se, sse = regression_matrix(X, y)
-    print(w, y_hat, se, sse)
+    print('Weights:', w)
+    print('Predictions:', y_hat)
+    print('Errors:', se)
+    print('SSE:', sse)
 
     # With regularization
+    print('With regularization')
     w, y_hat, se, sse = regression_matrix(X, y, reg=0.01)
-    print(w, y_hat, se, sse)
+    print('Weights:', w)
+    print('Predictions:', y_hat)
+    print('Errors:', se)
+    print('SSE:', sse)

@@ -9,7 +9,7 @@ import numpy as np
 stat = open('../salammbo/salammbo_a_fr.tsv').read().strip().split('\n')
 observations = np.array([list(map(float, obs.split())) for obs in stat])
 
-# We plot the points: x is the predictor (feature) and y the response
+# We plot the points: X is the predictor (feature) and y the response
 x = observations[:, 0]
 y = observations[:, 1]
 
