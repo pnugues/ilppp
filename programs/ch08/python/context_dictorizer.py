@@ -7,6 +7,7 @@ The result is an X matrix, where each row corresponds to the context of a word
 and a y vector representing the parts of speech
 """
 __author__ = "Pierre Nugues"
+
 import sys
 import os
 import math

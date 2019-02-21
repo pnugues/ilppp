@@ -1,3 +1,10 @@
+"""
+Implementation of a simple feed forward neural network
+with embeddings
+
+"""
+__author__ = "Pierre Nugues"
+
 import sys
 import os
 import numpy as np
@@ -188,7 +195,7 @@ def main():
     y_test = [pos2idx.get(i, 0) for i in y_test_cat]
 
     test_loss, test_acc = model.evaluate(X_test, y_test)
-    print(config)
+    print('Configuration:', config)
     print('Loss:', test_loss)
     print('Accuracy:', test_acc)
 
@@ -236,18 +243,18 @@ def main():
     epochs = range(1, len(acc) + 1)
     plt.plot(epochs, loss, 'bo', label='Training loss')
     plt.plot(epochs, val_loss, 'b', label='Validation loss')
-    plt.plot('Training and validation loss')
+    plt.title('Training and validation loss')
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
     plt.legend()
-    plt.show()
 
-    plt.clf()
+    plt.figure()
     plt.plot(epochs, acc, 'bo', label='Training acc')
     plt.plot(epochs, val_acc, 'b', label='Validation acc')
     plt.title('Training and validation accuracy')
     plt.xlabel('Epochs')
-    plt.ylabel('Loss')
+    plt.ylabel('Accuracy')
+    plt.legend()
     plt.show()
 
 

@@ -1,7 +1,7 @@
 """
 Preprocessing functions for RNNs
-__author__ = "Pierre Nugues"
 """
+__author__ = "Pierre Nugues"
 
 
 def build_sequences(corpus_dict,

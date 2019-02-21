@@ -3,8 +3,9 @@ Functions to load CoNLL datasets.
 Some of the corpora are available from github.
 For some others, you need to obtain them from LDC or other sources
 and store them in your computer. You will have to edit the paths.
-__author__ = "Pierre Nugues"
 """
+__author__ = "Pierre Nugues"
+
 import sys, os
 import numpy as np
 from os.path import join, dirname

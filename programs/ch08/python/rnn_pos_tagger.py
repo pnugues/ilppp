@@ -1,8 +1,9 @@
 """
 Simple RNN and LSTM POS taggers
 As output layer, they use either a dense layer or CRFs
-__author__ = "Pierre Nugues"
 """
+__author__ = "Pierre Nugues"
+
 import sys
 import os
 import time
@@ -22,7 +23,7 @@ sys.path.append(os.path.abspath(
 from ch06.python.conll_dictorizer import CoNLLDictorizer
 
 CORPUS = 'EWT'  # 'EWT' or 'PTB'
-TYPE = 'RNN'  # 'RNN' or 'LSTM'
+TYPE = 'LSTM'  # 'RNN' or 'LSTM'
 OUTPUT_LAYER = 'DENSE'  # 'CRF' or 'DENSE'
 OPTIMIZER = 'rmsprop'
 EMBEDDING_DIM = 100
@@ -371,7 +372,7 @@ def main():
 
     # In X_dict, we replace the words with their index
     X_test_cat, Y_test_cat = build_sequences(test_dict)
-    
+
     # We create the parallel sequences of indexes
     X_test_idx = to_index(X_test_cat, word2idx)
     Y_test_idx = to_index(Y_test_cat, pos2idx)
@@ -395,8 +396,8 @@ def main():
     test_loss, test_acc = model.evaluate(X_test_padded,
                                          Y_test_padded_vectorized,
                                          batch_size=BATCH_SIZE)
-    print('Batch evaluation')
     print('Configuration', config)
+    print('Batch evaluation')
     print('Loss:', test_loss)
     print('Accuracy:', test_acc)
     print('Time:', (time.perf_counter() - start_time) / 60)
@@ -436,22 +437,22 @@ def main():
     elif OUTPUT_LAYER == 'CRF':
         acc = history.history['crf_viterbi_accuracy']
         val_acc = history.history['val_crf_viterbi_accuracy']
+
     epochs = range(1, len(acc) + 1)
     plt.plot(epochs, loss, 'bo', label='Training loss')
     plt.plot(epochs, val_loss, 'b', label='Validation loss')
-    plt.plot('Training and validation loss')
+    plt.title('Training and validation loss')
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
     plt.legend()
-    plt.show()
 
-    plt.clf()
-
+    plt.figure()
     plt.plot(epochs, acc, 'bo', label='Training acc')
     plt.plot(epochs, val_acc, 'b', label='Validation acc')
     plt.title('Training and validation accuracy')
     plt.xlabel('Epochs')
-    plt.ylabel('Loss')
+    plt.ylabel('Accuracy')
+    plt.legend()
     plt.show()
 
 

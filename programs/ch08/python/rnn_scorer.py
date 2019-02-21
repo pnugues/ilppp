@@ -1,7 +1,7 @@
 """
 Scoring functions for RNNs
-__author__ = "Pierre Nugues"
 """
+__author__ = "Pierre Nugues"
 
 
 def eval(X_test_cat, Y_test_cat, Y_test_pred, word2idx):
