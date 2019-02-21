@@ -1,29 +1,43 @@
+"""
+A simplified implementation of ELIZA
+"""
+__author__ = "Pierre Nugues"
+
 import regex as re
 import numpy as np
 
 dialogue_pairs = {
     '.*I am not (.+)': [
-        r'Why aren\'t you \1'],
+        r'Why aren\'t you \1'
+    ],
     '.*I am (.+)': [
-        r'How long have you been \1'],
+        r'How long have you been \1'
+    ],
     '.*I like (.+)': [
-        r'Why do you like \1'],
+        r'Why do you like \1'
+    ],
     '.*I remember (.+)': [
         r'Do you often think of \1',
         'What else do you remember',
-        r'Why do you remember \1 just now'],
+        r'Why do you remember \1 just now'
+    ],
     '.*(father|mother|brother|sister).*': [
-        r'Please tell me more about your \1'],
+        r'Please tell me more about your \1'
+    ],
     '^no$': [
         'Why are you so negative?',
-        'Why not?'],
+        'Why not?'
+    ],
     '^\p{L}+$': [
-        'Tell me more...'],
+        'Tell me more...'
+    ],
     # When nothing matches
     '.*': [
         'I am not sure I understand you fully',
         'Please go on',
-        'What does that suggest to you']}
+        'What does that suggest to you'
+    ]
+}
 
 
 def match_utterance(user_input):
