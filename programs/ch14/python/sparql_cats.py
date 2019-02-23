@@ -1,7 +1,8 @@
 """
 Extraction of cat names, replicating an example from https://query.wikidata.org/
-__author__ = "Pierre Nugues"
 """
+__author__ = "Pierre Nugues"
+
 import requests
 import pandas as pd
 
@@ -18,7 +19,8 @@ SELECT ?item ?itemLabel WHERE {
     ?item wdt:P31 wd:Q146 .
 
     OPTIONAL {
-        ?item rdfs:label ?itemLabel filter (lang(?itemLabel) = "en") .
+        ?item rdfs:label ?itemLabel 
+        filter (lang(?itemLabel) = "en") .
     }
 }'''
 

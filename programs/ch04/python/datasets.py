@@ -3,6 +3,7 @@ Reader of libsvm format
 """
 __author__ = 'Pierre Nugues'
 import numpy as np
+from urllib.request import urlopen
 
 
 def read_libsvm_file(file_path):
@@ -48,10 +49,21 @@ def read_tsv(file_path):
     return X, y
 
 
+def load_tsv(file):
+    observations = urlopen(file).read().decode('utf-8').strip().split('\n')
+    observations = [[1] + list(map(float, obs.split())) for obs in observations]
+    X = [obs[:-1] for obs in observations]
+    y = [obs[-1] for obs in observations]
+    return X, y
+
+
 if __name__ == '__main__':
     X, y = read_tsv('../salammbo/salammbo_a_en.tsv')
-    print(X)
-    print(y)
+    print('X:', X)
+    print('y:', y)
+    X, y = load_tsv('https://raw.githubusercontent.com/pnugues/ilppp/master/programs/ch04/salammbo/salammbo_a_en.tsv')
+    print('X:', X)
+    print('y:', y)
     X, y = read_libsvm_file('../salammbo/salammbo_a_e_binary.libsvm')
-    print(X)
-    print(y)
+    print('X:', X)
+    print('y:', y)
