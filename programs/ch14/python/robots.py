@@ -19,7 +19,9 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>'''
 
 # Instances of robots
 query_instances = '''
-SELECT  ?item ?itemLabel WHERE {
+SELECT  ?item ?itemLabel 
+WHERE
+{
      ?item wdt:P31 wd:Q11012. # a robot
      OPTIONAL {
         ?item rdfs:label ?itemLabel 
@@ -30,7 +32,9 @@ LIMIT 100'''
 
 # Superclass of robots
 query_superclass = '''
-SELECT  ?item ?itemLabel WHERE {
+SELECT  ?item ?itemLabel 
+WHERE 
+{
      wd:Q11012 wdt:P279 ?item. # a robot
      OPTIONAL {
         ?item rdfs:label ?itemLabel 
@@ -41,7 +45,9 @@ LIMIT 100'''
 
 # Subclasses of robots
 query_subclasses = '''
-SELECT  ?item ?itemLabel WHERE {
+SELECT  ?item ?itemLabel 
+WHERE
+{
      ?item wdt:P279 wd:Q11012. # a robot
      OPTIONAL {
         ?item rdfs:label ?itemLabel 
@@ -52,7 +58,9 @@ LIMIT 100'''
 
 # Parts of robots
 query_parts = '''
-SELECT  DISTINCT ?item ?itemLabel WHERE {
+SELECT  DISTINCT ?item ?itemLabel 
+WHERE 
+{
      {?item wdt:P361 wd:Q11012.}
      UNION
      {wd:Q11012 wdt:P527 ?item.}

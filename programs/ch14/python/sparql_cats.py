@@ -10,12 +10,15 @@ pd.options.display.max_rows = 10000
 pd.options.display.max_columns = 80
 pd.options.display.width = 200
 
-query = '''PREFIX wikibase: <http://wikiba.se/ontology#>
+prefixes = '''PREFIX wikibase: <http://wikiba.se/ontology#>
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>'''
 
-SELECT ?item ?itemLabel WHERE {
+query = '''
+SELECT ?item ?itemLabel 
+WHERE 
+{
     ?item wdt:P31 wd:Q146 .
 
     OPTIONAL {
@@ -25,7 +28,7 @@ SELECT ?item ?itemLabel WHERE {
 }'''
 
 url = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql'
-data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+data = requests.get(url, params={'query': prefixes + query, 'format': 'json'}).json()
 
 # print(data)
 cats = []

@@ -10,10 +10,11 @@ pd.options.display.max_rows = 10000
 pd.options.display.max_columns = 80
 pd.options.display.width = 200
 
-query = '''prefix dbo:	<http://dbpedia.org/ontology/>
-prefix foaf:	<http://xmlns.com/foaf/0.1/>
+prefixes = '''prefix dbo:	<http://dbpedia.org/ontology/>
+prefix foaf:	<http://xmlns.com/foaf/0.1/>'''
 
-SELECT ?entity ?population
+query = '''
+SELECT ?entity ?population 
 WHERE
 {
   ?entity foaf:name "Busan Metropolitan City"@en.
@@ -21,7 +22,7 @@ WHERE
 }'''
 
 url = 'https://dbpedia.org/sparql'
-data = requests.get(url, params={'query': query, 'format': 'json'}).json()
+data = requests.get(url, params={'query': prefixes + query, 'format': 'json'}).json()
 
 population = []
 for item in data['results']['bindings']:

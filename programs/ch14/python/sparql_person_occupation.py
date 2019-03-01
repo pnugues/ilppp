@@ -19,7 +19,8 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 english_query = '''
 SELECT DISTINCT ?item ?itemLabelOcc (lang(?itemLabel) as ?lang)
-WHERE {
+WHERE 
+{
     wd:Q76 p:P106 ?occupation .
     ?occupation ps:P106 ?item .
     ?item rdfs:label ?itemLabelOcc .
@@ -29,7 +30,8 @@ LIMIT 1000'''
 
 multilingual_query = '''
 SELECT DISTINCT ?item ?itemLabelOcc (lang(?itemLabel) as ?lang)
-WHERE {
+WHERE 
+{
     wd:Q76 p:P106 ?occupation .
     ?occupation ps:P106 ?item .
     ?item rdfs:label ?itemLabelOcc . 
