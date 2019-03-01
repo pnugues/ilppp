@@ -30,6 +30,8 @@ for item in data['results']['bindings']:
         'entity': item['entity']['value'],
         'population': item.get('population', {}).get('value')})
 
+# print(data)
+# print(population)
 df = pd.DataFrame(population)
 print(len(df))
 print(df)

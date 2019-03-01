@@ -19,10 +19,12 @@ WHERE {
   ?item wdt:P31 wd:Q28640; # instance of Profession
         wdt:P279 ?_subclass_of. # subclass of
   OPTIONAL {
-    ?item rdfs:label ?itemLabel filter (lang(?itemLabel) = "sv") .
+    ?item rdfs:label ?itemLabel 
+    FILTER (lang(?itemLabel) = "sv") .
   }
   OPTIONAL {
-    ?_subclass_of rdfs:label ?_subclass_ofLabel filter (lang(?_subclass_ofLabel) = "sv") .
+    ?_subclass_of rdfs:label ?_subclass_ofLabel 
+    FILTER (lang(?_subclass_ofLabel) = "sv") .
   }
 }'''
 
