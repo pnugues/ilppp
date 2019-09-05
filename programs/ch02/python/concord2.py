@@ -7,7 +7,7 @@ python3 concord2.py helenus.txt 'Helenus' 20
 """
 __author__ = "Pierre Nugues"
 
-import re
+import regex as re
 import sys
 
 [file_name, pattern, width] = sys.argv[1:]
@@ -19,10 +19,11 @@ except:
 
 text = file.read()
 
-# Let spaces match across _and print_ newlines
-pattern = re.sub(" ", r"\\s+", pattern)
-text = re.sub(r"\s+", " ", text)  # Uncomment this to match/print newlines as spaces
-pattern = "(.{{0,{width}}})({pattern})(?=(.{{0,{width}}}))".format(pattern=pattern, width=width)
+# spaces match tabs and newlines
+pattern = re.sub(' ', '\\s+', pattern)
+text = re.sub('\s+', ' ', text)  # Uncomment this to match/print newlines as spaces
+# pattern = '(.{0,25}Achaeans(?=(.{0,25})))'
+pattern = '(.{{0,{width}}}{pattern}(?=(.{{0,{width}}})))'.format(pattern=pattern, width=width)
 for match in re.finditer(pattern, text):
-    print(match.group(1), match.group(2), match.group(3))
+    print(match.group(1), match.group(2))
 # print the string with 0..width characters on either side
