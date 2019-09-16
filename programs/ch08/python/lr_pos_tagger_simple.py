@@ -19,7 +19,7 @@ sys.path.append(os.path.abspath(
 
 from ch06.python.conll_dictorizer import CoNLLDictorizer
 
-CORPUS = 'PTB' # 'EWT'  # or 'PTB'
+CORPUS = 'EWT'  # or 'PTB'
 
 
 def predict_sentence(sentence, model,
@@ -63,7 +63,7 @@ def sentence_to_conll(sentence):
 
 
 if __name__ == '__main__':
-    start_time = time.clock()
+    start_time = time.perf_counter()
     if CORPUS == 'EWT':
         train_sentences, dev_sentences, test_sentences, column_names = datasets.load_ud_en_ewt()
     else:
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
 
-    context_dictorizer = ContextDictorizer()
+    context_dictorizer = ContextDictorizer(w_size=2)
     context_dictorizer.fit(train_dict)
     # Feature and response extraction
     X_dict, y = context_dictorizer.transform(train_dict)
@@ -90,7 +90,8 @@ if __name__ == '__main__':
     X = dict_vectorizer.fit_transform(X_dict)
 
     print('Fitting the model...')
-    classifier = linear_model.LogisticRegression(dual=True)
+    classifier = linear_model.LogisticRegression(multi_class='auto',
+                                                 solver='lbfgs')
     model = classifier.fit(X, y)
     print(model)
 
@@ -123,20 +124,20 @@ if __name__ == '__main__':
         print([y['form'] for y in y_test_pred_cat])
         print([y['ppos'] for y in y_test_pred_cat])
 
-    print('Elapsed time:', time.clock() - start_time)
+    print('Elapsed time:', time.perf_counter() - start_time)
 
     """
     Results:
     Penn Treebank
-    Accuracy, lexical model (dual):
-    width 1: 0.950690061724114
-    width 2: 0.9549726055898468 *
-    width 3: 0.954296414453152
-    width 4: 0.9529960468825854
+    Accuracy, lexical model (dual):         (lbfgs)
+    width 1: 0.950690061724114              0.9416915181357931
+    width 2: 0.9549726055898468 **          0.9462688119841876
+    width 3: 0.954296414453152              0.9464942090297525 *
+    width 4: 0.9529960468825854             0.9453845620362022             
     
-    UD en_ewt
-    width 1: 0.8973980953898872
-    width 2: 0.9012630991752002 *
-    width 3: 0.8984340757859505
-    width 4: 0.8973184045901901
+    UD en_ewt (liblinear, dual)             (lbfgs)
+    width 1: 0.8973980953898872             0.8968004143921584
+    width 2: 0.9012630991752002 *           0.9033749053671754 **     
+    width 3: 0.8984340757859505             0.8994700561820138
+    width 4: 0.8973184045901901             0.8987129935848907
     """
