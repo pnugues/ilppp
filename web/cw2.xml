@@ -159,8 +159,12 @@ Perplexity: 73.10957919390972
         <p>As an application of n-grams, execute the Jupyter notebook by Peter Norvig <a
                 href="http://nbviewer.jupyter.org/url/norvig.com/ipython/How%20to%20Do%20Things%20with%20Words.ipynb">
             here</a>. Just run all the cells and be sure that you understand the code.
-            You will find the data <a href="http://norvig.com/ngrams/">here</a>. In you report, you will describe
-            one experiment with a long string of words your will create yourself.
+            You will find the data <a href="http://norvig.com/ngrams/">here</a>.</p>
+        <p>In your report, you will also describe one experiment with a long string of words
+            your will create yourself or copy from a text you like. You will remove all the punctuation and
+            white spaces from this string and comment the segmentation results you obtain
+            with unigram and bigram models. (You will just replace Norvig's examples with your string and
+            run the notebook cells again)
         </p>
         <h2>Complement</h2>
         <p>As a complement, you can read a paper by <a
