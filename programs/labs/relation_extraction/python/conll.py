@@ -49,7 +49,7 @@ def split_rows(sentences, column_names):
     start = [dict(zip(column_names, root_values))]
     for sentence in sentences:
         rows = sentence.split('\n')
-        sentence = [dict(zip(column_names, row.split())) for row in rows if row[0] != '#']
+        sentence = [dict(zip(column_names, row.split('\t'))) for row in rows if row[0] != '#']
         sentence = start + sentence
         new_sentences.append(sentence)
     return new_sentences
@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
     column_names_u = ['id', 'form', 'lemma', 'upostag', 'xpostag', 'feats', 'head', 'deprel', 'deps', 'misc']
 
-    files = get_files('../../corpus/ud-treebanks-v1.3/', 'train.conllu')
+    files = get_files('../../corpus/ud-treebanks-v2.4/', 'train.conllu')
     for train_file in files:
         sentences = read_sentences(train_file)
         formatted_corpus = split_rows(sentences, column_names_u)
