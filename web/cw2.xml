@@ -162,9 +162,10 @@ Perplexity: 73.10957919390972
             You will find the data <a href="http://norvig.com/ngrams/">here</a>.</p>
         <p>In your report, you will also describe one experiment with a long string of words
             your will create yourself or copy from a text you like. You will remove all the punctuation and
-            white spaces from this string and comment the segmentation results you obtain
-            with unigram and bigram models. (You will just replace Norvig's examples with your string and
-            run the notebook cells again)
+            white spaces from this string. Set this string in lowercase letters.</p>
+        <p>You will just add a cell at the end of Sect. 7 in Norvig's notebook, where you will use your string and
+            run the notebook cell with the <tt>segment()</tt> and <tt>segment2()</tt> functions. </p>
+        <p>You will comment the segmentation results you obtain with unigram and bigram models.
         </p>
         <h2>Complement</h2>
         <p>As a complement, you can read a paper by <a
