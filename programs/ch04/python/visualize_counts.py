@@ -13,8 +13,8 @@ def pair(stats):
     :return:
     """
     counts = stats.split()
-    cnt_all = counts[0::2]  # Letter count
-    cnt_one = counts[1::2]  # A count
+    cnt_all = list(map(int, counts[0::2]))  # Letter count
+    cnt_one = list(map(int, counts[1::2]))  # A count
     return cnt_all, cnt_one
 
 
