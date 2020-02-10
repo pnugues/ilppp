@@ -26,18 +26,22 @@ def regression_matrix(X, y, reg=0.0):
     return w, y_hat, se, sse
 
 
-def regression_array(X, y):
+def regression_array(X, y, reg=0.0):
     """
     Computes the regression using numpy arrays
     :param observations:
     :return: weights, ŷ, sse
     """
-    w = (np.linalg.inv(X.T @ X) @ X.T) @ y
+    if reg != 0.0:
+        print('Regularized')
+    I = np.identity(X.shape[1])
+    w = (np.linalg.inv(X.T @ X + reg * I) @ X.T) @ y
     # Or directly with pinv()
     # w = np.linalg.pinv(X) @ y
     y_hat = X @ w
+    se = (y_hat - y) * (y_hat - y)
     sse = (y_hat - y).T @ (y_hat - y)
-    return w, y_hat, sse
+    return w, y_hat, se, sse
 
 
 if __name__ == '__main__':
@@ -55,11 +59,12 @@ if __name__ == '__main__':
         lang[i] = plt.scatter(x_l, y_l, color=pattern[i][0], marker=pattern[i][1])
         X = np.array(observations)[:, :-1]
         y = np.array(observations)[:, -1]
-        w, y_hat, sse = regression_array(X, y)
+        w, y_hat, se, sse = regression_array(X, y)
         print('Language:', i)
         print('X:', X)
         print('y:', y)
         print('ŷ:', y_hat)
+        print('Squared errors:', se)
         print("Weights", w.T)
         print("SSE", sse)
         plt.plot([min(x_l), max(x_l)],
@@ -101,18 +106,18 @@ if __name__ == '__main__':
     print('Trying regularization with a singular matrix')
     # Creation of a singular matrix by duplicating a column
     observations = [obs[0:-1] + [obs[-2]] + [obs[-1]] for obs in observations]
-    X = np.matrix(observations)[:, :-1]
-    y = np.matrix(observations)[:, -1]
+    X = np.array(observations)[:, :-1]
+    y = np.array(observations)[:, -1]
     print('X:', X)
     print('y:', y)
     try:
-        regression_matrix(X, y)
+        regression_array(X, y)
     except:
         print(np.linalg.linalg.LinAlgError)
         print("Singular matrix: Could not be inverted.")
 
     # Singular matrix with regularization
-    w, y_hat, se, sse = regression_matrix(X, y, reg=0.01)
+    w, y_hat, se, sse = regression_array(X, y, reg=0.01)
     print('Weights:', w)
     print('Predictions:', y_hat)
     print('Errors:', se)
@@ -122,13 +127,13 @@ if __name__ == '__main__':
     print('Trying regularization with a quasi singular matrix')
     np.set_printoptions(precision=10)
     observations[0][2] -= 0.000001
-    X = np.matrix(observations)[:, :-1]
-    y = np.matrix(observations)[:, -1]
+    X = np.array(observations)[:, :-1]
+    y = np.array(observations)[:, -1]
     print('X:', X)
     print('y:', y)
     # No regularization
     print('No regularization:')
-    w, y_hat, se, sse = regression_matrix(X, y)
+    w, y_hat, se, sse = regression_array(X, y)
     print('Weights:', w)
     print('Predictions:', y_hat)
     print('Errors:', se)
@@ -136,7 +141,7 @@ if __name__ == '__main__':
 
     # With regularization
     print('With regularization')
-    w, y_hat, se, sse = regression_matrix(X, y, reg=0.01)
+    w, y_hat, se, sse = regression_array(X, y, reg=0.01)
     print('Weights:', w)
     print('Predictions:', y_hat)
     print('Errors:', se)
