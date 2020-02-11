@@ -38,9 +38,17 @@ classifier = linear_model.LogisticRegression()
 model = classifier.fit(X, y)
 print(model)
 
-# We predict_sentence the training set or observations
+# We predict the training set
+print('Class predictions with probabilities')
+y_predicted = classifier.predict_proba(X)
+print(y_predicted)
+
+print('Class predictions')
 y_predicted = classifier.predict(X)
 print(y_predicted)
+
+print('Model weights:', classifier.coef_, classifier.intercept_)
+
 print(classifier.predict([X[0]]))
 print(classifier.predict(np.array([[35680, 2217]])))
 
@@ -51,4 +59,3 @@ print('Score', scores.mean())
 
 print("Classification report for classifier %s:\n%s\n"
       % (classifier, metrics.classification_report(y, y_predicted)))
-
