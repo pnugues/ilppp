@@ -19,9 +19,6 @@ def logistic(x):
         return 0
 
 
-logistic = np.vectorize(logistic)
-
-
 def compute_likelihood(X, y, w):
     """
     Computes the likelihood of a partition given the weights
@@ -32,34 +29,33 @@ def compute_likelihood(X, y, w):
     :param w2:
     :return:
     """
-    X = logistic(np.dot(X, w))
-    val = 1.0
-    for i in range(len(X)):
-        if y[i] == 0:  # If in class 0, the prob. to be in class 1 is 0. We take 1 - P
-            val *= 1 - X[i]
-        else:
-            val *= X[i]
-    return val
+    p_hat = list(map(logistic, np.dot(X, w)))
+    likelihood = 1.0
+    for i in range(len(p_hat)):
+        if y[i] == 1:
+            likelihood *= p_hat[i]
+        else:  # If in class 0, the prob. to be in this class is 1 - P
+            likelihood *= 1 - p_hat[i]
+    return likelihood
 
 
-def plot_likelihood_surf(w0_opt, w1_range, w2_range):
-    z_axis = np.array([[None] * len(w2_range) for i in range(len(w1_range))])
+def plot_likelihood_surf(w0_hat, w1_range, w2_range):
+    z_axis = np.array([[0.0] * len(w2_range) for i in range(len(w1_range))])
     x_axis, y_axis = np.meshgrid(w1_range, w2_range)
     z_axis = z_axis.reshape(x_axis.shape)
 
     for i in range(len(w1_range)):
         for j in range(len(w2_range)):
-            z_axis[j, i] = compute_likelihood(X, y, [w0_opt, w1_range[i], w2_range[j]])
+            z_axis[j, i] = compute_likelihood(X, y, [w0_hat, w1_range[i], w2_range[j]])
     return x_axis, y_axis, z_axis
 
 
 def plot_logistic_surf(x_range, y_range, w_opt):
-    z_axis = np.array([[None] * len(y_range) for i in range(len(x_range))])
+    z_axis = np.array([[0.0] * len(y_range) for i in range(len(x_range))])
     x_axis, y_axis = np.meshgrid(x_range, y_range)
     z_axis = z_axis.reshape(x_axis.shape)
 
-    # We plot the probability surface as a function of x and y
-
+    # We compute the probability surface as a function of x and y
     for i in range(len(x_range)):
         for j in range(len(y_range)):
             z_axis[j, i] = logistic(np.dot([1, x_range[i], y_range[j]], w_opt))
@@ -81,39 +77,49 @@ if __name__ == '__main__':
     Values found by my impl. of gradient descent
     w0: -0.001966632190134919	w1: -1.2301484430755214	w2: 18.558733427826855
     """
+    # We compute the likelihood of the classes given the observations
     v1 = compute_likelihood(X, y, [5.636568881389995234, -0.1833732150319406229, 2.779328979299188429])
     v2 = compute_likelihood(X, y, [-0.001966, -1.23076923077, 18.5869565217])
-    # print(v1, v2)
+    print('The likelihood of the classes found by R:', v1)
+    print('The likelihood of the classes found by my implementation of SGD:', v2)
 
-    # We plot the likelihood surface as a function of w
-    w0_opt = 5.636568881389995234
-    w1_range = np.linspace(-0.25, -0.1, 100)
-    w2_range = np.linspace(1., 4., 200)
-    x_axis, y_axis, z_axis = plot_likelihood_surf(w0_opt, w1_range, w2_range)
+    # We plot the likelihood surface as a function of w.
+    # We center it on the optimal values found by R
+    # We denote the fitted weights w_hat
+    # w0_hat = 5.636568881389995234, w1_hat = -0.1833732150319406229 w2_hat = 2.779328979299188429
+    w0_hat = 5.636568881389995234
+    w1_range = np.linspace(-0.19, -0.17, 100)
+    w2_range = np.linspace(2.5, 3., 200)
+    x_axis, y_axis, z_axis = plot_likelihood_surf(w0_hat, w1_range, w2_range)
 
     fig = plt.figure()
     ax = Axes3D(fig)
     # ax = fig.gca(projection='3d')
-
-    surf = ax.plot_surface(y_axis, x_axis, z_axis, rstride=1, cstride=1, cmap=cm.coolwarm,
+    surf = ax.plot_surface(y_axis, x_axis, z_axis, rstride=1, cstride=1,
+                           cmap=cm.coolwarm,
                            linewidth=0, antialiased=False)
     fig.colorbar(surf, shrink=0.5, aspect=5)
-
     plt.show()
 
-    # Now, given w, we plot the logistic surface representing the probabilities
+    # Now, given w_hat, we plot the logistic surface representing the probabilities
+    # (x, y) = (#letters, #a)
     x_range = np.linspace(0, 100000, 200)
     y_range = np.linspace(0, 10000, 200)
-    w_opt = [5.636568881389995234, -0.1833732150319406229, 2.779328979299188429]
+    w_hat = [5.636568881389995234, -0.1833732150319406229, 2.779328979299188429]
+    # w_hat = [-0.001966632190134919, -1.2301484430755214, 18.558733427826855]
 
-    x_axis, y_axis, z_axis = plot_logistic_surf(x_range, y_range, w_opt)
+    x_axis, y_axis, z_axis = plot_logistic_surf(x_range, y_range, w_hat)
 
     fig = plt.figure()
     ax = Axes3D(fig)
     # ax = fig.gca(projection='3d')
-
     surf = ax.plot_surface(y_axis, x_axis, z_axis, rstride=1, cstride=1, cmap=cm.coolwarm,
-                           linewidth=0, antialiased=False)
+                           linewidth=0, antialiased=False, alpha=0.2)
     fig.colorbar(surf, shrink=0.5, aspect=5)
-
+    # We plot the observations
+    for x, y_class in zip(X, y):
+        if y_class == 1:
+            ax.scatter(x[2], x[1], y_class, color='green', marker='x')
+        else:
+            ax.scatter(x[2], x[1], y_class, color='red', marker='x')
     plt.show()
