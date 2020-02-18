@@ -152,7 +152,7 @@ def load_glove_vectors(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/'):
     :return:
     """
     fname = BASE_DIR + 'glove.6B.100d.txt'
-    fobj = open(fname)
+    fobj = open(fname, encoding='utf8')
     embeddings_dict = {}
     for line in fobj:
         values = line.strip().split()
@@ -206,7 +206,7 @@ if __name__ == '__main__':
     print(train_dict[1])
 
     train_sentences, dev_sentences, test_sentences, column_names = load_suc_3()
-    conll_dict = CoNLLDictorizer(column_names)
+    conll_dict = CoNLLDictorizer(column_names, col_sep='\t')
     train_dict = conll_dict.transform(train_sentences)
     print(train_dict[0])
     print(train_dict[1])
