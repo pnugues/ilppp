@@ -28,9 +28,13 @@ def normalize(Xy):
     return (Xy, maxima)
 
 
-def stoch_descent(X, y, alpha, w,
-                  epochs=500,
-                  epsilon=1.0e-5):
+def predict(X, w):
+    return X @ w
+
+
+def fit_stoch(X, y, alpha, w,
+              epochs=500,
+              epsilon=1.0e-5):
     """
     Stochastic gradient descent
     :param X:
@@ -49,7 +53,7 @@ def stoch_descent(X, y, alpha, w,
     for epoch in range(epochs):
         random.shuffle(idx)
         for i in idx:
-            loss = y[i] - X[i] @ w
+            loss = y[i] - predict(X[i], w)[0]
             gradient = loss * np.array([X[i]]).T
             w = w + alpha * gradient
             logs_stoch += (w, alpha, sse(X, y, w))
@@ -60,9 +64,9 @@ def stoch_descent(X, y, alpha, w,
     return w
 
 
-def batch_descent(X, y, alpha, w,
-                  epochs=500,
-                  epsilon=1.0e-5):
+def fit_batch(X, y, alpha, w,
+              epochs=500,
+              epsilon=1.0e-5):
     """
     Batch gradient descent
     :param X:
@@ -77,7 +81,7 @@ def batch_descent(X, y, alpha, w,
     logs = []
     alpha /= len(X)
     for epoch in range(epochs):
-        loss = y - X @ w
+        loss = y - predict(X, w)
         gradient = X.T @ loss
         w = w + alpha * gradient
         logs += (w, alpha, sse(X, y, w))
@@ -107,7 +111,7 @@ if __name__ == '__main__':
 
     print("===Batch descent===")
     w = np.zeros(X.shape[1]).reshape((-1, 1))
-    w = batch_descent(X, y, alpha, w)
+    w = fit_batch(X, y, alpha, w)
     print("Weights", w)
     print("SSE", sse(X, y, w))
     if normalized:
@@ -128,7 +132,7 @@ if __name__ == '__main__':
 
     print("===Stochastic descent===")
     w = np.zeros(X.shape[1]).reshape((-1, 1))
-    w = stoch_descent(X, y, alpha, w)
+    w = fit_stoch(X, y, alpha, w)
     print("Weights", w)
     print("SSE", sse(X, y, w))
     if normalized:

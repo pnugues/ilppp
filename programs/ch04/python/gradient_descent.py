@@ -30,9 +30,13 @@ def normalize(observations):
             maxima)
 
 
-def stoch_descent(X, y, alpha, w,
-                  epochs=500,
-                  epsilon=1.0e-5):
+def predict(X, w):
+    return vector.mul_mat_vec(X, w)
+
+
+def fit_stoch(X, y, alpha, w,
+              epochs=500,
+              epsilon=1.0e-5):
     """
     Stochastic gradient descent
     :param X:
@@ -51,7 +55,8 @@ def stoch_descent(X, y, alpha, w,
     for epoch in range(epochs):
         random.shuffle(idx)
         for i in idx:
-            loss = y[i] - vector.dot(X[i], w)
+            y_hat = predict([X[i]], w)[0]
+            loss = y[i] - y_hat
             gradient = vector.mul(loss, X[i])
             w = vector.add(w, vector.mul(alpha, gradient))
             logs_stoch += (w, alpha, sse(X, y, w))
@@ -63,9 +68,9 @@ def stoch_descent(X, y, alpha, w,
     return w
 
 
-def batch_descent(X, y, alpha, w,
-                  epochs=500,
-                  epsilon=1.0e-5):
+def fit_batch(X, y, alpha, w,
+              epochs=500,
+              epsilon=1.0e-5):
     """
     Batch gradient descent
     :param X:
@@ -80,7 +85,8 @@ def batch_descent(X, y, alpha, w,
     logs = []
     alpha /= len(X)
     for epoch in range(epochs):
-        loss = vector.sub(y, vector.mul_mat_vec(X, w))
+        y_hat = predict(X, w)
+        loss = vector.sub(y, y_hat)
         gradient = vector.mul_mat_vec(vector.transpose(X), loss)
         w = vector.add(w, vector.mul(alpha, gradient))
         logs += (w, alpha, sse(X, y, w))
@@ -107,7 +113,7 @@ if __name__ == '__main__':
 
     print("===Batch descent===")
     w = [0.0] * (len(X))
-    w = batch_descent(X, y, alpha, w)
+    w = fit_batch(X, y, alpha, w)
     print("Weights", w)
     print("SSE", sse(X, y, w))
     if normalized:
@@ -127,7 +133,7 @@ if __name__ == '__main__':
 
     print("===Stochastic descent===")
     w = [0.0] * (len(X))
-    w = stoch_descent(X, y, alpha, w)
+    w = fit_stoch(X, y, alpha, w)
     print("Weights", w)
     print("SSE", sse(X, y, w))
     if normalized:
