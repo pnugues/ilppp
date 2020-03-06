@@ -5,10 +5,9 @@ __author__ = "Pierre Nugues"
 
 import numpy as np
 from sklearn.datasets import load_svmlight_file
-from sklearn import linear_model
+from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
-from sklearn.svm import SVC
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_val_score, LeaveOneOut
 
 # We load the dataset from a file with the svmlight format
 X, y = load_svmlight_file('../salammbo/salammbo_a_binary.libsvm')
@@ -34,28 +33,46 @@ X = np.array(
      ])
 
 # We create a classifier and learn a model
-classifier = linear_model.LogisticRegression()
+classifier = LogisticRegression()
 model = classifier.fit(X, y)
-print(model)
+print('Model:', model)
 
 # We predict the training set
-print('Class predictions with probabilities')
+# As classes
+y_hat = classifier.predict(X)
+print('Class predictions:', y_hat)
+
+# With probabilities
 y_predicted = classifier.predict_proba(X)
-print(y_predicted)
+print('Class predictions with probabilities:\n', y_predicted)
 
-print('Class predictions')
-y_predicted = classifier.predict(X)
-print(y_predicted)
+print('Model weights:', classifier.intercept_, classifier.coef_)
 
-print('Model weights:', classifier.coef_, classifier.intercept_)
+print('Prediction of the last observation: {},\n class: {}'.format(
+    [X[-1]],
+    classifier.predict([X[0]])[0]))
+print('Prediction of the observation: {},\n class: {}'.format(
+    [35680, 2217],
+    classifier.predict(np.array([[35680, 2217]]))[0]))
 
-print(classifier.predict([X[0]]))
-print(classifier.predict(np.array([[35680, 2217]])))
+# We evaluate the model on the training set
+print("Classification report for classifier on the training set:\n",
+      metrics.classification_report(y, y_hat))
 
 # We evaluate the classifier with cross validation
 scores = cross_val_score(classifier, X, y, cv=5,
                          scoring='accuracy')
-print('Score', scores.mean())
+print('Five-fold crossvalidation accuracy:', scores.mean())
 
-print("Classification report for classifier %s:\n%s\n"
-      % (classifier, metrics.classification_report(y, y_predicted)))
+# We evaluate the classifier with leave-one-out cross validation
+loo = LeaveOneOut()
+predictions = 0
+correct_predictions = 0
+for train_index, test_index in loo.split(X):
+    predictions += 1
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
+    classifier.fit(X_train, y_train)
+    if classifier.predict(X_test)[0] == y_test:
+        correct_predictions += 1
+print('Leave-one-out crossvalidation accuracy:', correct_predictions / predictions)
