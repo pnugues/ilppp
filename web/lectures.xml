@@ -148,9 +148,6 @@
                         <a href="http://clair.si.umich.edu/clair/anthology/rank.cgi?release_year=2009&amp;type=Paper&amp;stat=Incoming+Citations&amp;limit=1000&amp;year=1998">1998</a>, and
                         <a href="http://clair.si.umich.edu/clair/anthology/rank.cgi?release_year=2009&amp;type=Paper&amp;stat=Incoming+Citations&amp;limit=1000&amp;year=2008">2008</a>.
                     </li>-->
-                    <li>
-                        <a href="http://registry.dfki.de/">Natural language software registry</a>
-                    </li>
                 </ul>
             </li>
             <li>Research opportunities:
@@ -160,7 +157,6 @@
                         <a href="http://research.google.com/">Research at Google</a>,
                         <a href="http://www.research.ibm.com/">IBM research</a>,
                         <a href="http://research.yahoo.com/">Yahoo Research</a>,
-                        <a href="http://www.xrce.xerox.com/">Xerox research center</a>.
                     </li>
                     <li>Lists: <a href="http://www.hit.uib.no/corpora/">Corpora</a>, <a href="http://www.elsnet.org/">
                         ELSNET</a>,
@@ -198,7 +194,8 @@
                     <li>Python
                         <ul>
                             <li>Short programs to illustrate regular expressions and pattern matching [<a
-                                    href="https://github.com/pnugues/ilppp/tree/master/programs/ch02/python">2</a>]
+                                    href="https://github.com/pnugues/ilppp/tree/master/programs/ch02/python">2</a>]. They
+                                include a Jupyter notebook, where you can run regular expressions interactively.
                             </li>
                             <li>Concordances [<a
                                     href="https://github.com/pnugues/ilppp/blob/master/programs/ch02/python/concord.py">
@@ -345,7 +342,7 @@
         </ul>
         <h2>
             <a href="#content">^</a>
-            <a name="ch04"></a>Chapter 4: Topics in information theory and machine learning (12/09/2019) [<a
+            <a name="ch04"></a>Chapter 4: Topics in information theory and machine learning (7/09/2020) [<a
                 href="http://link.springer.com/content/pdf/10.1007/978-3-642-41464-0_4.pdf">pdf</a>] [first ed. <a
                 href="http://link.springer.com/content/pdf/10.1007/3-540-34336-9_3.pdf">pdf</a>]
         </h2>
@@ -398,7 +395,7 @@
         </ul>
         <h2>
             <a href="#content">^</a>
-            <a name="ch05"></a>Chapter 5: Counting words (9/09/2019) [<a
+            <a name="ch05"></a>Chapter 5: Counting words (7/09/2020) [<a
                 href="http://link.springer.com/content/pdf/10.1007/978-3-642-41464-0_5.pdf">pdf</a>] [first ed. <a
                 href="http://link.springer.com/content/pdf/10.1007/3-540-34336-9_4.pdf">pdf</a>]
         </h2>
