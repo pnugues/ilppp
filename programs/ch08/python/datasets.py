@@ -60,7 +60,6 @@ def load_conll2003_en(BASE_DIR='/Users/pierre/Projets/Corpora/CoNLL2003/'):
 def load_ud_en_ewt(url='https://raw.githubusercontent.com/UniversalDependencies/UD_English-EWT/master/'):
     """
     The English Web treebank from github
-    Changed column name UPOS to POS
     Source: https://universaldependencies.org/
     :param url:
     :return:
@@ -69,7 +68,7 @@ def load_ud_en_ewt(url='https://raw.githubusercontent.com/UniversalDependencies/
     dev_file = url + 'en_ewt-ud-dev.conllu'
     test_file = url + 'en_ewt-ud-test.conllu'
 
-    column_names = ['ID', 'FORM', 'LEMMA', 'POS', 'XPOS',
+    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS',
                     'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
 
     column_names = list(map(str.lower, column_names))
@@ -79,7 +78,7 @@ def load_ud_en_ewt(url='https://raw.githubusercontent.com/UniversalDependencies/
     return train_sentences, dev_sentences, test_sentences, column_names
 
 
-def load_ud_en_talbanken(url='https://raw.githubusercontent.com/UniversalDependencies/UD_Swedish-Talbanken/master/'):
+def load_ud_sv_talbanken(url='https://raw.githubusercontent.com/UniversalDependencies/UD_Swedish-Talbanken/master/'):
     """
     The Swedish talbanken from the Universal Dependency corpus.
     Changed column name UPOS to POS
@@ -91,7 +90,7 @@ def load_ud_en_talbanken(url='https://raw.githubusercontent.com/UniversalDepende
     dev_file = url + 'sv_talbanken-ud-dev.conllu'
     test_file = url + 'sv_talbanken-ud-test.conllu'
 
-    column_names = ['ID', 'FORM', 'LEMMA', 'POS', 'XPOS',
+    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS',
                     'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
 
     column_names = list(map(str.lower, column_names))
@@ -112,7 +111,7 @@ def load_ud_fr_gsd(url='https://raw.githubusercontent.com/UniversalDependencies/
     dev_file = url + 'fr_gsd-ud-dev.conllu'
     test_file = url + 'fr_gsd-ud-test.conllu'
 
-    column_names = ['ID', 'FORM', 'LEMMA', 'POS', 'XPOS',
+    column_names = ['ID', 'FORM', 'LEMMA', 'UPOS', 'XPOS',
                     'FEATS', 'HEAD', 'DEPREL', 'HEAD', 'DEPS', 'MISC']
 
     column_names = list(map(str.lower, column_names))
