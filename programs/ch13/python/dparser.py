@@ -34,7 +34,7 @@ def reference(stack, queue, graph):
     if stack and transition.can_reduce(stack, graph):
         for word in stack:
             if (word['id'] == queue[0]['head'] or
-                        word['head'] == queue[0]['id']):
+                    word['head'] == queue[0]['id']):
                 # print('re', stack[0]['cpostag'], queue[0]['cpostag'])
                 stack, queue, graph = transition.reduce(stack, queue, graph)
                 return stack, queue, graph, 're'
@@ -45,16 +45,24 @@ def reference(stack, queue, graph):
 
 
 if __name__ == '__main__':
-    train_file = '../../../corpus/conllx/sv/swedish_talbanken05_train.conll'
-    test_file = '../../../corpus/conllx/sv/swedish_talbanken05_test_blind.conll'
-    column_names_2006 = ['id', 'form', 'lemma', 'cpostag', 'postag', 'feats', 'head', 'deprel', 'phead', 'pdeprel']
-    column_names_2006_test = ['id', 'form', 'lemma', 'cpostag', 'postag', 'feats']
+    version = 'conllu'
+    if version == 'conllx':
+        train_file = '../../../corpus/conllx/sv/swedish_talbanken05_train.conll'
+        test_file = '../../../corpus/conllx/sv/swedish_talbanken05_test_blind.conll'
+        column_names = ['id', 'form', 'lemma', 'cpostag', 'postag', 'feats', 'head', 'deprel', 'phead', 'pdeprel']
+        # column_names_test = ['id', 'form', 'lemma', 'cpostag', 'postag', 'feats']
+    elif version == 'conllu':
+        ud_path = '../../../corpus/ud-treebanks-v2.6/'
+        train_file = ud_path + 'UD_Swedish-Talbanken/sv_talbanken-ud-train.conllu'
+        test_file = ud_path + 'UD_Swedish-Talbanken/sv_talbanken-ud-test.conllu'
+        column_names = ['id', 'form', 'lemma', 'upos', 'xpos', 'feats', 'head', 'deprel', 'deps', 'misc']
 
     sentences = conll.read_sentences(train_file)
-    formatted_corpus = conll.split_rows(sentences, column_names_2006)
+    formatted_corpus = conll.split_rows(sentences, column_names)
 
     sent_cnt = 0
     for sentence in formatted_corpus:
+        print(sentence)
         sent_cnt += 1
         if sent_cnt % 1000 == 0:
             print(sent_cnt, 'sentences on', len(formatted_corpus), flush=True)
@@ -77,3 +85,4 @@ if __name__ == '__main__':
             word['head'] = graph['heads'][word['id']]
         print(transitions)
         print(graph)
+    print('Processed ' + str(sent_cnt) + ' sentences')

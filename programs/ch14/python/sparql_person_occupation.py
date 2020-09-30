@@ -17,6 +17,8 @@ PREFIX ps: <http://www.wikidata.org/prop/statement/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 '''
 
+# Q22686 Donald Trump
+# Q76 Barack Obama
 english_query = '''
 SELECT DISTINCT ?item ?itemLabelOcc (lang(?itemLabel) as ?lang)
 WHERE 

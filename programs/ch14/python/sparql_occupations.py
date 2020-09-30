@@ -25,11 +25,11 @@ WHERE
         wdt:P279 ?_subclass_of. # subclass of
   OPTIONAL {
     ?item rdfs:label ?itemLabel 
-    FILTER (lang(?itemLabel) = "sv") .
+    FILTER (lang(?itemLabel) = "en") .
   }
   OPTIONAL {
     ?_subclass_of rdfs:label ?_subclass_ofLabel 
-    FILTER (lang(?_subclass_ofLabel) = "sv") .
+    FILTER (lang(?_subclass_ofLabel) = "en") .
   }
 }'''
 

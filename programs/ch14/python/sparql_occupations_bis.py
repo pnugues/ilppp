@@ -23,7 +23,7 @@ WHERE
     ?occupation rdfs:label ?itemLabelOcc filter (lang(?itemLabelOcc) = "en") .
   }  
 }
-LIMIT 10'''
+LIMIT 1000'''
 
 url = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql'
 data = requests.get(url, params={'query': query, 'format': 'json'}).json()
