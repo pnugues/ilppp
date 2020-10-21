@@ -1,3 +1,6 @@
+__author__ = 'Pierre Nugues'
+
+
 class HMMProb:
     (lambda1_trigram, lambda2_trigram, lambda3_trigram) = (0.1, 0.2, 0.7)
     (lambda1_bigram, lambda2_bigram) = (0.2, 0.8)

@@ -1,3 +1,6 @@
+__author__ = 'Pierre Nugues'
+
+
 class Preprocessor:
 
     def __init__(self, column_names):

@@ -1,3 +1,6 @@
+__author__ = 'Pierre Nugues'
+
+
 class ConfusionMatrix:
 
     def __init__(self, sentences, POS_key):

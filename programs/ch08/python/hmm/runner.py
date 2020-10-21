@@ -1,3 +1,5 @@
+__author__ = 'Pierre Nugues'
+
 from baseline_post import Baseline
 from best_first import BestFirst
 from beam_search import BeamSearch
@@ -7,7 +9,6 @@ from counts import Counts
 from confusion_matrix import ConfusionMatrix
 from tqdm import tqdm
 import conll
-
 
 if __name__ == '__main__':
     corpus = 'CoNLL-U'

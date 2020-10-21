@@ -1,3 +1,5 @@
+__author__ = 'Pierre Nugues'
+
 import conll
 from confusion_matrix import ConfusionMatrix
 from hmm_prob import HMMProb

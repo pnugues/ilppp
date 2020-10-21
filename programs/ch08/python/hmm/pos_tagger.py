@@ -2,7 +2,7 @@
 """
 Base class part-of-speech tagger.
 """
-__author__ = "Pierre Nugues"
+__author__ = 'Pierre Nugues'
 
 
 class POSTagger:
