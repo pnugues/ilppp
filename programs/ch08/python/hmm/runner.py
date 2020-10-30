@@ -69,8 +69,9 @@ if __name__ == '__main__':
     cm.compute_matrix()
     print("Accuracy: ", cm.compute_accuracy())
 
-    print('Beam search')
-    tagger = BeamSearch(counts, 4)
+    beam_diameter = 4
+    print('Beam search:', beam_diameter)
+    tagger = BeamSearch(counts, beam_diameter)
 
     test_sentences = conll.read_sentences(test_file)
     formatted_test_corpus = [conll.split_rows(sentence, column_names)
