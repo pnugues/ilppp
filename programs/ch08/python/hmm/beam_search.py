@@ -76,11 +76,11 @@ class BeamSearch(POSTagger):
                     prev_bigram = tuple(path['path'][-2:])
                     if len(prev_bigram) < 2:
                         prev_bigram = ('<s>', prev_bigram[0])
-                    probTerm = hmm_prob.compute_tri(form, prev_bigram, pos)
+                    prob_term = hmm_prob.compute_tri(form, prev_bigram, pos)
                 else:
                     prev_pos = path['path'][-1]
-                    probTerm = hmm_prob.compute_bi(form, prev_pos, pos)
-                new_path['logprob'] += math.log10(probTerm)
+                    prob_term = hmm_prob.compute_bi(form, prev_pos, pos)
+                new_path['logprob'] += math.log10(prob_term)
                 new_paths.append(new_path)
         return new_paths
 
