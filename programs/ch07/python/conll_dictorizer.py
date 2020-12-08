@@ -7,6 +7,7 @@ __author__ = "Pierre Nugues"
 
 import regex as re
 from urllib.request import urlopen
+from sklearn import base
 
 
 def save(file, corpus_dict, column_names):
@@ -31,7 +32,7 @@ class Token(dict):
     pass
 
 
-class CoNLLDictorizer:
+class CoNLLDictorizer(base.TransformerMixin):
 
     def __init__(self, column_names, sent_sep='\n\n', col_sep='\t+'):
         self.column_names = column_names
