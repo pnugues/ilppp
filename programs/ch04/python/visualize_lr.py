@@ -88,8 +88,8 @@ if __name__ == '__main__':
     # We denote the fitted weights w_hat
     # w0_hat = 5.636568881389995234, w1_hat = -0.1833732150319406229 w2_hat = 2.779328979299188429
     w0_hat = 5.636568881389995234
-    w1_range = np.linspace(-0.19, -0.17, 100)
-    w2_range = np.linspace(2.5, 3., 200)
+    w1_range = np.linspace(-0.19, -0.17, 200)
+    w2_range = np.linspace(2.6, 2.9, 200)
     x_axis, y_axis, z_axis = plot_likelihood_surf(w0_hat, w1_range, w2_range)
 
     fig = plt.figure()
