@@ -143,14 +143,19 @@ def load_suc_3(BASE_DIR='/Users/pierre/Projets/Corpora/svenska/SUC3.0/corpus/con
     return train_sentences, dev_sentences, test_sentences, column_names
 
 
-def load_glove_vectors(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/'):
+def load_glove_vectors(BASE_DIR='/Users/pierre/Documents/Cours/EDAN20/corpus/', dim=100):
     """
     Return the Glove embeddings in the from of a dictionary
     Source: https://nlp.stanford.edu/projects/glove/
     :param file:
     :return:
     """
-    fname = BASE_DIR + 'glove.6B.100d.txt'
+    if dim == 50:
+        fname = BASE_DIR + 'glove.6B.50d.txt'
+    elif dim == 100:
+        fname = BASE_DIR + 'glove.6B.100d.txt'
+    else:
+        fname = BASE_DIR + 'glove.6B.100d.txt'
     fobj = open(fname, encoding='utf8')
     embeddings_dict = {}
     for line in fobj:
