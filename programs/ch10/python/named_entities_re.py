@@ -9,19 +9,19 @@ input_string = 'M. Dupont was given 500 euros in front of the casino'
 # input_string = open('/Users/pierre/Documents/Cours/Spelling corrector in Prolog/Norvig/big.txt').read()
 
 ne_pairs = {
-'in front of': [
-    'in_front_of'
-],
-'in front': [
-    'in_front'
-],
+    'in front of': [
+        'in_front_of'
+    ],
+    'in front': [
+        'in_front'
+    ],
     'give up': [
         'give_up'
     ],
     'M\. (\p{Lu}\p{L}+)': [
         r'<ENAMEX> M. \1 </ENAMEX>'
     ],
-    r'(\p{N}+) euros': [
+    '(\p{N}+) euros': [
         r'<NUMEX> \1 euros </NUMEX>'
     ]
 }
@@ -36,7 +36,7 @@ for match in re.finditer(re_union, input_string):
         if ne_match:
             transduced_string = re.sub(
                 key,
-                re.escape(ne_pairs[key]),
+                ne_pairs[key][0],
                 match.group(), count=1)
             output_string += \
                 input_string[start_span:match.span()[0]] + \
