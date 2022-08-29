@@ -16,9 +16,9 @@ except:
     exit(0)
 
 # spaces match tabs and newlines
-pattern = re.sub(' ', '\\s+', pattern)
+pattern = re.sub(' ', r'\\s+', pattern)
 # Replaces newlines with spaces in the text
-text = re.sub('\s+', ' ', text)
+text = re.sub(r'\s+', ' ', text)
 concordance = ('(.{{0,{width}}}{pattern}.{{0,{width}}})'
                .format(pattern=pattern, width=width))
 for match in re.finditer(concordance, text):

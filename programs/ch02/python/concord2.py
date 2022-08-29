@@ -20,8 +20,8 @@ except:
 text = file.read()
 
 # spaces match tabs and newlines
-pattern = re.sub(' ', '\\s+', pattern)
-text = re.sub('\s+', ' ', text)  # Uncomment this to match/print newlines as spaces
+pattern = re.sub(' ', r'\\s+', pattern)
+text = re.sub(r'\s+', ' ', text)  # Uncomment this to match/print newlines as spaces
 # pattern = '(.{0,25}Achaeans(?=(.{0,25})))'
 pattern = '(.{{0,{width}}}{pattern}(?=(.{{0,{width}}})))'.format(pattern=pattern, width=width)
 for match in re.finditer(pattern, text):

@@ -3,7 +3,7 @@ The m// match operator and s/// substitution operator
 """
 __author__ = "Pierre Nugues"
 
-import re
+import regex as re
 import sys
 
 for line in sys.stdin:

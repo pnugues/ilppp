@@ -6,9 +6,10 @@ __author__ = "Pierre Nugues"
 
 import re
 
-line = "Tell me, O muse, of that ingenious hero who travelled far and wide after he had sacked the famous town of Troy."
+line = """"Tell me,
+       O muse, of that ingenious hero who travelled far and wide after he had sacked the famous town of Troy."""
 
-match = re.search(",.*,", line)
+match = re.search(",.*,", line, re.S)
 
 print("First match: ", line[match.start():match.end()])
 print("Before: ", line[:match.start()])
