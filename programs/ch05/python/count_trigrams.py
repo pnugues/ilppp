@@ -10,13 +10,13 @@ import regex
 
 
 def tokenize(text):
-    words = regex.findall("\p{L}+", text)
+    words = regex.findall(r'\p{L}+', text)
     return words
 
 
 def count_trigrams(words):
-    trigrams = [tuple(words[inx:inx + 3])
-                for inx in range(len(words) - 2)]
+    trigrams = [tuple(words[idx:idx + 3])
+                for idx in range(len(words) - 2)]
     frequencies = {}
     for trigram in trigrams:
         if trigram in frequencies:

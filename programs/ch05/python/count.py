@@ -9,7 +9,7 @@ import regex as re
 
 
 def tokenize(text):
-    words = re.findall('\p{L}+', text)
+    words = re.findall(r'\p{L}+', text)
     return words
 
 

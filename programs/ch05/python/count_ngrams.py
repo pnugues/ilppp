@@ -10,13 +10,13 @@ import regex
 
 
 def tokenize(text):
-    words = regex.findall('\p{L}+', text)
+    words = regex.findall(r'\p{L}+', text)
     return words
 
 
 def count_bigrams(words):
-    bigrams = [tuple(words[inx:inx + 2])
-               for inx in range(len(words) - 1)]
+    bigrams = [tuple(words[idx:idx + 2])
+               for idx in range(len(words) - 1)]
     frequencies = {}
     for bigram in bigrams:
         if bigram in frequencies:
@@ -27,9 +27,9 @@ def count_bigrams(words):
 
 
 def count_ngrams(words, n):
-    ngrams = [tuple(words[inx:inx + n])
-              for inx in range(len(words) - n + 1)]
-    # "\t".join(words[inx:inx + n])
+    ngrams = [tuple(words[idx:idx + n])
+              for idx in range(len(words) - n + 1)]
+    # "\t".join(words[idx:idx + n])
     frequencies = {}
     for ngram in ngrams:
         if ngram in frequencies:

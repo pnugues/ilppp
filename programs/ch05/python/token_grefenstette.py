@@ -9,10 +9,10 @@ __author__ = "Pierre Nugues"
 import regex as re
 import sys
 
-letter = "[\p{L}']"
-not_letter = "[^\p{L}'0-9]"
-always_sep = "[?!()\";/\\|,`]"
-begin_sep = "['&]"
+letter = r"[\p{L}']"
+not_letter = r"[^\p{L}'0-9]"
+always_sep = r"[?!()\";/\\|,`]"
+begin_sep = r"['&]"
 end_sep = "('|:|-|'S|'D|'M|'LL|'RE|'VE|N'T|'s|'d|'m|'ll|'re|'ve|n't)"
 abbr = {"Co.": 1, "Corp.": 1, "vs.": 1, "e.g.": 1,
         "etc.": 1, "ex.": 1, "cf.": 1, "eg.": 1,

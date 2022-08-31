@@ -15,10 +15,10 @@ town of Troy."""
 def tokenize(text):
     """uses the nonletters to break the text into words
     returns a list of words"""
-    # words = re.split('[\s\-,;:!?.’\'«»()–...&‘’“”*—]+', text)
-    # words = re.split('[^a-zåàâäæçéèêëîïôöœßùûüÿA-ZÅÀÂÄÆÇÉÈÊËÎÏÔÖŒÙÛÜŸ’\-]+', text)
-    # words = re.split('\W+', text)
-    words = re.split('\P{L}+', text)
+    # words = re.split(r'[\s\-,;:!?.’\'«»()–...&‘’“”*—]+', text)
+    # words = re.split(r'[^a-zåàâäæçéèêëîïôöœßùûüÿA-ZÅÀÂÄÆÇÉÈÊËÎÏÔÖŒÙÛÜŸ’\-]+', text)
+    # words = re.split(r'\W+', text)
+    words = re.split(r'\P{L}+', text)
     words.remove('')
     return words
 
@@ -26,17 +26,17 @@ def tokenize(text):
 def tokenize2(text):
     """uses the letters to break the text into words
     returns a list of words"""
-    # words = re.findall('[a-zåàâäæçéèêëîïôöœßùûüÿA-ZÅÀÂÄÆÇÉÈÊËÎÏÔÖŒÙÛÜŸ’\-]+', text)
-    # words = re.findall('\w+', text)
-    words = re.findall('\p{L}+', text)
+    # words = re.findall(r'[a-zåàâäæçéèêëîïôöœßùûüÿA-ZÅÀÂÄÆÇÉÈÊËÎÏÔÖŒÙÛÜŸ’\-]+', text)
+    # words = re.findall(r'\w+', text)
+    words = re.findall(r'\p{L}+', text)
     return words
 
 
 def tokenize3(text):
     """uses the punctuation and nonletters to break the text into words
     returns a list of words"""
-    # text = re.sub('[^a-zåàâäæçéèêëîïôöœßùûüÿA-ZÅÀÂÄÆÇÉÈÊËÎÏÔÖŒÙÛÜŸ’'()\-,.?!:;]+', '\n', text)
-    # text = re.sub('([,.?!:;)('-])', r'\n\1\n', text)
+    # text = re.sub(r'[^a-zåàâäæçéèêëîïôöœßùûüÿA-ZÅÀÂÄÆÇÉÈÊËÎÏÔÖŒÙÛÜŸ’'()\-,.?!:;]+', '\n', text)
+    # text = re.sub(r'([,.?!:;)('-])', r'\n\1\n', text)
     text = re.sub(r'[^\p{L}\p{P}]+', '\n', text)
     text = re.sub(r'(\p{P})', r'\n\1\n', text)
     text = re.sub(r'\n+', '\n', text)
@@ -46,8 +46,8 @@ def tokenize3(text):
 def tokenize4(text):
     """uses the punctuation and symbols to break the text into words
     returns a list of words"""
-    spaced_tokens = re.sub('([\p{S}\p{P}])', r' \1 ', text)
-    one_token_per_line = re.sub('\s+', '\n', spaced_tokens)
+    spaced_tokens = re.sub(r'([\p{S}\p{P}])', r' \1 ', text)
+    one_token_per_line = re.sub(r'\s+', '\n', spaced_tokens)
     tokens = one_token_per_line.split()
     return tokens
 
