@@ -19,7 +19,7 @@ def logistic(x):
         return 0
 
 
-def compute_likelihood(X, y, w):
+def compute_likelihood(X, y, w, reg=0.0):
     """
     Computes the likelihood of a partition given the weights
     :param X: The observations
@@ -29,24 +29,24 @@ def compute_likelihood(X, y, w):
     :param w2:
     :return:
     """
-    p_hat = list(map(logistic, np.dot(X, w)))
+    p_hat = logistic(np.dot(X, w))
     likelihood = 1.0
     for i in range(len(p_hat)):
         if y[i] == 1:
             likelihood *= p_hat[i]
         else:  # If in class 0, the prob. to be in this class is 1 - P
             likelihood *= 1 - p_hat[i]
-    return likelihood
+    return likelihood * math.exp(-reg * (w[1] ** 2 + w[2] ** 2))
 
 
-def plot_likelihood_surf(w0_hat, w1_range, w2_range):
+def plot_likelihood_surf(w0_hat, w1_range, w2_range, reg=0.0):
     z_axis = np.array([[0.0] * len(w2_range) for i in range(len(w1_range))])
     x_axis, y_axis = np.meshgrid(w1_range, w2_range)
     z_axis = z_axis.reshape(x_axis.shape)
 
     for i in range(len(w1_range)):
         for j in range(len(w2_range)):
-            z_axis[j, i] = compute_likelihood(X, y, [w0_hat, w1_range[i], w2_range[j]])
+            z_axis[j, i] = compute_likelihood(X, y, [w0_hat, w1_range[i], w2_range[j]], reg)
     return x_axis, y_axis, z_axis
 
 
@@ -64,6 +64,8 @@ def plot_logistic_surf(x_range, y_range, w_opt):
 
 if __name__ == '__main__':
     X, y = read_libsvm_file('../salammbo/salammbo_a_binary.libsvm')
+    logistic = np.vectorize(logistic)
+    regularization_experiment = False
 
     """
     Values found with R
@@ -83,17 +85,24 @@ if __name__ == '__main__':
     print('The likelihood of the classes found by R:', v1)
     print('The likelihood of the classes found by my implementation of SGD:', v2)
 
-    # We plot the likelihood surface as a function of w.
-    # We center it on the optimal values found by R
-    # We denote the fitted weights w_hat
-    # w0_hat = 5.636568881389995234, w1_hat = -0.1833732150319406229 w2_hat = 2.779328979299188429
-    w0_hat = 5.636568881389995234
-    w1_range = np.linspace(-0.19, -0.17, 200)
-    w2_range = np.linspace(2.6, 2.9, 200)
-    x_axis, y_axis, z_axis = plot_likelihood_surf(w0_hat, w1_range, w2_range)
+    if not regularization_experiment:
+        # We plot the likelihood surface as a function of w.
+        # We center it on the optimal values found by R
+        # We denote the fitted weights w_hat
+        # w0_hat = 5.636568881389995234, w1_hat = -0.1833732150319406229 w2_hat = 2.779328979299188429
+        w0_hat = 5.636568881389995234
+        w1_range = np.linspace(-0.19, -0.17, 200)
+        w2_range = np.linspace(2.6, 2.9, 200)
+        x_axis, y_axis, z_axis = plot_likelihood_surf(w0_hat, w1_range, w2_range)
+    else:
+        w0_hat = 5.636568881389995234
+        w1_range = np.linspace(-0.25, 0.0, 400)
+        w2_range = np.linspace(0.0, 3.0, 300)
+        x_axis, y_axis, z_axis = plot_likelihood_surf(w0_hat, w1_range, w2_range, reg=0.1)
 
     fig = plt.figure()
-    ax = Axes3D(fig)
+    ax = Axes3D(fig, auto_add_to_figure=False)
+    fig.add_axes(ax)
     # ax = fig.gca(projection='3d')
     surf = ax.plot_surface(y_axis, x_axis, z_axis, rstride=1, cstride=1,
                            cmap=cm.coolwarm,
@@ -111,7 +120,8 @@ if __name__ == '__main__':
     x_axis, y_axis, z_axis = plot_logistic_surf(x_range, y_range, w_hat)
 
     fig = plt.figure()
-    ax = Axes3D(fig)
+    ax = Axes3D(fig, auto_add_to_figure=False)
+    fig.add_axes(ax)
     # ax = fig.gca(projection='3d')
     surf = ax.plot_surface(y_axis, x_axis, z_axis, rstride=1, cstride=1, cmap=cm.coolwarm,
                            linewidth=0, antialiased=False, alpha=0.2)
